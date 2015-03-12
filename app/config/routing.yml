@@ -1,0 +1,3 @@
+fhv_tmd:
+    resource: "@FHVTmdBundle/Resources/config/routing.yml"
+    prefix:   /

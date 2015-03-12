@@ -1,0 +1,8 @@
+services:
+    fhv_tmd.segmentManager:
+        class: FHV\Bundle\TmdBundle\Manager\SegmentManager
+        arguments: ["%tmd.earth_circumference%"]
+
+    fhv_tmd.trainingDataManager:
+        class: FHV\Bundle\TmdBundle\Manager\GPXTrainingDataManager
+        arguments: ["@fhv_tmd.segmentManager"]
