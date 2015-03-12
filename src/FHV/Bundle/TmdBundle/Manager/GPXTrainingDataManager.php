@@ -99,8 +99,6 @@ class GPXTrainingDataManager
         $segment = (array) $xmlSegment;
         $trackPoints = (array) $segment['trkpt'];
 
-        $this->sm->createSegment($trackPoints, $type);
-
-        return null;
+        return $this->sm->createSegment($trackPoints, $type);
     }
 }

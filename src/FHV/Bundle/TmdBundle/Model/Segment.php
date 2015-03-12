@@ -22,6 +22,8 @@ class Segment
 
     private $maxVelocity;
 
+    private $time;
+
     /**
      * Distance in meters
      * @var float
@@ -128,5 +130,21 @@ class Segment
     public function setDistance($distance)
     {
         $this->distance = $distance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTime()
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param mixed $time
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
     }
 }

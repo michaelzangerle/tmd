@@ -41,7 +41,7 @@ class TrackPoint
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getEle()
     {
@@ -49,7 +49,7 @@ class TrackPoint
     }
 
     /**
-     * @param mixed $ele
+     * @param float $ele
      */
     public function setEle($ele)
     {
@@ -57,7 +57,7 @@ class TrackPoint
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getLat()
     {
@@ -65,7 +65,7 @@ class TrackPoint
     }
 
     /**
-     * @param mixed $lat
+     * @param float $lat
      */
     public function setLat($lat)
     {
@@ -73,7 +73,7 @@ class TrackPoint
     }
 
     /**
-     * @return mixed
+     * @return float
      */
     public function getLong()
     {
@@ -81,7 +81,7 @@ class TrackPoint
     }
 
     /**
-     * @param mixed $long
+     * @param float $long
      */
     public function setLong($long)
     {
@@ -89,7 +89,7 @@ class TrackPoint
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
      */
     public function getTime()
     {
@@ -97,13 +97,18 @@ class TrackPoint
     }
 
     /**
-     * @param mixed $time
+     * @param \DateTime $time
      */
     public function setTime($time)
     {
         $this->time = $time;
     }
 
+    /**
+     * Validates the xml data received via the constructor
+     * @param $xml
+     * @return bool
+     */
     private function isValidPointXML($xml)
     {
         if ($xml->ele && $xml->time && $xml->attributes()->lat && $xml->attributes()->lon) {

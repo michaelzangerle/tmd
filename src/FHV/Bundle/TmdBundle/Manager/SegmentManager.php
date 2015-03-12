@@ -33,24 +33,47 @@ class SegmentManager extends ContainerAware
     {
         $segment = new Segment();
         $meanAcceleration = 0;
+        $amountOfTrackpoints = count($trackPoints);
         $meanVelocity = 0;
         $maxAcceleration = 0;
         $maxVelocity = 0;
         $distance = 0;
+        $time = 0;
+        $counter = 0;
 
         if ($type) {
             $segment->setType($type);
         }
 
-        for ($i = 0; $i < count($trackPoints) - 1; $i++) {
+        for ($i = 0; $i < $amountOfTrackpoints - 1; $i++) {
             $tp1 = new TrackPoint($trackPoints[$i]);
             $tp2 = new TrackPoint($trackPoints[$i + 1]);
+
             $currentDistance = $this->calcDistance($tp1, $tp2);
+            $currentTime = $tp2->getTime()->getTimestamp() - $tp1->getTime()->getTimestamp();
+
+            // sometimes the distance does not match with the time at all
+            // skipping these points
+            if ($currentTime <= 1) {
+                continue;
+            }
+            $currentTime = $currentTime > 0 ? $currentTime : 1;
+            $currentVelocity = $currentDistance / $currentTime;
 
             $distance += $currentDistance;
+            $time += $currentTime;
+            $meanVelocity += $currentVelocity;
+            $counter++;
+
+            if ($currentVelocity > $maxVelocity) {
+                $maxVelocity = $currentVelocity;
+            }
         }
 
+        $segment->setMeanVelocity($meanVelocity / $counter);
         $segment->setDistance($distance);
+        $segment->setTime($time);
+        $segment->setMaxVelocity($maxVelocity);
 
         return $segment;
     }
@@ -64,7 +87,6 @@ class SegmentManager extends ContainerAware
      */
     protected function calcDistance($tp1, $tp2)
     {
-
         $lat1 = deg2rad($tp1->getLat());
         $lat2 = deg2rad($tp2->getLat());
         $long1 = deg2rad($tp2->getLat() - $tp1->getLat());
