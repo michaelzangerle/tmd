@@ -10,7 +10,7 @@
         <extensions>
             <topografix:color xmlns:topografix="http://www.topografix.com/GPX/Private/TopoGrafix/0/1">c0c0c0</topografix:color>
         </extensions>
-        <trkseg type="walking">
+        <trkseg type="walk">
             <trkpt lat="47.409585" lon="9.743498">
                 <ele>489.0</ele>
                 <time>2015-02-27T14:20:58.744Z</time>

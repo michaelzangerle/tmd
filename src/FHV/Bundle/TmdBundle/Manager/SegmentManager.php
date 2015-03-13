@@ -31,7 +31,6 @@ class SegmentManager extends ContainerAware
      */
     public function createSegment(array $trackPoints, $type = null)
     {
-        $segment = new Segment();
         $meanAcceleration = 0;
         $amountOfTrackpoints = count($trackPoints);
         $meanVelocity = 0;
@@ -39,43 +38,56 @@ class SegmentManager extends ContainerAware
         $maxVelocity = 0;
         $distance = 0;
         $time = 0;
-        $counter = 0;
-
-        if ($type) {
-            $segment->setType($type);
-        }
+        $validTrackpoints = 0;
+        $prevVelocity = 0;
+        $accTrackPoints = 0;
 
         for ($i = 0; $i < $amountOfTrackpoints - 1; $i++) {
             $tp1 = new TrackPoint($trackPoints[$i]);
             $tp2 = new TrackPoint($trackPoints[$i + 1]);
 
             $currentDistance = $this->calcDistance($tp1, $tp2);
-            $currentTime = $tp2->getTime()->getTimestamp() - $tp1->getTime()->getTimestamp();
+            $currentTime = $this->calcTime($tp2->getTime(), $tp1->getTime());
 
             // sometimes the distance does not match with the time at all
             // skipping these points
-            if ($currentTime <= 1) {
+            if ($currentTime < 1) { // TODO put into config
                 continue;
             }
-            $currentTime = $currentTime > 0 ? $currentTime : 1;
-            $currentVelocity = $currentDistance / $currentTime;
+
+            $currentVelocity = $this->calcVelocity($currentDistance, $currentTime);
+            $currentAcceleration = $this->calcAcceleration($currentVelocity, $prevVelocity);
 
             $distance += $currentDistance;
             $time += $currentTime;
             $meanVelocity += $currentVelocity;
-            $counter++;
+            $validTrackpoints++;
 
             if ($currentVelocity > $maxVelocity) {
                 $maxVelocity = $currentVelocity;
             }
+
+            if ($currentAcceleration > $maxAcceleration) {
+                $maxAcceleration = $currentAcceleration;
+            }
+
+            if ($currentAcceleration > 0) {
+                $meanAcceleration += $currentAcceleration;
+                $accTrackPoints++;
+            }
+
+            $prevVelocity = $currentAcceleration;
         }
 
-        $segment->setMeanVelocity($meanVelocity / $counter);
-        $segment->setDistance($distance);
-        $segment->setTime($time);
-        $segment->setMaxVelocity($maxVelocity);
-
-        return $segment;
+        return new Segment(
+            $meanAcceleration / $accTrackPoints,
+            $meanVelocity / $validTrackpoints,
+            $maxAcceleration,
+            $maxVelocity,
+            $time,
+            $distance,
+            $type
+        );
     }
 
     /**
@@ -96,5 +108,38 @@ class SegmentManager extends ContainerAware
         $tmp = 2 * atan2(sqrt($tmp), sqrt(1 - $tmp));
 
         return $tmp * $this->radius;
+    }
+
+    /**
+     * Calculates the time difference
+     * @param \DateTime $time1
+     * @param \DateTime $time2
+     * @return int
+     */
+    private function calcTime($time1, $time2)
+    {
+        return $time1->getTimestamp() - $time2->getTimestamp();
+    }
+
+    /**
+     * Calculates the velocity from a distance and a time
+     * @param float $distance in meters
+     * @param int $time in seconds
+     * @return float velocity in m/s
+     */
+    private function calcVelocity($distance, $time)
+    {
+        return $distance / $time;
+    }
+
+    /**
+     * Calculates the difference in two velocity values
+     * @param float $currentVelocity in m/s
+     * @param float $prevVelocity in m/s
+     * @return float
+     */
+    private function calcAcceleration($currentVelocity, $prevVelocity)
+    {
+        return $currentVelocity - $prevVelocity;
     }
 }

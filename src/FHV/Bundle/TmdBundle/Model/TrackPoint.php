@@ -37,6 +37,8 @@ class TrackPoint
             $this->time = new \DateTime($xml['time']);
             $this->lat = floatval($xml['@attributes']['lat']);
             $this->long = floatval($xml['@attributes']['lon']);
+        } else {
+            throw new \InvalidArgumentException('The provided xml for a trackpoint ('.$xml->time.') is invalid!');
         }
     }
 

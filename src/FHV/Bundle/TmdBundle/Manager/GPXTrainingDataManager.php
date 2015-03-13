@@ -56,6 +56,12 @@ class GPXTrainingDataManager
             }
 
             // TODO write result
+            if ($format === 'separated') {
+                $this->writeFile($dir, $segments, true, ',');
+            } else {
+                $this->writeFile($dir, $segments);
+            }
+
 
         } else {
             throw new FileNotFoundException('The directory ' . $dir . ' does not be exist!');
@@ -73,15 +79,12 @@ class GPXTrainingDataManager
         $result = [];
         $doc = new \SimpleXMLElement($fileName, 0, true);
         $doc->registerXPathNamespace('gpx', 'http://www.topografix.com/GPX/1/1');
-        $segments = $doc->xpath('//gpx:trkseg/.');
+        $segments = $doc->xpath('//gpx:trkseg');
         $pb = new ProgressBar($output, count($segments));
         $pb->start();
-        $i = 0;
-        while ($i++ < count($segments)) {
-            foreach ($segments as $segment) {
-                $result[] = $this->processSegment($segment);
-                $pb->advance();
-            }
+        foreach ($segments as $segment) {
+            $result[] = $this->processSegment($segment);
+            $pb->advance();
         }
         $pb->finish();
 
@@ -96,9 +99,35 @@ class GPXTrainingDataManager
     private function processSegment($xmlSegment)
     {
         $type = (string)$xmlSegment['type'];
-        $segment = (array) $xmlSegment;
-        $trackPoints = (array) $segment['trkpt'];
+        $segment = (array)$xmlSegment;
+        $trackPoints = (array)$segment['trkpt'];
 
         return $this->sm->createSegment($trackPoints, $type);
+    }
+
+    /**
+     * Writes the csv result file for all analyzed segments
+     * @param string $dir
+     * @param Segment[] $segments
+     * @param bool $separateHeader
+     * @param string $delimiter
+     */
+    private function writeFile($dir, array $segments, $separateHeader = false, $delimiter = ';')
+    {
+        if ($separateHeader) {
+            $fph = fopen($dir . '/result.names', 'w');
+            fputcsv($fph, Segment::$ATTRIBUTES, $delimiter);
+            fclose($fph);
+            $fp = fopen($dir . '/result.data', 'w');
+        } else {
+            $fp = fopen($dir . '/result.csv', 'w');
+            fputcsv($fp, Segment::$ATTRIBUTES, $delimiter);
+        }
+
+        foreach ($segments as $seg) {
+            fputcsv($fp, $seg->toArray(), $delimiter);
+
+        }
+        fclose($fp);
     }
 }
