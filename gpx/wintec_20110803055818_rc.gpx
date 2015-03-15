@@ -6,12 +6,6 @@
         <name>Wintec#20110803</name>
         <trkseg type="car">
             <trkpt lon="9.6645768" lat="47.4502272">
-                <time>2011-08-03T05:58:18.000Z</time>
-                <course>0.0</course>
-                <speed>0.0</speed>
-                <name>Position 1</name>
-            </trkpt>
-            <trkpt lon="9.6645768" lat="47.4502272">
                 <ele>0.0</ele>
                 <time>2011-08-03T05:58:25.000Z</time>
                 <course>0.0</course>

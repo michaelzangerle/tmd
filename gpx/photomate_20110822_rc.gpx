@@ -6,12 +6,6 @@
         <name>photomate#20110822</name>
         <trkseg type="car">
             <trkpt lon="9.590295" lat="47.241218333">
-                <time>2011-08-22T06:02:31.000Z</time>
-                <course>0.0</course>
-                <speed>0.0</speed>
-                <name>Position 1</name>
-            </trkpt>
-            <trkpt lon="9.590295" lat="47.241218333">
                 <ele>149.991776</ele>
                 <time>2011-08-22T06:02:32.000Z</time>
                 <course>0.0</course>

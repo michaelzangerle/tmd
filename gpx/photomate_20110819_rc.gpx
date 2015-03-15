@@ -6,12 +6,6 @@
         <name>photomate#20110819</name>
         <trkseg type="walk">
             <trkpt lon="9.575956667" lat="47.236236667">
-                <time>2011-08-19T17:59:37.000Z</time>
-                <course>0.0</course>
-                <speed>0.0</speed>
-                <name>Position 1</name>
-            </trkpt>
-            <trkpt lon="9.575956667" lat="47.236236667">
                 <ele>149.889038</ele>
                 <time>2011-08-19T17:59:38.000Z</time>
                 <course>0.0</course>
