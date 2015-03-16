@@ -23,24 +23,13 @@ class GenerateTrainingFileCommand extends ContainerAwareCommand
                 'dir',
                 InputArgument::REQUIRED,
                 'Define the directory with the gpx files in it.'
-            )
-            ->addArgument(
-                'format',
-                InputArgument::OPTIONAL,
-                'Define the output format of the trainings file [csv,separated]'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = $input->getArgument('dir');
-        $format = $input->getArgument('format');
-
-        if ($format === null || ($format !== 'csv' && $format !== 'separated')) {
-            $format = 'csv';
-        }
-
-        $this->getContainer()->get('fhv_tmd.trainingDataManager')->process($dir, $format, $output);
+        $this->getContainer()->get('fhv_tmd.trainingDataManager')->process($dir, $output);
         $output->write('Finished.', true);
     }
 }

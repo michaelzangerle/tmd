@@ -20,12 +20,6 @@ class GPXTrainingDataManager
     protected $sm;
 
     /**
-     * for each file get segments
-     * let segments be analyzed by segmentreader
-     * write segments into file depending on format
-     */
-
-    /**
      * @param SegmentManager $sm
      */
     function __construct(SegmentManager $sm)
@@ -36,10 +30,9 @@ class GPXTrainingDataManager
     /**
      * Reads gpx files from directory, processes them and generates a file with the result
      * @param string $dir
-     * @param string $format
      * @param OutputInterface $output
      */
-    public function process($dir = '.', $format = 'csv', $output)
+    public function process($dir = '.', $output)
     {
         $segments = [];
         if (file_exists($dir)) {
@@ -54,15 +47,7 @@ class GPXTrainingDataManager
             } else {
                 $output->write('<info>No gpx files found!</info>' . PHP_EOL);
             }
-
-            // TODO write result
-            if ($format === 'separated') {
-                $this->writeFile($dir, $segments, true, ',');
-            } else {
-                $this->writeFile($dir, $segments);
-            }
-
-
+            $this->writeFile($dir, $segments);
         } else {
             throw new FileNotFoundException('The directory ' . $dir . ' does not be exist!');
         }
@@ -109,20 +94,12 @@ class GPXTrainingDataManager
      * Writes the csv result file for all analyzed segments
      * @param string $dir
      * @param Segment[] $segments
-     * @param bool $separateHeader
      * @param string $delimiter
      */
-    private function writeFile($dir, array $segments, $separateHeader = false, $delimiter = ';')
+    private function writeFile($dir, array $segments, $delimiter = ';')
     {
-        if ($separateHeader) {
-            $fph = fopen($dir . '/result.names', 'w');
-            fputcsv($fph, Segment::$ATTRIBUTES, $delimiter);
-            fclose($fph);
-            $fp = fopen($dir . '/result.data', 'w');
-        } else {
-            $fp = fopen($dir . '/result.csv', 'w');
-            fputcsv($fp, Segment::$ATTRIBUTES, $delimiter);
-        }
+        $fp = fopen($dir . '/result.csv', 'w');
+        fputcsv($fp, Segment::$ATTRIBUTES, $delimiter);
 
         foreach ($segments as $seg) {
             fputcsv($fp, $seg->toArray(), $delimiter);
