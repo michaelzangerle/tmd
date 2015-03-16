@@ -56,7 +56,7 @@ class SegmentManager extends ContainerAware
             }
 
             $currentVelocity = $this->calcVelocity($currentDistance, $currentTime);
-            $currentAcceleration = $this->calcAcceleration($currentVelocity, $prevVelocity);
+            $currentAcceleration = $this->calcAcceleration($currentVelocity, $currentTime, $prevVelocity);
 
             $distance += $currentDistance;
             $time += $currentTime;
@@ -135,11 +135,12 @@ class SegmentManager extends ContainerAware
     /**
      * Calculates the difference in two velocity values
      * @param float $currentVelocity in m/s
+     * @param $time
      * @param float $prevVelocity in m/s
      * @return float
      */
-    private function calcAcceleration($currentVelocity, $prevVelocity)
+    private function calcAcceleration($currentVelocity, $time, $prevVelocity)
     {
-        return $currentVelocity - $prevVelocity;
+        return ($currentVelocity - $prevVelocity) / $time;
     }
 }
