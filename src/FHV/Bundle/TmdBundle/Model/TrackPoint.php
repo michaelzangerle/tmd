@@ -7,7 +7,7 @@ namespace FHV\Bundle\TmdBundle\Model;
  * Class TrackPoint
  * @package FHV\Bundle\TmdBundle\Model
  */
-class TrackPoint
+class TrackPoint implements TrackPointInterface
 {
     /**
      * @var float
@@ -38,7 +38,7 @@ class TrackPoint
             $this->lat = floatval($xml['@attributes']['lat']);
             $this->long = floatval($xml['@attributes']['lon']);
         } else {
-            throw new \InvalidArgumentException('The provided xml for a trackpoint ('.$xml->time.') is invalid!');
+            throw new \InvalidArgumentException('The provided xml for a trackpoint (' . $xml->time . ') is invalid!');
         }
     }
 

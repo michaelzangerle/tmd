@@ -7,7 +7,7 @@ namespace FHV\Bundle\TmdBundle\Model;
  * Class Segment
  * @package FHV\Bundle\TmdBundle\Model
  */
-class Segment
+class Segment implements SegmentInterface
 {
     public static $ATTRIBUTES = array(
         'distance',
@@ -46,9 +46,9 @@ class Segment
     private $maxVelocity;
 
     /**
-     * @var int seconds
+     * @var float seconds
      */
-    private $time;
+    private $duration;
 
     /**
      * @var float in meters
@@ -62,12 +62,24 @@ class Segment
     private $type;
 
     /**
+     * @var TrackPointInterface
+     */
+    private $startPoint;
+
+    /**
+     * @var TrackPointInterface
+     */
+    private $endPoint;
+
+    /**
      * @param float $meanAcceleration in m/s
      * @param float $meanVelocity in m/s
      * @param float $maxAcceleration in m/s
      * @param float $maxVelocity in m/s
-     * @param float $time in seconds
+     * @param float $duration in seconds
      * @param float $distance in meters
+     * @param TrackPointInterface $startPoint
+     * @param TrackPointInterface $endPoint
      * @param int $type of segment
      */
     function __construct(
@@ -75,17 +87,54 @@ class Segment
         $meanVelocity,
         $maxAcceleration,
         $maxVelocity,
-        $time,
+        $duration,
         $distance,
+        $startPoint,
+        $endPoint,
         $type = 5
+
     ) {
         $this->meanAcceleration = $meanAcceleration;
         $this->meanVelocity = $meanVelocity;
         $this->maxAcceleration = $maxAcceleration;
         $this->maxVelocity = $maxVelocity;
-        $this->time = $time;
+        $this->duration = $duration;
         $this->distance = $distance;
         $this->type = $this->getValidType($type);
+        $this->endPoint = $endPoint;
+        $this->startPoint = $startPoint;
+    }
+
+    /**
+     * @return TrackPoint
+     */
+    public function getStartPoint()
+    {
+        return $this->startPoint;
+    }
+
+    /**
+     * @param TrackPoint $startPoint
+     */
+    public function setStartPoint($startPoint)
+    {
+        $this->startPoint = $startPoint;
+    }
+
+    /**
+     * @return TrackPoint
+     */
+    public function getEndPoint()
+    {
+        return $this->endPoint;
+    }
+
+    /**
+     * @param TrackPoint $endPoint
+     */
+    public function setEndPoint($endPoint)
+    {
+        $this->endPoint = $endPoint;
     }
 
     /**
@@ -185,19 +234,19 @@ class Segment
     }
 
     /**
-     * @return mixed
+     * @return float
      */
-    public function getTime()
+    public function getDuration()
     {
-        return $this->time;
+        return $this->duration;
     }
 
     /**
-     * @param mixed $time
+     * @param float $duration
      */
-    public function setTime($time)
+    public function setDuration($duration)
     {
-        $this->time = $time;
+        $this->duration = $duration;
     }
 
     /**
@@ -234,10 +283,10 @@ class Segment
     }
 
     /**
-     * Returns the segment as array
+     * Returns a partial segment as array
      * @return array
      */
-    public function toArray()
+    public function toCSVArray()
     {
         return array(
             $this->getDistance(),
@@ -249,11 +298,12 @@ class Segment
         );
     }
 
+    /**
+     * @return string returns string for type
+     */
     private function getTypeAsString()
     {
         switch ($this->getType()) {
-            case 1:
-                return 'undefined';
             case 2:
                 return 'car';
             case 3:
@@ -264,6 +314,8 @@ class Segment
                 return 'walk';
             case 6:
                 return 'bike';
+            default:
+                return 'undefined';
 
         }
     }

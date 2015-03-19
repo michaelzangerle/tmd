@@ -1,12 +1,12 @@
 services:
-    fhv_tmd.geoCalUtil:
-        class: FHV\Bundle\TmdBundle\Util\GeoCalcUtil
+    fhv_tmd.trackPointUtil:
+        class: FHV\Bundle\TmdBundle\Util\TrackPointUtil
         arguments: ["%tmd.earth_circumference%"]
 
     fhv_tmd.segmentManager:
         class: FHV\Bundle\TmdBundle\Manager\SegmentManager
-        arguments: ["@fhv_tmd.geoCalUtil"]
+        arguments: ["@fhv_tmd.trackPointUtil"]
 
     fhv_tmd.trainingDataManager:
-        class: FHV\Bundle\TmdBundle\Manager\GPXTrainingDataManager
+        class: FHV\Bundle\TmdBundle\Manager\TrainingDataManager
         arguments: ["@fhv_tmd.segmentManager"]

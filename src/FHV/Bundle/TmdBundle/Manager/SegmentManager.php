@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Manager;
 
 use FHV\Bundle\TmdBundle\Model\Segment;
+use FHV\Bundle\TmdBundle\Model\SegmentInterface;
 use FHV\Bundle\TmdBundle\Model\TrackPoint;
 use FHV\Bundle\TmdBundle\Util\TrackPointUtil;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -26,24 +27,24 @@ class SegmentManager extends ContainerAware
 
     /**
      * Returns a segment for the given trackpoints
-     * @param  $trackPoints
+     * @param array $trackPoints
      * @param string|null $type
-     * @return Segment
+     * @return SegmentInterface
      */
     public function createSegment(array $trackPoints, $type = null)
     {
         $meanAcceleration = 0;
-        $amountOfTrackpoints = count($trackPoints);
+        $amountOfTrackPoints = count($trackPoints);
         $meanVelocity = 0;
         $maxAcceleration = 0;
         $maxVelocity = 0;
         $distance = 0;
         $time = 0;
-        $validTrackpoints = 0;
+        $validTrackPoints = 0;
         $prevVelocity = 0;
         $accTrackPoints = 0;
 
-        for ($i = 0; $i < $amountOfTrackpoints - 1; $i++) {
+        for ($i = 0; $i < $amountOfTrackPoints - 1; $i++) {
             $tp1 = new TrackPoint($trackPoints[$i]);
             $tp2 = new TrackPoint($trackPoints[$i + 1]);
 
@@ -62,7 +63,7 @@ class SegmentManager extends ContainerAware
             $distance += $currentDistance;
             $time += $currentTime;
             $meanVelocity += $currentVelocity;
-            $validTrackpoints++;
+            $validTrackPoints++;
 
             if ($currentVelocity > $maxVelocity) {
                 $maxVelocity = $currentVelocity;
@@ -82,11 +83,13 @@ class SegmentManager extends ContainerAware
 
         return new Segment(
             $meanAcceleration / $accTrackPoints,
-            $meanVelocity / $validTrackpoints,
+            $meanVelocity / $validTrackPoints,
             $maxAcceleration,
             $maxVelocity,
             $time,
             $distance,
+            $trackPoints[0],
+            $trackPoints[$amountOfTrackPoints - 1],
             $type
         );
     }

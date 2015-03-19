@@ -2,6 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Manager;
 
+use FHV\Bundle\TmdBundle\Model\SegmentInterface;
 use FHV\Bundle\TmdBundle\Model\Segment;
 use SimpleXMLElement;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -12,7 +13,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
  * Class GPXTrainingDataManager
  * @package FHV\Bundle\TmdBundle\Manager
  */
-class GPXTrainingDataManager
+class TrainingDataManager
 {
     /**
      * @var SegmentManager
@@ -79,7 +80,7 @@ class GPXTrainingDataManager
     /**
      * Processes all points of a track segment and returns a segment model
      * @param SimpleXmlElement $xmlSegment
-     * @return Segment
+     * @return SegmentInterface
      */
     private function processSegment($xmlSegment)
     {
@@ -102,7 +103,7 @@ class GPXTrainingDataManager
         fputcsv($fp, Segment::$ATTRIBUTES, $delimiter);
 
         foreach ($segments as $seg) {
-            fputcsv($fp, $seg->toArray(), $delimiter);
+            fputcsv($fp, $seg->toCSVArray(), $delimiter);
 
         }
         fclose($fp);
