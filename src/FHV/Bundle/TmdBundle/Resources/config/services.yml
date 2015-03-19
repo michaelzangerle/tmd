@@ -1,7 +1,11 @@
 services:
+    fhv_tmd.geoCalUtil:
+        class: FHV\Bundle\TmdBundle\Util\GeoCalcUtil
+        arguments: ["%tmd.earth_circumference%"]
+
     fhv_tmd.segmentManager:
         class: FHV\Bundle\TmdBundle\Manager\SegmentManager
-        arguments: ["%tmd.earth_circumference%"]
+        arguments: ["@fhv_tmd.geoCalUtil"]
 
     fhv_tmd.trainingDataManager:
         class: FHV\Bundle\TmdBundle\Manager\GPXTrainingDataManager

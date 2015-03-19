@@ -4,6 +4,7 @@ namespace FHV\Bundle\TmdBundle\Manager;
 
 use FHV\Bundle\TmdBundle\Model\Segment;
 use FHV\Bundle\TmdBundle\Model\TrackPoint;
+use FHV\Bundle\TmdBundle\Util\TrackPointUtil;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
 /**
@@ -13,14 +14,14 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 class SegmentManager extends ContainerAware
 {
     /**
-     * Radius of the earth
-     * @var float
+     * Util obj for calculations
+     * @var TrackPointUtil
      */
-    private $radius;
+    private $util;
 
-    function __construct($radius)
+    function __construct(TrackPointUtil $util)
     {
-        $this->radius = $radius;
+        $this->util = $util;
     }
 
     /**
@@ -46,8 +47,8 @@ class SegmentManager extends ContainerAware
             $tp1 = new TrackPoint($trackPoints[$i]);
             $tp2 = new TrackPoint($trackPoints[$i + 1]);
 
-            $currentDistance = $this->calcDistance($tp1, $tp2);
-            $currentTime = $this->calcTime($tp2->getTime(), $tp1->getTime());
+            $currentDistance = $this->util->calcDistance($tp1, $tp2);
+            $currentTime = $this->util->calcTime($tp2, $tp1);
 
             // sometimes the distance does not match with the time at all
             // skipping these points
@@ -55,8 +56,8 @@ class SegmentManager extends ContainerAware
                 continue;
             }
 
-            $currentVelocity = $this->calcVelocity($currentDistance, $currentTime);
-            $currentAcceleration = $this->calcAcceleration($currentVelocity, $currentTime, $prevVelocity);
+            $currentVelocity = $this->util->calcVelocity($currentDistance, $currentTime);
+            $currentAcceleration = $this->util->calcAcceleration($currentVelocity, $currentTime, $prevVelocity);
 
             $distance += $currentDistance;
             $time += $currentTime;
@@ -88,59 +89,5 @@ class SegmentManager extends ContainerAware
             $distance,
             $type
         );
-    }
-
-    /**
-     * Calculates the distance between two trackpoints and returns them in meters
-     * http://www.movable-type.co.uk/scripts/latlong.html
-     * @param TrackPoint $tp1
-     * @param TrackPoint $tp2
-     * @return float
-     */
-    protected function calcDistance($tp1, $tp2)
-    {
-        $lat1 = deg2rad($tp1->getLat());
-        $lat2 = deg2rad($tp2->getLat());
-        $long1 = deg2rad($tp2->getLat() - $tp1->getLat());
-        $long2 = deg2rad($tp2->getLong() - $tp1->getLong());
-
-        $tmp = sin($long1 / 2) * sin($long1 / 2) + cos($lat1) * cos($lat2) * sin($long2 / 2) * sin($long2 / 2);
-        $tmp = 2 * atan2(sqrt($tmp), sqrt(1 - $tmp));
-
-        return $tmp * $this->radius;
-    }
-
-    /**
-     * Calculates the time difference
-     * @param \DateTime $time1
-     * @param \DateTime $time2
-     * @return int
-     */
-    private function calcTime($time1, $time2)
-    {
-        return $time1->getTimestamp() - $time2->getTimestamp();
-    }
-
-    /**
-     * Calculates the velocity from a distance and a time
-     * @param float $distance in meters
-     * @param int $time in seconds
-     * @return float velocity in m/s
-     */
-    private function calcVelocity($distance, $time)
-    {
-        return $distance / $time;
-    }
-
-    /**
-     * Calculates the difference in two velocity values
-     * @param float $currentVelocity in m/s
-     * @param $time
-     * @param float $prevVelocity in m/s
-     * @return float
-     */
-    private function calcAcceleration($currentVelocity, $time, $prevVelocity)
-    {
-        return ($currentVelocity - $prevVelocity) / $time;
     }
 }
