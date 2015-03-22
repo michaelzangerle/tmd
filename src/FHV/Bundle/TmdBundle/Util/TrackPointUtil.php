@@ -2,16 +2,16 @@
 
 namespace FHV\Bundle\TmdBundle\Util;
 
-use FHV\Bundle\TmdBundle\Model\TrackPoint;
+use FHV\Bundle\TmdBundle\Model\TrackPointInterface;
 
 /**
  * Helper class to calculate distances, velocity, ...
  * Class GPSUtil
  */
-class TrackPointUtil {
-
+class TrackPointUtil
+{
     /**
-     * Radius of earth
+     * Radius of the planet
      * @var
      */
     private $radius;
@@ -24,11 +24,11 @@ class TrackPointUtil {
     /**
      * Calculates the distance between two trackpoints and returns them in meters
      * http://www.movable-type.co.uk/scripts/latlong.html
-     * @param TrackPoint $tp1
-     * @param TrackPoint $tp2
+     * @param TrackPointInterface $tp1
+     * @param TrackPointInterface $tp2
      * @return float
      */
-    public function calcDistance($tp1, $tp2)
+    public function calcDistance(TrackPointInterface $tp1, TrackPointInterface $tp2)
     {
         $lat1 = deg2rad($tp1->getLat());
         $lat2 = deg2rad($tp2->getLat());
@@ -43,13 +43,24 @@ class TrackPointUtil {
 
     /**
      * Calculates the time difference between two trackpoints
-     * @param TrackPoint $tp1
-     * @param TrackPoint $tp2
+     * @param TrackPointInterface $tp1
+     * @param TrackPointInterface $tp2
      * @return int
      */
-    public function calcTime($tp1, $tp2)
+    public function calcTime(TrackPointInterface $tp1, TrackPointInterface $tp2)
     {
-        return $tp1->getTime()->getTimestamp() - $tp2->getTime()->getTimestamp();
+        return abs($tp1->getTime()->getTimestamp() - $tp2->getTime()->getTimestamp());
+    }
+
+    /**
+     * Calculates the elevation difference between two trackpoints
+     * @param TrackPointInterface $tp1
+     * @param TrackPointInterface $tp2
+     * @return float
+     */
+    public function calcElevation(TrackPointInterface $tp1, TrackPointInterface $tp2)
+    {
+        return abs($tp1->getEle() - $tp2->getEle());
     }
 
     /**
@@ -66,12 +77,16 @@ class TrackPointUtil {
     /**
      * Calculates the difference in two velocity values
      * @param float $currentVelocity in m/s
-     * @param $time
+     * @param int $time in seconds
      * @param float $prevVelocity in m/s
      * @return float
      */
     public function calcAcceleration($currentVelocity, $time, $prevVelocity)
     {
-        return ($currentVelocity - $prevVelocity) / $time;
+        if ($time > 0) {
+            return ($currentVelocity - $prevVelocity) / $time;
+        }
+
+        return 0;
     }
 }

@@ -88,8 +88,8 @@ class SegmentManager extends ContainerAware
             $maxVelocity,
             $time,
             $distance,
-            $trackPoints[0],
-            $trackPoints[$amountOfTrackPoints - 1],
+            new TrackPoint($trackPoints[0]),
+            new TrackPoint($trackPoints[$amountOfTrackPoints - 1]),
             $type
         );
     }

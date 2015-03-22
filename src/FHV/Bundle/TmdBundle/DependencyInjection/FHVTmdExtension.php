@@ -22,14 +22,31 @@ class FHVTmdExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('tmd.earth_circumference', $config['earth_circumference']);
+        $container->setParameter('tmd.planet_circumference', $config['planet_circumference']);
+        $container->setParameter('tmd.gpx_namespace', $config['gpx_namespace']);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $this->setFilterParameters($container, $config);
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
 
     public function getAlias()
     {
         return 'fhv_tmd';
+    }
+
+    /**
+     * Sets the parameters needed for the filter operations
+     * @param $container
+     * @param $config
+     */
+    private function setFilterParameters($container, $config)
+    {
+        $container->setParameter('tmd.filter.max_distance', $config['filter']['max_distance']);
+        $container->setParameter('tmd.filter.min_distance', $config['filter']['min_distance']);
+        $container->setParameter('tmd.filter.max_altitude_change', $config['filter']['max_altitude_change']);
+        $container->setParameter('tmd.filter.min_trackpoints_per_segment', $config['filter']['min_trackpoints_per_segment']);
+        $container->setParameter('tmd.filter.min_time_difference', $config['filter']['min_time_difference']);
     }
 }
