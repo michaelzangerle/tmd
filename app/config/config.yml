@@ -77,9 +77,10 @@ fhv_tmd:
   planet_circumference: 6371000
   gpx_namespace: "http://www.topografix.com/GPX/1/1"
   filter:
-    max_distance: 500
+    max_distance: 45
     min_distance: 0
-    max_altitude_change: 100
+    max_altitude_change: 25
     min_trackpoints_per_segment: 2
     min_time_difference: 1
+    max_velocity: 50
 

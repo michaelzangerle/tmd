@@ -18,7 +18,12 @@ class TrackPointFilter extends AbstractFilter
     /**
      * @var int
      */
-    protected $minTimeDifference;
+    private $minTimeDifference;
+
+    /**
+     * @var float
+     */
+    private $maxVelocity;
     /**
      * @var TrackPointUtil
      */
@@ -45,7 +50,8 @@ class TrackPointFilter extends AbstractFilter
         $minDistance,
         $maxAltitudeChange,
         $minTimeDifference,
-        $minTrackPointsPerSegment
+        $minTrackPointsPerSegment,
+        $maxVelocity
     ) {
         parent::__construct();
         $this->util = $util;
@@ -54,6 +60,7 @@ class TrackPointFilter extends AbstractFilter
         $this->maxAltitudeChange = $maxAltitudeChange;
         $this->minTimeDifference = $minTimeDifference;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
+        $this->maxVelocity = $maxVelocity;
     }
 
     /**
@@ -112,6 +119,23 @@ class TrackPointFilter extends AbstractFilter
     }
 
     /**
+     * Checks if the velocity value is valid
+     * @param TrackPointInterface $tp1
+     * @param TrackPointInterface $tp2
+     * @return bool
+     */
+    private function isValidVelocity($tp1, $tp2)
+    {
+        $distance = $this->util->calcDistance($tp1, $tp2);
+        $time = $this->util->calcTime($tp2, $tp1);
+        $velocity = $this->util->calcVelocity($distance, $time);
+        if($time > 0 && $velocity <= $this->maxVelocity){
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Validates trackpoints and removes invalid ones
      * @param array $trackPoints
      * @return array
@@ -131,7 +155,8 @@ class TrackPointFilter extends AbstractFilter
 
             if ($this->isValidTime($tp2, $tp1) &&
                 $this->isValidDistance($tp2, $tp1) &&
-                $this->isValidAltitudeChange($tp1, $tp2)
+                $this->isValidAltitudeChange($tp1, $tp2) &&
+                $this->isValidVelocity($tp1, $tp2)
             ) {
                 $cleaned[] = $trackPoints[$i];
                 $i = $next;
