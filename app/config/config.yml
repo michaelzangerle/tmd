@@ -78,7 +78,7 @@ fhv_tmd:
   gpx_namespace: "http://www.topografix.com/GPX/1/1"
   filter:
     max_distance: 500
-    min_distance: 1
+    min_distance: 0
     max_altitude_change: 100
     min_trackpoints_per_segment: 2
     min_time_difference: 1
