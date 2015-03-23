@@ -23,13 +23,20 @@ class GenerateTrainingFileCommand extends ContainerAwareCommand
                 'dir',
                 InputArgument::REQUIRED,
                 'Define the directory with the gpx files in it.'
+            )
+            ->addArgument(
+                'fileName',
+                InputArgument::OPTIONAL,
+                'Define the filename for the results.',
+                'result.csv'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dir = $input->getArgument('dir');
-        $this->getContainer()->get('fhv_tmd.trainingDataManager')->process($dir, $output);
+        $fileName = $input->getArgument('fileName');
+        $this->getContainer()->get('fhv_tmd.trainingDataManager')->process($output, $dir, $fileName);
         $output->write('Finished.', true);
     }
 }

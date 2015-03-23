@@ -12,6 +12,8 @@ services:
     # Filter
     ##############################
 
+    # TODO check if they should be reinstaniated for each "request"
+
     fhv_tmd.fileReaderFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileReaderFilter
           arguments: [%tmd.filter.min_trackpoints_per_segment%, %tmd.gpx_namespace%]
@@ -32,12 +34,8 @@ services:
     # Manager
     ##############################
 
-    fhv_tmd.segmentManager:
-        class: FHV\Bundle\TmdBundle\Manager\SegmentManager
-        arguments: [@fhv_tmd.trackPointUtil]
-
     fhv_tmd.trainingDataManager:
         class: FHV\Bundle\TmdBundle\Manager\TrainingDataManager
-        arguments: [@fhv_tmd.segmentManager, @fhv_tmd.trackPointFilter, @fhv_tmd.fileReaderFilter, @fhv_tmd.fileWriterFilter, @fhv_tmd.segmentFilter]
+        arguments: [@fhv_tmd.trackPointFilter, @fhv_tmd.fileReaderFilter, @fhv_tmd.fileWriterFilter, @fhv_tmd.segmentFilter]
 
 

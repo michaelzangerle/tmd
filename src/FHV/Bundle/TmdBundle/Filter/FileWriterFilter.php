@@ -47,6 +47,10 @@ class FileWriterFilter extends AbstractFilter
      */
     public function setDir($dir)
     {
+        if(substr($dir, -1) !== '/'){
+            $dir .= '/';
+        }
+
         $this->dir = $dir;
     }
 

@@ -7,7 +7,6 @@ use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\Model\SegmentInterface;
 use SimpleXMLElement;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -60,16 +59,10 @@ class FileReaderFilter extends AbstractFilter
         $doc = new \SimpleXMLElement($fileName, 0, true);
         $doc->registerXPathNamespace('gpx', $this->gpxNameSpace);
         $segments = $doc->xpath('//gpx:trkseg');
-//        $pb = new ProgressBar($output, count($segments));
-//        $pb->start();
-
-        // FIXME remove progress bar?
 
         foreach ($segments as $segment) {
             $result[] = $this->processSegment($segment);
-//            $pb->advance();
         }
-//        $pb->finish();
 
         return $result;
     }

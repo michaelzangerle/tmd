@@ -123,6 +123,8 @@ class TrackPointFilter extends AbstractFilter
         $next = 1;
         $cleaned = [];
 
+        // TODO special find first valid point check?
+
         while ($next < $length) {
             $tp1 = new TrackPoint($trackPoints[$i]);
             $tp2 = new TrackPoint($trackPoints[$next]);

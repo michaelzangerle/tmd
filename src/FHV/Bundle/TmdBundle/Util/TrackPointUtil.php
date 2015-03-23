@@ -75,7 +75,7 @@ class TrackPointUtil
     }
 
     /**
-     * Calculates the difference in two velocity values
+     * Calculates acceleration (the difference in two velocity values over time)
      * @param float $currentVelocity in m/s
      * @param int $time in seconds
      * @param float $prevVelocity in m/s
@@ -84,7 +84,7 @@ class TrackPointUtil
     public function calcAcceleration($currentVelocity, $time, $prevVelocity)
     {
         if ($time > 0) {
-            return ($currentVelocity - $prevVelocity) / $time;
+            return abs(($currentVelocity - $prevVelocity) / $time);
         }
 
         return 0;

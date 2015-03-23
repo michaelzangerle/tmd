@@ -45,5 +45,4 @@ abstract class AbstractFilter implements FilterInterface
 
         return false;
     }
-
 }

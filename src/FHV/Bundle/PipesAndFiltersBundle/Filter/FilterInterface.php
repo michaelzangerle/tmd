@@ -2,8 +2,8 @@
 
 namespace FHV\Bundle\PipesAndFiltersBundle\Filter;
 
+use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\PipeInterface;
-use FHV\Bundle\TmdBundle\Filter\Exception\FilterException;
 
 interface FilterInterface
 {
