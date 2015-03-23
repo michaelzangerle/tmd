@@ -10,10 +10,9 @@ interface FilterInterface
     /**
      * Starts a filter and processes the given data
      * @param $data
-     * @param $log
      * @throws FilterException
      */
-    public function run($data, $log);
+    public function run($data);
 
     /**
      * Registers a pipe

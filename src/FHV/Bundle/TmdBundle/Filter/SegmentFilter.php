@@ -31,10 +31,9 @@ class SegmentFilter extends AbstractFilter
     /**
      * Starts a filter and processes the given data
      * @param $data
-     * @param $log
      * @throws FilterException
      */
-    public function run($data, $log)
+    public function run($data)
     {
         if (isset($data['trackPoints'])) {
             $segment = $this->createSegment($data['trackPoints'], $data['type']);

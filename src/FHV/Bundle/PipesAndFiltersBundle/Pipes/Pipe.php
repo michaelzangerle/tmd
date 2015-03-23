@@ -26,10 +26,10 @@ class Pipe implements PipeInterface
     /**
      * @inheritdoc
      */
-    public function write($data, $log = null)
+    public function write($data)
     {
         if ($this->targetFilter !== null) {
-            $this->targetFilter->run($data, $log);
+            $this->targetFilter->run($data);
         }
     }
 }

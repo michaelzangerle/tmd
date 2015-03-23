@@ -35,13 +35,12 @@ class FileReaderFilter extends AbstractFilter
     /**
      * Starts a filter and processes the given data
      * @param $data
-     * @param $log
      * @throws FilterException
      */
-    public function run($data, $log = null)
+    public function run($data)
     {
         if ($data !== null && is_file($data)) {
-            $this->readSegments($data, $log);
+            $this->readSegments($data);
         } else {
             throw new InvalidArgumentException('FileReaderFilter: Parameter should be a valid file name!');
         }
@@ -50,21 +49,16 @@ class FileReaderFilter extends AbstractFilter
     /**
      * Reads all segments from a gpx file
      * @param string $fileName
-     * @param OutputInterface $output
-     * @return array
      */
-    protected function readSegments($fileName, $output)
+    protected function readSegments($fileName)
     {
-        $result = [];
         $doc = new \SimpleXMLElement($fileName, 0, true);
         $doc->registerXPathNamespace('gpx', $this->gpxNameSpace);
         $segments = $doc->xpath('//gpx:trkseg');
 
         foreach ($segments as $segment) {
-            $result[] = $this->processSegment($segment);
+            $this->processSegment($segment);
         }
-
-        return $result;
     }
 
     /**

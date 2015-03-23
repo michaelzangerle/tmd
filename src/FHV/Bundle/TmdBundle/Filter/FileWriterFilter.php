@@ -89,10 +89,9 @@ class FileWriterFilter extends AbstractFilter
     /**
      * Starts a filter and processes the given data
      * @param $data
-     * @param $log
      * @throws FilterException
      */
-    public function run($data, $log)
+    public function run($data)
     {
         if ($data !== null) {
             $this->writeHeader($this->dir, $this->fileName, $this->delimiter);

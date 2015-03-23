@@ -66,9 +66,9 @@ class TrackPointFilter extends AbstractFilter
     {
         if ($tp1 !== null && $tp2 !== null) {
             $time = $this->util->calcTime($tp2, $tp1);
-            $time = $time > 0 ? $time : 1;
+            $time = $time > 0 ? $time : 1; // should not happen
             $distance = $this->util->calcDistance($tp1, $tp2);
-            if ($distance > $this->minDistance * $time && $distance < $this->maxDistance * $time) {
+            if ($distance > ($this->minDistance * $time) && $distance < ($this->maxDistance * $time)) {
                 return true;
             }
 
@@ -148,10 +148,9 @@ class TrackPointFilter extends AbstractFilter
     /**
      * Starts a filter and processes the given data
      * @param $data
-     * @param null $log
      * @throws FilterException
      */
-    public function run($data, $log = null)
+    public function run($data)
     {
         if (isset($data['trackPoints'])) {
             $data['trackPoints'] = $this->filter($data['trackPoints']);
