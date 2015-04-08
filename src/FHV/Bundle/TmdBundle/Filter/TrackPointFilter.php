@@ -118,6 +118,8 @@ class TrackPointFilter extends AbstractFilter
         return false;
     }
 
+    // TODO really needed when time and distance filter are present?
+
     /**
      * Checks if the velocity value is valid
      * @param TrackPointInterface $tp1
@@ -153,6 +155,7 @@ class TrackPointFilter extends AbstractFilter
             $tp1 = new TrackPoint($trackPoints[$i]);
             $tp2 = new TrackPoint($trackPoints[$next]);
 
+            // time filter has to be used first to provide time value > 0
             if ($this->isValidTime($tp2, $tp1) &&
                 $this->isValidDistance($tp2, $tp1) &&
                 $this->isValidAltitudeChange($tp1, $tp2) &&
@@ -164,8 +167,6 @@ class TrackPointFilter extends AbstractFilter
 
             $next++;
         }
-
-        // TODO special last point check?
 
         return $cleaned;
     }
