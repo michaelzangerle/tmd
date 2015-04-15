@@ -3,8 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Filter;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
+use FHV\Bundle\TmdBundle\Exception\TrackException;
 use FHV\Bundle\TmdBundle\Model\TrackPoint;
 use FHV\Bundle\TmdBundle\Model\TrackPointInterface;
 use FHV\Bundle\TmdBundle\Util\TrackPointUtil;
@@ -21,9 +20,10 @@ class TrackPointFilter extends AbstractFilter
     private $minTimeDifference;
 
     /**
-     * @var float
+     * @var float percentage value (valid points in relation to all points in the track)
      */
-    private $maxVelocity;
+    private $minValidPoints;
+
     /**
      * @var TrackPointUtil
      */
@@ -44,6 +44,16 @@ class TrackPointFilter extends AbstractFilter
      */
     private $maxAltitudeChange;
 
+    /**
+     * @var float
+     */
+    private $minValidPointsInRow;
+
+    /**
+     * @var int
+     */
+    private $validPointCounter = 0;
+
     function __construct(
         $util,
         $maxDistance,
@@ -51,7 +61,8 @@ class TrackPointFilter extends AbstractFilter
         $maxAltitudeChange,
         $minTimeDifference,
         $minTrackPointsPerSegment,
-        $maxVelocity
+        $minValidPointsInRow,
+        $minValidPoints
     ) {
         parent::__construct();
         $this->util = $util;
@@ -60,13 +71,16 @@ class TrackPointFilter extends AbstractFilter
         $this->maxAltitudeChange = $maxAltitudeChange;
         $this->minTimeDifference = $minTimeDifference;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
-        $this->maxVelocity = $maxVelocity;
+        $this->minValidPoints = $minValidPoints;
+        $this->minValidPointsInRow = $minValidPointsInRow;
     }
 
     /**
      * Checks if the distance between two trackpoints does make sense
+     *
      * @param TrackPointInterface $tp1
      * @param TrackPointInterface $tp2
+     *
      * @return bool
      */
     protected function isValidDistance(TrackPointInterface $tp1, TrackPointInterface $tp2)
@@ -87,8 +101,10 @@ class TrackPointFilter extends AbstractFilter
 
     /**
      * Checks if the change of the elevation value is valid
+     *
      * @param TrackPointInterface $tp1
      * @param TrackPointInterface $tp2
+     *
      * @return bool
      */
     protected function isValidAltitudeChange(TrackPointInterface $tp1, TrackPointInterface $tp2)
@@ -104,8 +120,10 @@ class TrackPointFilter extends AbstractFilter
 
     /**
      * Checks if the change of the time value is valid
+     *
      * @param TrackPointInterface $tp1
      * @param TrackPointInterface $tp2
+     *
      * @return bool
      */
     protected function isValidTime(TrackPointInterface $tp1, TrackPointInterface $tp2)
@@ -118,73 +136,125 @@ class TrackPointFilter extends AbstractFilter
         return false;
     }
 
-    // TODO really needed when time and distance filter are present?
-
-    /**
-     * Checks if the velocity value is valid
-     * @param TrackPointInterface $tp1
-     * @param TrackPointInterface $tp2
-     * @return bool
-     */
-    private function isValidVelocity($tp1, $tp2)
-    {
-        $distance = $this->util->calcDistance($tp1, $tp2);
-        $time = $this->util->calcTime($tp2, $tp1);
-        $velocity = $this->util->calcVelocity($distance, $time);
-        if($time > 0 && $velocity <= $this->maxVelocity){
-            return true;
-        }
-        return false;
-    }
-
     /**
      * Validates trackpoints and removes invalid ones
+     *
      * @param array $trackPoints
+     *
      * @return array
+     * @throws TrackException
      */
     protected function filter(array $trackPoints)
     {
         $length = count($trackPoints);
-        $i = 0;
+        $i = $this->findValidStart($trackPoints);
         $next = 1;
         $cleaned = [];
 
-        // TODO special find first valid point check?
+        if ($i > -1) { // valid start point found
+            $this->validPointCounter++; // first point
+
+            while ($next < $length) {
+                $tp1 = new TrackPoint($trackPoints[$i]);
+                $tp2 = new TrackPoint($trackPoints[$next]);
+
+                // time filter has to be used first to be sure time value > 0
+                if ($this->areTrackpointsValid($tp1, $tp2)) {
+                    $this->validPointCounter++;
+                    $cleaned[] = $trackPoints[$i];
+                    $i = $next;
+                }
+
+                $next++;
+            }
+
+            return $cleaned;
+        }
+
+        throw new TrackException('TrackPointFilter: No valid starting point found!');
+    }
+
+    /**
+     * Starts a filter and processes the given data
+     *
+     * @param $data
+     *
+     * @throws TrackException
+     */
+    public function run($data)
+    {
+        if (isset($data['trackPoints'])) {
+            // before being processed
+            $totalAmountOfTrackPoints = count($data['trackPoints']);
+            $data['trackPoints'] = $this->filter($data['trackPoints']);
+            $validPointThreshold = $this->validPointCounter / $totalAmountOfTrackPoints;
+
+            if (count($data['trackPoints']) >= $this->minTrackPointsPerSegment &&
+                $validPointThreshold >= $this->minValidPoints
+            ) {
+                $this->write($data);
+            } else {
+                throw new TrackException(
+                    'TrackPointFilter: To many invalid or inaccurate trackpoints prevented further processing!'
+                );
+            }
+        } else {
+            throw new TrackException('TrackPointFilter: Data param should contain trackpoints!');
+        }
+    }
+
+    /**
+     * Checks if a trackpoint-pair is valid
+     *
+     * @param TrackPointInterface $tp1
+     * @param TrackPointInterface $tp2
+     *
+     * @return bool
+     */
+    private function areTrackpointsValid($tp1, $tp2)
+    {
+        if ($this->isValidTime($tp2, $tp1) &&
+            $this->isValidDistance($tp2, $tp1) &&
+            $this->isValidAltitudeChange($tp1, $tp2)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Searches for a valid start point
+     *
+     * @param array $trackPoints
+     *
+     * @return int returns -1 if none is found or index of the point to start from
+     */
+    private function findValidStart(array $trackPoints)
+    {
+        $validInRow = 0;
+        $i = 0;
+        $next = 1;
+        $length = count($trackPoints);
 
         while ($next < $length) {
             $tp1 = new TrackPoint($trackPoints[$i]);
             $tp2 = new TrackPoint($trackPoints[$next]);
 
-            // time filter has to be used first to provide time value > 0
-            if ($this->isValidTime($tp2, $tp1) &&
-                $this->isValidDistance($tp2, $tp1) &&
-                $this->isValidAltitudeChange($tp1, $tp2) &&
-                $this->isValidVelocity($tp1, $tp2)
-            ) {
-                $cleaned[] = $trackPoints[$i];
-                $i = $next;
+            // time filter has to be used first to be sure time value > 0
+            if ($this->areTrackpointsValid($tp1, $tp2)) {
+                $validInRow++;
+                if ($validInRow === $this->minValidPointsInRow) {
+                    return ($next - $this->minValidPointsInRow);
+                }
+            } else {
+                $validInRow = 0;
             }
 
             $next++;
+            $i++;
         }
 
-        return $cleaned;
-    }
-
-    /**
-     * Starts a filter and processes the given data
-     * @param $data
-     * @throws FilterException
-     */
-    public function run($data)
-    {
-        if (isset($data['trackPoints'])) {
-            $data['trackPoints'] = $this->filter($data['trackPoints']);
-            if (count($data['trackPoints']) >= $this->minTrackPointsPerSegment) {
-                $this->write($data);
-            }
-        } else {
-            throw new InvalidArgumentException('TrackPointFilter: Data param should contain trackpoints!');
-        }
+        return -1;
     }
 }

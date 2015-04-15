@@ -20,7 +20,7 @@ services:
 
     fhv_tmd.trackPointFilter:
           class: FHV\Bundle\TmdBundle\Filter\TrackPointFilter
-          arguments: [@fhv_tmd.trackPointUtil, %tmd.filter.max_distance%, %tmd.filter.min_distance%, %tmd.filter.max_altitude_change%, %tmd.filter.min_time_difference%, %tmd.filter.min_trackpoints_per_segment%, %tmd.filter.max_velocity%]
+          arguments: [@fhv_tmd.trackPointUtil, %tmd.filter.max_distance%, %tmd.filter.min_distance%, %tmd.filter.max_altitude_change%, %tmd.filter.min_time_difference%, %tmd.filter.min_trackpoints_per_segment%, %tmd.filter.min_valid_in_row%, %tmd.filter.min_valid_points%]
 
     fhv_tmd.segmentFilter:
           class: FHV\Bundle\TmdBundle\Filter\SegmentFilter

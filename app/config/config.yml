@@ -82,5 +82,6 @@ fhv_tmd:
     max_altitude_change: 25
     min_trackpoints_per_segment: 2
     min_time_difference: 1
-    max_velocity: 50
+    min_valid_in_row: 3
+    min_valid_points: 0.85
 
