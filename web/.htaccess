@@ -5,6 +5,8 @@
 # to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
 DirectoryIndex app.php
 
+SetEnv SYMFONY_ENV dev
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
@@ -44,8 +46,6 @@ DirectoryIndex app.php
     # Rewrite all other queries to the front controller.
     RewriteRule .? %{ENV:BASE}/app.php [L]
 
-    # remove app.php from url
-    #RedirectMatch permanent ^/app\.php/(.*) /$1
 </IfModule>
 
 <IfModule !mod_rewrite.c>
