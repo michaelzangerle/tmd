@@ -1,2 +1,28 @@
-$.material.init();
-console.log("finished init!");
+requirejs.config({
+    baseUrl: '/bundles/fhvtmd/js/',
+    paths: {
+        'jquery': '../vendor/jquery/dist/jquery.min',
+        'bootstrap': '../vendor/bootstrap/dist/js/bootstrap.min',
+        'material': '../vendor/bootstrap-material-design/dist/js/material.min'
+    },
+
+    shim: {
+        'jquery': {
+            exports: '$'
+        },
+        'bootstrap': {
+            deps: ['jquery']
+        },
+        'material': {
+            deps: ['bootstrap'],
+            exports: '$.material'
+        }
+    }
+});
+
+require(['jquery', 'create', 'material'], function ($, create, bs, m) {
+
+    $.material.init();
+    console.log('finished init!');
+    create.foo();
+});

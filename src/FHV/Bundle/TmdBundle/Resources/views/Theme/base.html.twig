@@ -49,17 +49,14 @@
         </div>
     {% endblock %}
 
-    <div class="row ">
-        <div class="col-md-12">&copy; Michael Zangerle 2015 | Transport Mode Detection</div>
-    </div>
-
 </div>
 
 {% block javascript %}
-    <script src="/bundles/fhvtmd/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="/bundles/fhvtmd/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/js/material.min.js"></script>
-    <script src="/bundles/fhvtmd/js/main.js"></script>
+    {#<script src="/bundles/fhvtmd/vendor/jquery/dist/jquery.min.js"></script>#}
+    {#<script src="/bundles/fhvtmd/vendor/bootstrap/dist/js/bootstrap.min.js"></script>#}
+    {#<script src="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/js/material.min.js"></script>#}
+    <script src="/bundles/fhvtmd/vendor/requirejs/require.js"></script>
+    <script src="/bundles/fhvtmd/js/main.js" data-main="scripts/main"></script>
 {% endblock %}
 </body>
 </html>
