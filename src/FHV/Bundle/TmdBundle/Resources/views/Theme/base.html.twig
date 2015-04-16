@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Transport Mode Detection</title>
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="/bundles/fhvtmd/vendor/bootstrap/dist/css/bootstrap.min.css">
+        <link href="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/css/roboto.min.css" rel="stylesheet">
+        <link href="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/css/material-fullpalette.min.css"
+              rel="stylesheet">
+    {% endblock %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+<body>
+
+{% include 'FHVTmdBundle::Theme/partials/navigation.html.twig' with { 'currentNavigation' : currentNavigation } only %}
+
+<div class="container">
+
+    {% block content %}
+        Hello {{ name }}!
+
+        <button class="btn btn-primary" data-toggle="modal" data-target="#complete-dialog">Open dialog
+            <div class="ripple-wrapper"></div>
+        </button>
+        <div id="complete-dialog" class="modal fade" tabindex="-1" style="display: none;" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Dialog</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Fore aut non quem incididunt, varias reprehenderit deserunt quem offendit,
+                            cillum proident ne reprehenderit, quem ad laborum, quo possumus praetermissum,
+                            si ne illustriora, hic appellat coniunctione, do labore aliqua quo probant. In
+                            probant voluptatibus quo mentitum est laboris. Quorum mandaremus graviterque.
+                            Mentitum id velit, dolor aut litteris, ea varias illustriora, ita commodo ita
+                            ingeniis, iis nulla appellat incurreret, aut irure amet summis pariatur ita ubi
+                            quis dolore veniam proident, consequat sed ingeniis.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-dismiss="modal">Dismiss</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    <div class="row ">
+        <div class="col-md-12">&copy; Michael Zangerle 2015 | Transport Mode Detection</div>
+    </div>
+
+</div>
+
+{% block javascript %}
+    <script src="/bundles/fhvtmd/vendor/jquery/dist/jquery.min.js"></script>
+    <script src="/bundles/fhvtmd/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/js/material.min.js"></script>
+    <script src="/bundles/fhvtmd/js/main.js"></script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,19 @@
+<div class="navbar navbar-default navbar-material-blue-grey">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">TMD</a>
+    </div>
+    <div class="navbar-collapse collapse navbar-responsive-collapse">
+        <ul class="nav navbar-nav">
+            <li {% if currentNavigation == 'index' %}class="active"{% endif %}><a href="/">Home</a></li>
+            <li {% if currentNavigation == 'create' %}class="active"{% endif %}><a href="/create">Create</a></li>
+            <li {% if currentNavigation == 'analytics' %}class="active"{% endif %}><a href="/analytics">Analytics</a></li>
+        </ul>
+    </div>
+</div>
+
+

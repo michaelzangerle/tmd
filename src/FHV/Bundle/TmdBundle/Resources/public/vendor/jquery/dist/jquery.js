@@ -6886,7 +6886,7 @@ jQuery.fx.stop = function() {
 jQuery.fx.speeds = {
 	slow: 600,
 	fast: 200,
-	// Default speed
+	// theme speed
 	_default: 400
 };
 
@@ -6914,7 +6914,7 @@ jQuery.fn.delay = function( time, type ) {
 	input.type = "checkbox";
 
 	// Support: iOS<=5.1, Android<=4.2+
-	// Default value for a checkbox should be "on"
+	// theme value for a checkbox should be "on"
 	support.checkOn = input.value !== "";
 
 	// Support: IE<=11+
@@ -7940,7 +7940,7 @@ jQuery.extend({
 			requestHeadersNames = {},
 			// The jqXHR state
 			state = 0,
-			// Default abort message
+			// theme abort message
 			strAbort = "canceled",
 			// Fake xhr
 			jqXHR = {
@@ -8707,7 +8707,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 var oldCallbacks = [],
 	rjsonp = /(=)\?(?=&|$)|\?\?/;
 
-// Default jsonp settings
+// theme jsonp settings
 jQuery.ajaxSetup({
 	jsonp: "callback",
 	jsonpCallback: function() {

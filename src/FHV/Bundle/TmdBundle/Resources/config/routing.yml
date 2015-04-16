@@ -1,11 +1,11 @@
-fhv_tmd_homepage:
+fhv_tmd_index:
     path:     /
-    defaults: { _controller: FHVTmdBundle:Default:index }
+    defaults: { _controller: FHVTmdBundle:Template:index }
 
-fhv_tmd_foo:
+fhv_tmd_create:
     path:     /create/{name}
-    defaults: { _controller: FHVTmdBundle:Default:foo, name: foo }
+    defaults: { _controller: FHVTmdBundle:Template:create, name: foo }
 
-fhv_tmd_bar:
+fhv_tmd_analytics:
     path:     /analytics/{name}
-    defaults: { _controller: FHVTmdBundle:Default:foo, name: bar }
+    defaults: { _controller: FHVTmdBundle:Template:analytics, name: bar }
