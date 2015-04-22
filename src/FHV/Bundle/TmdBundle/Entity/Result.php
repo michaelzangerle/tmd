@@ -34,11 +34,11 @@ class Result
      */
     private $id;
 
-
     /**
      * Set transportType
      *
      * @param integer $transportType
+     *
      * @return Result
      */
     public function setTransportType($transportType)
@@ -51,7 +51,7 @@ class Result
     /**
      * Get transportType
      *
-     * @return integer 
+     * @return integer
      */
     public function getTransportType()
     {
@@ -62,6 +62,7 @@ class Result
      * Set correctedByUser
      *
      * @param boolean $correctedByUser
+     *
      * @return Result
      */
     public function setCorrectedByUser($correctedByUser)
@@ -74,7 +75,7 @@ class Result
     /**
      * Get correctedByUser
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getCorrectedByUser()
     {
@@ -85,6 +86,7 @@ class Result
      * Set precision
      *
      * @param float $precision
+     *
      * @return Result
      */
     public function setPrecision($precision)
@@ -97,7 +99,7 @@ class Result
     /**
      * Get precision
      *
-     * @return float 
+     * @return float
      */
     public function getPrecision()
     {
@@ -108,6 +110,7 @@ class Result
      * Set analizationType
      *
      * @param integer $analizationType
+     *
      * @return Result
      */
     public function setAnalizationType($analizationType)
@@ -120,7 +123,7 @@ class Result
     /**
      * Get analizationType
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnalizationType()
     {
@@ -130,7 +133,7 @@ class Result
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {

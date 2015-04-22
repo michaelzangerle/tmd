@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
+
 /**
  * Feature
  * @ExclusionPolicy("all")
@@ -34,11 +35,11 @@ class Feature
      */
     private $segment;
 
-
     /**
      * Set key
      *
      * @param float $key
+     *
      * @return Feature
      */
     public function setKey($key)
@@ -51,7 +52,7 @@ class Feature
     /**
      * Get key
      *
-     * @return float 
+     * @return float
      */
     public function getKey()
     {
@@ -62,6 +63,7 @@ class Feature
      * Set value
      *
      * @param float $value
+     *
      * @return Feature
      */
     public function setValue($value)
@@ -74,7 +76,7 @@ class Feature
     /**
      * Get value
      *
-     * @return float 
+     * @return float
      */
     public function getValue()
     {
@@ -84,7 +86,7 @@ class Feature
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -95,6 +97,7 @@ class Feature
      * Set segment
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Tracksegment $segment
+     *
      * @return Feature
      */
     public function setSegment(\FHV\Bundle\TmdBundle\Entity\Tracksegment $segment)
@@ -107,7 +110,7 @@ class Feature
     /**
      * Get segment
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Tracksegment 
+     * @return \FHV\Bundle\TmdBundle\Entity\Tracksegment
      */
     public function getSegment()
     {

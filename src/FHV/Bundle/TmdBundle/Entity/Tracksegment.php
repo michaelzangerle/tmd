@@ -65,7 +65,7 @@ class Tracksegment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,6 +76,7 @@ class Tracksegment
      * Set start
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Trackpoint $start
+     *
      * @return Tracksegment
      */
     public function setStart(\FHV\Bundle\TmdBundle\Entity\Trackpoint $start = null)
@@ -88,7 +89,7 @@ class Tracksegment
     /**
      * Get start
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Trackpoint 
+     * @return \FHV\Bundle\TmdBundle\Entity\Trackpoint
      */
     public function getStart()
     {
@@ -99,6 +100,7 @@ class Tracksegment
      * Set end
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Trackpoint $end
+     *
      * @return Tracksegment
      */
     public function setEnd(\FHV\Bundle\TmdBundle\Entity\Trackpoint $end = null)
@@ -111,7 +113,7 @@ class Tracksegment
     /**
      * Get end
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Trackpoint 
+     * @return \FHV\Bundle\TmdBundle\Entity\Trackpoint
      */
     public function getEnd()
     {
@@ -122,6 +124,7 @@ class Tracksegment
      * Set result
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Result $result
+     *
      * @return Tracksegment
      */
     public function setResult(\FHV\Bundle\TmdBundle\Entity\Result $result = null)
@@ -134,7 +137,7 @@ class Tracksegment
     /**
      * Get result
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Result 
+     * @return \FHV\Bundle\TmdBundle\Entity\Result
      */
     public function getResult()
     {
@@ -145,6 +148,7 @@ class Tracksegment
      * Add trackpoints
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Trackpoint $trackpoints
+     *
      * @return Tracksegment
      */
     public function addTrackpoint(\FHV\Bundle\TmdBundle\Entity\Trackpoint $trackpoints)
@@ -167,7 +171,7 @@ class Tracksegment
     /**
      * Get trackpoints
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTrackpoints()
     {
@@ -178,6 +182,7 @@ class Tracksegment
      * Add features
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Feature $features
+     *
      * @return Tracksegment
      */
     public function addFeature(\FHV\Bundle\TmdBundle\Entity\Feature $features)
@@ -200,7 +205,7 @@ class Tracksegment
     /**
      * Get features
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFeatures()
     {
@@ -211,6 +216,7 @@ class Tracksegment
      * Set track
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Track $track
+     *
      * @return Tracksegment
      */
     public function setTrack(\FHV\Bundle\TmdBundle\Entity\Track $track)
@@ -223,7 +229,7 @@ class Tracksegment
     /**
      * Get track
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Track 
+     * @return \FHV\Bundle\TmdBundle\Entity\Track
      */
     public function getTrack()
     {

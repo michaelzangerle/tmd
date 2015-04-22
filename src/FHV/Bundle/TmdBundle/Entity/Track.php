@@ -36,6 +36,7 @@ class Track
      * Set analyzationType
      *
      * @param integer $analyzationType
+     *
      * @return Track
      */
     public function setAnalyzationType($analyzationType)
@@ -48,7 +49,7 @@ class Track
     /**
      * Get analyzationType
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnalyzationType()
     {
@@ -58,7 +59,7 @@ class Track
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,6 +70,7 @@ class Track
      * Add segments
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Tracksegment $segments
+     *
      * @return Track
      */
     public function addSegment(\FHV\Bundle\TmdBundle\Entity\Tracksegment $segments)
@@ -91,7 +93,7 @@ class Track
     /**
      * Get segments
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSegments()
     {
