@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="FHV\Bundle\TmdBundle\Entity\Trackpoint" table="trackpoints">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="lat" type="float" nullable="false"/>
+        <field name="long" type="float" nullable="false"/>
+        <field name="time" type="datetime" nullable="false"/>
+
+        <many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" field="segment"
+                     inversed-by="trackpoints">
+            <join-columns>
+                <join-column name="idTracksegments" referenced-column-name="id" nullable="false"
+                             on-delete="CASCADE"/>
+            </join-columns>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

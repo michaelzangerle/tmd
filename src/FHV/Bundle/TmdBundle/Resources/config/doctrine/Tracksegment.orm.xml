@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="FHV\Bundle\TmdBundle\Entity\Tracksegment" table="tracksegments">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <one-to-one field="start" target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint">
+            <join-column name="idStartPoint" referenced-column-name="id" />
+        </one-to-one>
+
+        <one-to-one field="end" target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint">
+            <join-column name="idEndPoint" referenced-column-name="id" />
+        </one-to-one>
+
+        <one-to-one field="result" target-entity="FHV\Bundle\TmdBundle\Entity\Result">
+            <join-column name="idResult" referenced-column-name="id" />
+        </one-to-one>
+
+        <one-to-many target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint" mapped-by="segment"
+                     field="trackpoints">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="FHV\Bundle\TmdBundle\Entity\Feature" mapped-by="segment"
+                     field="features">
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Track" field="track"
+                     inversed-by="segments">
+            <join-columns>
+                <join-column name="idTracks" referenced-column-name="id" nullable="false"
+                             on-delete="CASCADE"/>
+            </join-columns>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

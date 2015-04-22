@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="FHV\Bundle\TmdBundle\Entity\Feature" table="features">
+        <id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="key" type="float" nullable="false"/>
+        <field name="value" type="float" nullable="false"/>
+
+        <many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" field="segment"
+                     inversed-by="features">
+            <join-columns>
+                <join-column name="idTrackpointsegments" referenced-column-name="id" nullable="false"
+                             on-delete="CASCADE"/>
+            </join-columns>
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>
