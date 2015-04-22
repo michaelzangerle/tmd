@@ -1,0 +1,3 @@
+fhv_tmd_track:
+    type:     rest
+    resource: FHV\Bundle\TmdBundle\Controller\TrackController

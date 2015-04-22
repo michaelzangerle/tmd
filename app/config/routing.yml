@@ -1,3 +1,7 @@
 fhv_tmd:
     resource: "@FHVTmdBundle/Resources/config/routing.yml"
     prefix:   /
+
+fhv_tmd_api:
+    resource: "@FHVTmdBundle/Resources/config/routing_api.yml"
+    prefix:   /api/
