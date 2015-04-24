@@ -1,9 +1,9 @@
-define([], function () {
+define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function (googleMaps) {
 
     return {
 
-        $formContainer: null,
-        $mapContainer: null,
+        $formView: null,
+        $mapView: null,
 
         $form: null,
         $submitButton: null,
@@ -18,8 +18,8 @@ define([], function () {
             this.$form = $('#createForm');
             this.$submitButton = $('#createFormSubmit');
             this.$errorForm = $('#errorForm');
-            this.$formContainer = $('#formContainer');
-            this.$mapContainer = $('#mapContainer');
+            this.$formView = $('#formView');
+            this.$mapView = $('#mapView');
 
             this.bindEvents();
         },
@@ -100,9 +100,21 @@ define([], function () {
         /**
          * Will handle
          */
-        fileUploadedHandler: function(){
-            this.$formContainer.hide();
-            this.$mapContainer.show();
+        fileUploadedHandler: function () {
+            this.$formView.hide();
+            this.$mapView.show();
+            this.initMap();
+        },
+
+        /**
+         * Initializes the map
+         */
+        initMap: function () {
+            var mapOptions = {
+                    zoom: 8,
+                    center: new google.maps.LatLng(-34.397, 150.644)
+                },
+                map = new google.maps.Map(document.getElementById('map'), mapOptions);
         }
     };
 });

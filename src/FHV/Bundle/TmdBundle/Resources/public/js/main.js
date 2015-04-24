@@ -3,7 +3,8 @@ requirejs.config({
     paths: {
         'jquery': '../vendor/jquery/dist/jquery.min',
         'bootstrap': '../vendor/bootstrap/dist/js/bootstrap.min',
-        'material': '../vendor/bootstrap-material-design/dist/js/material.min'
+        'material': '../vendor/bootstrap-material-design/dist/js/material.min',
+        'async': '../vendor/requirejs-plugins/src/async'
     },
 
     shim: {
