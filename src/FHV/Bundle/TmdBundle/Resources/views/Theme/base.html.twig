@@ -9,6 +9,7 @@
         <link href="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/css/roboto.min.css" rel="stylesheet">
         <link href="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/css/material-fullpalette.min.css"
               rel="stylesheet">
+        <link rel="stylesheet" href="/bundles/fhvtmd/css/tmd.css">
     {% endblock %}
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -17,9 +18,8 @@
 
 {% include 'FHVTmdBundle::Theme/partials/navigation.html.twig' with { 'currentNavigation' : currentNavigation } only %}
 
-<div class="container">
-
-    {% block content %}
+{% block content %}
+    <div class="container">
         Hello {{ name }}!
 
         <button class="btn btn-primary" data-toggle="modal" data-target="#complete-dialog">Open dialog
@@ -47,14 +47,12 @@
                 </div>
             </div>
         </div>
-    {% endblock %}
+    </div>
+{% endblock %}
 
-</div>
+
 
 {% block javascript %}
-    {#<script src="/bundles/fhvtmd/vendor/jquery/dist/jquery.min.js"></script>#}
-    {#<script src="/bundles/fhvtmd/vendor/bootstrap/dist/js/bootstrap.min.js"></script>#}
-    {#<script src="/bundles/fhvtmd/vendor/bootstrap-material-design/dist/js/material.min.js"></script>#}
     <script src="/bundles/fhvtmd/vendor/requirejs/require.js"></script>
     <script src="/bundles/fhvtmd/js/main.js" data-main="scripts/main"></script>
 {% endblock %}

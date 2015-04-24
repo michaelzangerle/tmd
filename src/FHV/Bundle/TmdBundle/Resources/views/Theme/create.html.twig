@@ -1,1 +1,70 @@
 {% extends 'FHVTmdBundle::Theme/base.html.twig' %}
+
+    {% block content %}
+        <div class="container" id="formContainer">
+            <div id="create"> <!-- upload form -->
+                <div class="row m-bottom-30">
+                    <h1>Getting started</h1>
+
+                    <p>Let your gps file be analyzed is an easy process:</p>
+                    <ol>
+                        <li>Choose one of the methods to analyze the file.</li>
+                        <li>Select your gps file.</li>
+                        <li>Click the start button.</li>
+                        <li>When the data is uploaded a map will be shown on which the analyzed track segments will be displayed.</li>
+                        <li>By selecting the segments the transport mode can be changed.</li>
+                        <li>By clicking on the 'Finish'-button the track will be saved and cannot be changed anymore.</li>
+                    </ol>
+
+                    <div class="bs-component" id="errorForm" style="display:none">
+                        <div class="alert alert-dismissable alert-danger">
+                            <button type="button" class="close" data-dismiss="alert">×</button>
+                            <strong>The provided form data is not valid. You have to provide a valid analyzation
+                            type and a valid gps file! The gps file should be standard conform and should use or at
+                            least be valid according to the <i>"http://www.topografix.com/GPX/1/1" namespace.</i></strong>
+                        </div>
+                        <div id="source-button" class="btn btn-primary btn-xs" style="display: none;">&lt; &gt;</div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <form id="createForm" enctype="multipart/form-data" method="POST">
+                        <label>Select an analyzation method</label>
+
+                        <div class="form-group m-bottom-30">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="typeOptions" id="typeA" value="typeA" checked>
+                                    <b>Method A</b> - Analyze gps file by using only meta information calculated from
+                                    the
+                                    data.
+                                </label>
+                            </div>
+                            <div class="radio disabled">
+                                <label>
+                                    <input type="radio" name="typeOptions" id="typeB" value="typeB" disabled>
+                                    <b>Method B</b> - Analyze gps file by using not only meta information calculated
+                                    from
+                                    the
+                                    data in the file but also geografical information.
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group m-bottom-30">
+                            <label for="gpsFile">File input</label>
+                            <input type="file" id="gpsFile">
+
+                            <p class="help-block">Max file size should be below 10 megabyte.</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="createFormSubmit">Start</button>
+                    </form>
+                </div>
+            </div>
+            <!-- upload form -->
+        </div>
+
+        <div id="mapContainer" class="hidden">  <!-- map ui -->
+                <h2>map</h2>
+            </div>
+        </div>  <!-- map ui -->
+    {% endblock %}

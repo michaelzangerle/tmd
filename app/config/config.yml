@@ -74,10 +74,6 @@ swiftmailer:
 
 # fost rest bundle
 fos_rest:
-    # add a content negotiation rule, enabling support for json/xml for the entire website
-    format_listener:
-        rules:
-            - { path: ^/api, priorities: [ json ], fallback_format: json, prefer_extension: false }
     routing_loader:
         default_format: json
 
