@@ -89,4 +89,6 @@ fhv_tmd:
     min_time_difference: 1
     min_valid_in_row: 3
     min_valid_points: 0.85
+  analyze:
+    default_method: A
 

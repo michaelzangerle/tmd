@@ -21,10 +21,7 @@ requirejs.config({
     }
 });
 
-require(['jquery', 'create', 'material'], function ($, create, material) {
-
+require(['jquery', 'create', 'material'], function ($, create) {
     $.material.init();
-    console.log('finished init!');
-
     create.initialize();
 });

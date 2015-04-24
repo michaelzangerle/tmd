@@ -62,6 +62,15 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('http://www.topografix.com/GPX/1/1')
                     ->info('Namespace for the gpx files.')
                 ->end()
+                ->arrayNode('analyze')
+                    ->children()
+                        ->scalarNode('default_method')
+                            ->defaultValue('A')
+                            ->info('Default method to analyze data.')
+                        ->end()
+                    ->end()
+                ->end()
+
             ->end()
         ;
 

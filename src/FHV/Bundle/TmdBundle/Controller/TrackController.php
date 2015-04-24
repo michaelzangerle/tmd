@@ -19,9 +19,11 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
      *
      * @return Response
      */
-    public function getAction($id){
+    public function getAction($id)
+    {
 
         $view = $this->view(new Track(), 200);
+
         return $this->handleView($view);
     }
 
@@ -30,9 +32,22 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
      *
      * @return Response
      */
-    public function postAction(Request $request){
+    public function postAction(Request $request)
+    {
+        $file = $request->files->get('file');
+        if ($file->isValid() && $file->getMimeType() === 'application/xml') {
+            $content = file_get_contents($file->getPathName());
+            $method = $request->get('method', $this->container->getParameter('tmd.analyze.default_method'));
 
-        $view = $this->view(new Track(), 200);
+            // TODO start processing
+
+            $view = $this->view('', 204);
+        } else {
+
+            $view = $this->view('GPS file is incomplete or not valid!', 400);
+        }
+
+        // TODO remove file when finished
         return $this->handleView($view);
     }
 }

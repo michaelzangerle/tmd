@@ -26,6 +26,7 @@ class FHVTmdExtension extends Extension
         $container->setParameter('tmd.gpx_namespace', $config['gpx_namespace']);
 
         $this->setFilterParameters($container, $config);
+        $this->setAnalyzeParameters($container, $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
@@ -50,5 +51,15 @@ class FHVTmdExtension extends Extension
         $container->setParameter('tmd.filter.min_time_difference', $config['filter']['min_time_difference']);
         $container->setParameter('tmd.filter.min_valid_in_row', $config['filter']['min_valid_in_row']);
         $container->setParameter('tmd.filter.min_valid_points', $config['filter']['min_valid_points']);
+    }
+
+    /**
+     * Sets the parameters needed for the analyze operations
+     * @param $container
+     * @param $config
+     */
+    private function setAnalyzeParameters($container, $config)
+    {
+        $container->setParameter('tmd.analyze.default_method', $config['analyze']['default_method']);
     }
 }
