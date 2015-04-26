@@ -47,6 +47,10 @@ services:
           class: FHV\Bundle\TmdBundle\Filter\SegmentationFilter
           arguments:
             - @fhv_tmd.trackPointUtil
+            - %tmd.segmentation.max_walk_velocity%
+            - %tmd.segmentation.max_walk_acceleration%
+            - %tmd.segmentation.min_segment_time%
+            - %tmd.segmentation.min_segment_distance%
 
     ##############################
     # Manager

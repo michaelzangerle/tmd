@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use FHV\Bundle\TmdBundle\Model\TracksegmentType;
 
 /**
  * Result
@@ -12,7 +13,7 @@ class Result
     /**
      * @var integer
      */
-    private $transportType;
+    private $transportType = TracksegmentType::UNDEFINIED;
 
     /**
      * @var boolean

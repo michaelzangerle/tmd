@@ -27,6 +27,7 @@ class FHVTmdExtension extends Extension
 
         $this->setFilterParameters($container, $config);
         $this->setAnalyzeParameters($container, $config);
+        $this->setSegmentationParameters($container, $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
@@ -61,5 +62,18 @@ class FHVTmdExtension extends Extension
     private function setAnalyzeParameters($container, $config)
     {
         $container->setParameter('tmd.analyze.default_method', $config['analyze']['default_method']);
+    }
+
+    /**
+     * Sets the parameters needed for the segmentation
+     * @param $container
+     * @param $config
+     */
+    private function setSegmentationParameters($container, $config)
+    {
+        $container->setParameter('tmd.segmentation.max_walk_velocity', $config['segmentation']['max_walk_velocity']);
+        $container->setParameter('tmd.segmentation.max_walk_acceleration', $config['segmentation']['max_walk_acceleration']);
+        $container->setParameter('tmd.segmentation.min_segment_distance', $config['segmentation']['min_segment_distance']);
+        $container->setParameter('tmd.segmentation.min_segment_time', $config['segmentation']['min_segment_time']);
     }
 }

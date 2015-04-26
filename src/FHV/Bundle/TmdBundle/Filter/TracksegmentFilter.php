@@ -33,7 +33,9 @@ class TracksegmentFilter extends AbstractFilter
 
     /**
      * Starts a filter and processes the given data
+     *
      * @param $data
+     *
      * @throws FilterException
      */
     public function run($data)
@@ -41,7 +43,7 @@ class TracksegmentFilter extends AbstractFilter
         if (isset($data['trackPoints'])) {
             $segment = $this->createSegment($data['trackPoints'], $data['type']);
             $this->write($segment);
-            if($this->getParentHasFinished()) {
+            if ($this->getParentHasFinished()) {
                 $this->finished();
             }
         } else {
@@ -58,10 +60,10 @@ class TracksegmentFilter extends AbstractFilter
     /**
      * Returns a segment for the given trackpoints
      *
-*@param array $trackPoints
+     * @param array       $trackPoints
      * @param string|null $type
      *
-*@return TracksegmentInterface
+     * @return TracksegmentInterface
      * @throws InvalidArgumentException
      */
     public function createSegment(array $trackPoints, $type = null)
@@ -77,7 +79,7 @@ class TracksegmentFilter extends AbstractFilter
         $accTrackPoints = 0;
         $trackPoints[] = new Trackpoint($trackPoints[0]);
 
-        if ($amountOfTrackPoints +1 >= $this->minTrackPointsPerSegment) {
+        if ($amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
             for ($i = 0; $i < $amountOfTrackPoints; $i++) {
                 $tp1 = new Trackpoint($trackPoints[$i]);
                 $tp2 = new Trackpoint($trackPoints[$i + 1]);

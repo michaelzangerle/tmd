@@ -108,7 +108,9 @@ class Trackpoint implements TrackpointInterface
 
     /**
      * Validates the xml data received via the constructor
+     *
      * @param $xml
+     *
      * @return bool
      */
     private function isValidPointXML($xml)

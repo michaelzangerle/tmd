@@ -2,7 +2,6 @@
 
 namespace FHV\Bundle\TmdBundle\Model;
 
-
 interface TracksegmentInterface
 {
     /**
@@ -110,5 +109,4 @@ interface TracksegmentInterface
      * @return array
      */
     public function toCSVArray();
-
 }

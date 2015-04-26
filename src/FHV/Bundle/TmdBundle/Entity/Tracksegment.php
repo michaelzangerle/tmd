@@ -2,6 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
@@ -38,13 +39,13 @@ class Tracksegment
 
     /**
      * @Expose
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     private $trackpoints;
 
     /**
      * @Expose
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      */
     private $features;
 
@@ -171,11 +172,25 @@ class Tracksegment
     /**
      * Get trackpoints
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getTrackpoints()
     {
         return $this->trackpoints;
+    }
+
+    /**
+     * Set trackpoints
+     *
+     * @param Collection $trackpoints
+     *
+     * @return Tracksegment
+     */
+    public function setTrackpoints(Collection $trackpoints)
+    {
+        $this->trackpoints = $trackpoints;
+
+        return $this;
     }
 
     /**
@@ -205,7 +220,7 @@ class Tracksegment
     /**
      * Get features
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Collection
      */
     public function getFeatures()
     {
@@ -234,5 +249,61 @@ class Tracksegment
     public function getTrack()
     {
         return $this->track;
+    }
+    /**
+     * @var float
+     */
+    private $distance;
+
+    /**
+     * @var integer
+     */
+    private $time;
+
+
+    /**
+     * Set distance
+     *
+     * @param float $distance
+     * @return Tracksegment
+     */
+    public function setDistance($distance)
+    {
+        $this->distance = $distance;
+
+        return $this;
+    }
+
+    /**
+     * Get distance
+     *
+     * @return float 
+     */
+    public function getDistance()
+    {
+        return $this->distance;
+    }
+
+    /**
+     * Set time
+     *
+     * @param integer $time
+     * @return Tracksegment
+     */
+    public function setTime($time)
+    {
+        $this->time = $time;
+
+        return $this;
+    }
+
+    /**
+     * Get time
+     *
+     * @return integer 
+     */
+    public function getTime()
+    {
+        return $this->time;
     }
 }

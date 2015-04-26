@@ -2,7 +2,6 @@
 
 namespace FHV\Bundle\TmdBundle\Model;
 
-
 interface TrackpointInterface
 {
     /**
@@ -44,5 +43,4 @@ interface TrackpointInterface
      * @param \DateTime $time
      */
     public function setTime($time);
-
 }

@@ -18,13 +18,6 @@ class Tracksegment implements TracksegmentInterface
         'type'
     );
 
-    public static $TYPE_UNDEFINED = 1;
-    public static $TYPE_DRIVE = 2;
-    public static $TYPE_BUS = 3;
-    public static $TYPE_TRAIN = 4;
-    public static $TYPE_WALK = 5;
-    public static $TYPE_BIKE = 6;
-
     /**
      * @var float m/s2
      */
@@ -77,16 +70,16 @@ class Tracksegment implements TracksegmentInterface
     private $trackPoints;
 
     /**
-     * @param float $meanAcceleration in m/s
-     * @param float $meanVelocity in m/s
-     * @param float $maxAcceleration in m/s
-     * @param float $maxVelocity in m/s
-     * @param float $duration in seconds
-     * @param float $distance in meters
-     * @param TrackpointInterface $startPoint
-     * @param TrackpointInterface $endPoint
+     * @param float                 $meanAcceleration in m/s
+     * @param float                 $meanVelocity in m/s
+     * @param float                 $maxAcceleration in m/s
+     * @param float                 $maxVelocity in m/s
+     * @param float                 $duration in seconds
+     * @param float                 $distance in meters
+     * @param TrackpointInterface   $startPoint
+     * @param TrackpointInterface   $endPoint
      * @param TrackpointInterface[] $trackPoints
-     * @param int $type of segment
+     * @param int                   $type of segment
      */
     function __construct(
         $meanAcceleration,
@@ -274,7 +267,9 @@ class Tracksegment implements TracksegmentInterface
 
     /**
      * Validates the given type and returns a valid type
+     *
      * @param string | int $type
+     *
      * @return bool|int
      */
     private function getValidType($type)
@@ -282,17 +277,17 @@ class Tracksegment implements TracksegmentInterface
         if (is_string($type)) {
             switch (strtolower($type)) {
                 case 'walk':
-                    return static::$TYPE_WALK;
+                    return TracksegmentType::WALK;
                 case 'bus':
-                    return static::$TYPE_BUS;
+                    return TracksegmentType::BUS;
                 case 'train':
-                    return static::$TYPE_TRAIN;
+                    return TracksegmentType::TRAIN;
                 case 'car':
-                    return static::$TYPE_DRIVE;
+                    return TracksegmentType::DRIVE;
                 case 'bike':
-                    return static::$TYPE_BIKE;
+                    return TracksegmentType::BIKE;
                 default:
-                    return static::$TYPE_UNDEFINED;
+                    return TracksegmentType::UNDEFINIED;
             }
         } else {
             if (is_int($type)) {
@@ -302,7 +297,7 @@ class Tracksegment implements TracksegmentInterface
             }
         }
 
-        return static::$TYPE_UNDEFINED;
+        return TracksegmentType::UNDEFINIED;
     }
 
     /**
@@ -327,19 +322,18 @@ class Tracksegment implements TracksegmentInterface
     private function getTypeAsString()
     {
         switch ($this->getType()) {
-            case 2:
+            case TracksegmentType::DRIVE:
                 return 'car';
-            case 3:
+            case TracksegmentType::BUS:
                 return 'bus';
-            case 4:
+            case TracksegmentType::TRAIN:
                 return 'train';
-            case 5:
+            case TracksegmentType::WALK:
                 return 'walk';
-            case 6:
+            case TracksegmentType::BIKE:
                 return 'bike';
             default:
                 return 'undefined';
-
         }
     }
 }
