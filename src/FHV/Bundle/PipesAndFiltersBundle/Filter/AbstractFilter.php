@@ -30,20 +30,19 @@ abstract class AbstractFilter implements FilterInterface
     }
 
     /**
-     * Will be called when the parent filter is finished
-     * Sets parentIsFinished to true
-     */
-    public function setParentHasFinished()
-    {
-        $this->parentHasFinished = true;
-    }
-
-    /**
      * @inheritdoc
      */
     public function getParentHasFinished()
     {
         return $this->parentHasFinished;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function parentHasFinished()
+    {
+        $this->parentHasFinished = true;
     }
 
     /**

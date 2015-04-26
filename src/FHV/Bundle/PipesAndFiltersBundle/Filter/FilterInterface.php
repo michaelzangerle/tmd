@@ -30,7 +30,7 @@ interface FilterInterface
     /**
      * Will be called when the parent filter has finished
      */
-    public function setParentHasFinished();
+    public function parentHasFinished();
 
     /**
      * Returns true if parent filter has finished
