@@ -70,11 +70,14 @@ class SegmentFilter extends AbstractFilter
         $time = 0;
         $prevVelocity = 0;
         $accTrackPoints = 0;
+        $trackPoints[] = new TrackPoint($trackPoints[0]);
 
         if ($amountOfTrackPoints +1 >= $this->minTrackPointsPerSegment) {
             for ($i = 0; $i < $amountOfTrackPoints; $i++) {
                 $tp1 = new TrackPoint($trackPoints[$i]);
                 $tp2 = new TrackPoint($trackPoints[$i + 1]);
+
+                $trackPoints[] = $tp2;
 
                 $currentDistance = $this->util->calcDistance($tp1, $tp2);
                 $currentTime = $this->util->calcTime($tp2, $tp1);
@@ -111,6 +114,7 @@ class SegmentFilter extends AbstractFilter
                 $distance,
                 new TrackPoint($trackPoints[0]),
                 new TrackPoint($trackPoints[$amountOfTrackPoints]),
+                $trackPoints,
                 $type
             );
         }

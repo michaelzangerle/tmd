@@ -96,6 +96,16 @@ interface SegmentInterface
     public function setDuration($duration);
 
     /**
+     * @return TrackPointInterface[]
+     */
+    public function getTrackPoints();
+
+    /**
+     * @param TrackPointInterface[] $trackPoints
+     */
+    public function setTrackPoints($trackPoints);
+
+    /**
      * Returns a segment partially as array
      * @return array
      */

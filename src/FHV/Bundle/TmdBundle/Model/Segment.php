@@ -72,6 +72,11 @@ class Segment implements SegmentInterface
     private $endPoint;
 
     /**
+     * @var TrackPointInterface[]
+     */
+    private $trackPoints;
+
+    /**
      * @param float $meanAcceleration in m/s
      * @param float $meanVelocity in m/s
      * @param float $maxAcceleration in m/s
@@ -80,6 +85,7 @@ class Segment implements SegmentInterface
      * @param float $distance in meters
      * @param TrackPointInterface $startPoint
      * @param TrackPointInterface $endPoint
+     * @param TrackPointInterface[] $trackPoints
      * @param int $type of segment
      */
     function __construct(
@@ -91,8 +97,8 @@ class Segment implements SegmentInterface
         $distance,
         $startPoint,
         $endPoint,
+        $trackPoints,
         $type = 5
-
     ) {
         $this->meanAcceleration = $meanAcceleration;
         $this->meanVelocity = $meanVelocity;
@@ -103,6 +109,23 @@ class Segment implements SegmentInterface
         $this->type = $this->getValidType($type);
         $this->endPoint = $endPoint;
         $this->startPoint = $startPoint;
+        $this->trackPoints = $trackPoints;
+    }
+
+    /**
+     * @return TrackPointInterface[]
+     */
+    public function getTrackPoints()
+    {
+        return $this->trackPoints;
+    }
+
+    /**
+     * @param TrackPointInterface[] $trackPoints
+     */
+    public function setTrackPoints($trackPoints)
+    {
+        $this->trackPoints = $trackPoints;
     }
 
     /**
