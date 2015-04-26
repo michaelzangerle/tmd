@@ -4,10 +4,10 @@ namespace FHV\Bundle\TmdBundle\Model;
 
 /**
  * Model for a track segment
- * Class Segment
+ * Class Tracksegment
  * @package FHV\Bundle\TmdBundle\Model
  */
-class Segment implements SegmentInterface
+class Tracksegment implements TracksegmentInterface
 {
     public static $ATTRIBUTES = array(
         'distance',
@@ -62,17 +62,17 @@ class Segment implements SegmentInterface
     private $type;
 
     /**
-     * @var TrackPointInterface
+     * @var TrackpointInterface
      */
     private $startPoint;
 
     /**
-     * @var TrackPointInterface
+     * @var TrackpointInterface
      */
     private $endPoint;
 
     /**
-     * @var TrackPointInterface[]
+     * @var TrackpointInterface[]
      */
     private $trackPoints;
 
@@ -83,9 +83,9 @@ class Segment implements SegmentInterface
      * @param float $maxVelocity in m/s
      * @param float $duration in seconds
      * @param float $distance in meters
-     * @param TrackPointInterface $startPoint
-     * @param TrackPointInterface $endPoint
-     * @param TrackPointInterface[] $trackPoints
+     * @param TrackpointInterface $startPoint
+     * @param TrackpointInterface $endPoint
+     * @param TrackpointInterface[] $trackPoints
      * @param int $type of segment
      */
     function __construct(
@@ -113,7 +113,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @return TrackPointInterface[]
+     * @return TrackpointInterface[]
      */
     public function getTrackPoints()
     {
@@ -121,7 +121,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @param TrackPointInterface[] $trackPoints
+     * @param TrackpointInterface[] $trackPoints
      */
     public function setTrackPoints($trackPoints)
     {
@@ -129,7 +129,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @return TrackPoint
+     * @return Trackpoint
      */
     public function getStartPoint()
     {
@@ -137,7 +137,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @param TrackPoint $startPoint
+     * @param Trackpoint $startPoint
      */
     public function setStartPoint($startPoint)
     {
@@ -145,7 +145,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @return TrackPoint
+     * @return Trackpoint
      */
     public function getEndPoint()
     {
@@ -153,7 +153,7 @@ class Segment implements SegmentInterface
     }
 
     /**
-     * @param TrackPoint $endPoint
+     * @param Trackpoint $endPoint
      */
     public function setEndPoint($endPoint)
     {

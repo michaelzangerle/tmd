@@ -4,15 +4,15 @@ namespace FHV\Bundle\TmdBundle\Filter;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\TmdBundle\Exception\TrackException;
-use FHV\Bundle\TmdBundle\Model\TrackPoint;
-use FHV\Bundle\TmdBundle\Model\TrackPointInterface;
-use FHV\Bundle\TmdBundle\Util\TrackPointUtil;
+use FHV\Bundle\TmdBundle\Model\Trackpoint;
+use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
+use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
 
 /**
  * Filter and removes single trackpoints from an array of trackpoints
  * Class TrackPointFilter
  */
-class TrackPointFilter extends AbstractFilter
+class TrackpointFilter extends AbstractFilter
 {
     /**
      * @var int
@@ -25,7 +25,7 @@ class TrackPointFilter extends AbstractFilter
     private $minValidPoints;
 
     /**
-     * @var TrackPointUtil
+     * @var TrackpointUtilInterface
      */
     private $util;
 
@@ -78,12 +78,12 @@ class TrackPointFilter extends AbstractFilter
     /**
      * Checks if the distance between two trackpoints does make sense
      *
-     * @param TrackPointInterface $tp1
-     * @param TrackPointInterface $tp2
+     * @param TrackpointInterface $tp1
+     * @param TrackpointInterface $tp2
      *
      * @return bool
      */
-    protected function isValidDistance(TrackPointInterface $tp1, TrackPointInterface $tp2)
+    protected function isValidDistance(TrackpointInterface $tp1, TrackpointInterface $tp2)
     {
         if ($tp1 !== null && $tp2 !== null) {
             $time = $this->util->calcTime($tp2, $tp1);
@@ -102,12 +102,12 @@ class TrackPointFilter extends AbstractFilter
     /**
      * Checks if the change of the elevation value is valid
      *
-     * @param TrackPointInterface $tp1
-     * @param TrackPointInterface $tp2
+     * @param TrackpointInterface $tp1
+     * @param TrackpointInterface $tp2
      *
      * @return bool
      */
-    protected function isValidAltitudeChange(TrackPointInterface $tp1, TrackPointInterface $tp2)
+    protected function isValidAltitudeChange(TrackpointInterface $tp1, TrackpointInterface $tp2)
     {
         $elevation = $this->util->calcElevation($tp1, $tp2);
         $time = $this->util->calcTime($tp2, $tp1);
@@ -121,12 +121,12 @@ class TrackPointFilter extends AbstractFilter
     /**
      * Checks if the change of the time value is valid
      *
-     * @param TrackPointInterface $tp1
-     * @param TrackPointInterface $tp2
+     * @param TrackpointInterface $tp1
+     * @param TrackpointInterface $tp2
      *
      * @return bool
      */
-    protected function isValidTime(TrackPointInterface $tp1, TrackPointInterface $tp2)
+    protected function isValidTime(TrackpointInterface $tp1, TrackpointInterface $tp2)
     {
         $time = $this->util->calcTime($tp2, $tp1);
         if ($time > 0 && $time >= $this->minTimeDifference) {
@@ -155,8 +155,8 @@ class TrackPointFilter extends AbstractFilter
             $this->validPointCounter++; // first point
 
             while ($next < $length) {
-                $tp1 = new TrackPoint($trackPoints[$i]);
-                $tp2 = new TrackPoint($trackPoints[$next]);
+                $tp1 = new Trackpoint($trackPoints[$i]);
+                $tp2 = new Trackpoint($trackPoints[$next]);
 
                 // time filter has to be used first to be sure time value > 0
                 if ($this->areTrackpointsValid($tp1, $tp2)) {
@@ -193,7 +193,7 @@ class TrackPointFilter extends AbstractFilter
                 $validPointThreshold >= $this->minValidPoints
             ) {
                 $this->write($data);
-                if($this->getParentHasFinished()) {
+                if ($this->getParentHasFinished()) {
                     $this->finished();
                 }
             } else {
@@ -209,8 +209,8 @@ class TrackPointFilter extends AbstractFilter
     /**
      * Checks if a trackpoint-pair is valid
      *
-     * @param TrackPointInterface $tp1
-     * @param TrackPointInterface $tp2
+     * @param TrackpointInterface $tp1
+     * @param TrackpointInterface $tp2
      *
      * @return bool
      */
@@ -241,8 +241,8 @@ class TrackPointFilter extends AbstractFilter
         $length = count($trackPoints);
 
         while ($next < $length) {
-            $tp1 = new TrackPoint($trackPoints[$i]);
-            $tp2 = new TrackPoint($trackPoints[$next]);
+            $tp1 = new Trackpoint($trackPoints[$i]);
+            $tp2 = new Trackpoint($trackPoints[$next]);
 
             // time filter has to be used first to be sure time value > 0
             if ($this->areTrackpointsValid($tp1, $tp2)) {

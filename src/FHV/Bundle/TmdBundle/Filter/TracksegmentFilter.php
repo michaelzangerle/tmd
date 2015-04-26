@@ -5,17 +5,20 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
-use FHV\Bundle\TmdBundle\Model\Segment;
-use FHV\Bundle\TmdBundle\Model\SegmentInterface;
-use FHV\Bundle\TmdBundle\Model\TrackPoint;
-use FHV\Bundle\TmdBundle\Util\TrackPointUtil;
+use FHV\Bundle\TmdBundle\Model\Tracksegment;
+use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
+use FHV\Bundle\TmdBundle\Model\Trackpoint;
+use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
+
+// TODO add functionallity for other analyzation types
+// should also be added to segmentation and further analyzation filters
 
 /**
  * Creates a segment from trackpoints
  * Class SegmentFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class SegmentFilter extends AbstractFilter
+class TracksegmentFilter extends AbstractFilter
 {
     /**
      * @var int
@@ -24,7 +27,7 @@ class SegmentFilter extends AbstractFilter
 
     /**
      * Util obj for calculations
-     * @var TrackPointUtil
+     * @var TrackpointUtil
      */
     private $util;
 
@@ -46,7 +49,7 @@ class SegmentFilter extends AbstractFilter
         }
     }
 
-    function __construct(TrackPointUtil $util, $minTrackPointsPerSegment)
+    function __construct(TrackpointUtil $util, $minTrackPointsPerSegment)
     {
         $this->util = $util;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
@@ -54,9 +57,11 @@ class SegmentFilter extends AbstractFilter
 
     /**
      * Returns a segment for the given trackpoints
-     * @param array $trackPoints
+     *
+*@param array $trackPoints
      * @param string|null $type
-     * @return SegmentInterface
+     *
+*@return TracksegmentInterface
      * @throws InvalidArgumentException
      */
     public function createSegment(array $trackPoints, $type = null)
@@ -70,12 +75,12 @@ class SegmentFilter extends AbstractFilter
         $time = 0;
         $prevVelocity = 0;
         $accTrackPoints = 0;
-        $trackPoints[] = new TrackPoint($trackPoints[0]);
+        $trackPoints[] = new Trackpoint($trackPoints[0]);
 
         if ($amountOfTrackPoints +1 >= $this->minTrackPointsPerSegment) {
             for ($i = 0; $i < $amountOfTrackPoints; $i++) {
-                $tp1 = new TrackPoint($trackPoints[$i]);
-                $tp2 = new TrackPoint($trackPoints[$i + 1]);
+                $tp1 = new Trackpoint($trackPoints[$i]);
+                $tp2 = new Trackpoint($trackPoints[$i + 1]);
 
                 $trackPoints[] = $tp2;
 
@@ -105,15 +110,15 @@ class SegmentFilter extends AbstractFilter
                 $prevVelocity = $currentAcceleration;
             }
 
-            return new Segment(
+            return new Tracksegment(
                 $meanAcceleration / $accTrackPoints,
                 $meanVelocity / $amountOfTrackPoints,
                 $maxAcceleration,
                 $maxVelocity,
                 $time,
                 $distance,
-                new TrackPoint($trackPoints[0]),
-                new TrackPoint($trackPoints[$amountOfTrackPoints]),
+                new Trackpoint($trackPoints[0]),
+                new Trackpoint($trackPoints[$amountOfTrackPoints]),
                 $trackPoints,
                 $type
             );

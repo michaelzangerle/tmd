@@ -4,8 +4,8 @@ namespace FHV\Bundle\TmdBundle\Filter;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
-use FHV\Bundle\TmdBundle\Model\Segment;
-use FHV\Bundle\TmdBundle\Model\SegmentInterface;
+use FHV\Bundle\TmdBundle\Model\Tracksegment;
+use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 
 /**
  * Writes segments as csv into a file
@@ -105,12 +105,13 @@ class FileWriterFilter extends AbstractFilter
 
     /**
      * Writes the csv result file for all analyzed segments
-     * @param string $dir
+     *
+*@param string $dir
      * @param $fileName
-     * @param SegmentInterface $seg
+     * @param TracksegmentInterface $seg
      * @param string $delimiter
      */
-    protected function writeData($dir, $fileName, SegmentInterface $seg, $delimiter)
+    protected function writeData($dir, $fileName, TracksegmentInterface $seg, $delimiter)
     {
         $fp = fopen($dir . $fileName, 'a+');
         fputcsv($fp, $seg->toCSVArray(), $delimiter);
@@ -128,7 +129,7 @@ class FileWriterFilter extends AbstractFilter
         if (!$this->headerWritten) {
             $this->headerWritten = true;
             $fp = fopen($dir . $fileName, 'w');
-            fputcsv($fp, Segment::$ATTRIBUTES, $delimiter);
+            fputcsv($fp, Tracksegment::$ATTRIBUTES, $delimiter);
             fclose($fp);
         }
     }

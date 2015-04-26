@@ -7,7 +7,7 @@ namespace FHV\Bundle\TmdBundle\Model;
  * Class TrackPoint
  * @package FHV\Bundle\TmdBundle\Model
  */
-class TrackPoint implements TrackPointInterface
+class Trackpoint implements TrackpointInterface
 {
     /**
      * @var float

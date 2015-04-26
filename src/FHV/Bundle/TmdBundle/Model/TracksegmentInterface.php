@@ -3,25 +3,25 @@
 namespace FHV\Bundle\TmdBundle\Model;
 
 
-interface SegmentInterface
+interface TracksegmentInterface
 {
     /**
-     * @return TrackPoint
+     * @return Trackpoint
      */
     public function getStartPoint();
 
     /**
-     * @param TrackPoint $startPoint
+     * @param Trackpoint $startPoint
      */
     public function setStartPoint($startPoint);
 
     /**
-     * @return TrackPoint
+     * @return Trackpoint
      */
     public function getEndPoint();
 
     /**
-     * @param TrackPoint $endPoint
+     * @param Trackpoint $endPoint
      */
     public function setEndPoint($endPoint);
 
@@ -96,12 +96,12 @@ interface SegmentInterface
     public function setDuration($duration);
 
     /**
-     * @return TrackPointInterface[]
+     * @return TrackpointInterface[]
      */
     public function getTrackPoints();
 
     /**
-     * @param TrackPointInterface[] $trackPoints
+     * @param TrackpointInterface[] $trackPoints
      */
     public function setTrackPoints($trackPoints);
 

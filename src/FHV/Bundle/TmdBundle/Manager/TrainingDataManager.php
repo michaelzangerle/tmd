@@ -6,8 +6,8 @@ use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
 use FHV\Bundle\TmdBundle\Filter\FileReaderFilter;
 use FHV\Bundle\TmdBundle\Filter\FileWriterFilter;
-use FHV\Bundle\TmdBundle\Filter\SegmentFilter;
-use FHV\Bundle\TmdBundle\Filter\TrackPointFilter;
+use FHV\Bundle\TmdBundle\Filter\TracksegmentFilter;
+use FHV\Bundle\TmdBundle\Filter\TrackpointFilter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -40,16 +40,16 @@ class TrainingDataManager
     protected $smFilter;
 
     /**
-     * @param TrackPointFilter $tpFilter
+     * @param TrackpointFilter $tpFilter
      * @param FileReaderFilter $fileReaderFilter
      * @param FileWriterFilter $fileWriterFilter
-     * @param SegmentFilter $segmentFilter
+     * @param TracksegmentFilter $segmentFilter
      */
     function __construct(
-        TrackPointFilter $tpFilter,
+        TrackpointFilter $tpFilter,
         FileReaderFilter $fileReaderFilter,
         FileWriterFilter $fileWriterFilter,
-        SegmentFilter $segmentFilter
+        TracksegmentFilter $segmentFilter
     ) {
         $this->tpFilter = $tpFilter;
         $this->frFilter = $fileReaderFilter;

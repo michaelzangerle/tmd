@@ -5,9 +5,8 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
-use FHV\Bundle\TmdBundle\Model\SegmentInterface;
+use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 use SimpleXMLElement;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Reads a file and passes its contents on
@@ -64,8 +63,10 @@ class FileReaderFilter extends AbstractFilter
 
     /**
      * Processes all points of a track segment and returns a segment model
-     * @param SimpleXmlElement $xmlSegment
-     * @return SegmentInterface
+     *
+*@param SimpleXmlElement $xmlSegment
+     *
+*@return TracksegmentInterface
      */
     private function processSegment($xmlSegment)
     {

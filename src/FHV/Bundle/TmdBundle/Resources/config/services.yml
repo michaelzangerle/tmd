@@ -5,7 +5,7 @@ services:
     ##############################
 
     fhv_tmd.trackPointUtil:
-        class: FHV\Bundle\TmdBundle\Util\TrackPointUtil
+        class: FHV\Bundle\TmdBundle\Util\TrackpointUtil
         arguments:
           - %tmd.planet_circumference%
 
@@ -22,7 +22,7 @@ services:
             - %tmd.gpx_namespace%
 
     fhv_tmd.trackPointFilter:
-          class: FHV\Bundle\TmdBundle\Filter\TrackPointFilter
+          class: FHV\Bundle\TmdBundle\Filter\TrackpointFilter
           arguments:
             - @fhv_tmd.trackPointUtil
             - %tmd.filter.max_distance%
@@ -34,7 +34,7 @@ services:
             - %tmd.filter.min_valid_points%
 
     fhv_tmd.segmentFilter:
-          class: FHV\Bundle\TmdBundle\Filter\SegmentFilter
+          class: FHV\Bundle\TmdBundle\Filter\TracksegmentFilter
           arguments:
             - @fhv_tmd.trackPointUtil
             - %tmd.filter.min_trackpoints_per_segment%
@@ -42,6 +42,11 @@ services:
     fhv_tmd.fileWriterFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileWriterFilter
           arguments: []
+
+    fhv_tmd.segmentationFilter:
+          class: FHV\Bundle\TmdBundle\Filter\SegmentationFilter
+          arguments:
+            - @fhv_tmd.trackPointUtil
 
     ##############################
     # Manager
@@ -59,5 +64,9 @@ services:
         class: FHV\Bundle\TmdBundle\Manager\TrackManager
         arguments:
           - @doctrine.orm.entity_manager
+
+
+
+
 
 

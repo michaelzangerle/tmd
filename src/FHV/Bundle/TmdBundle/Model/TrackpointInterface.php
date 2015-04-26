@@ -3,7 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Model;
 
 
-interface TrackPointInterface
+interface TrackpointInterface
 {
     /**
      * @return float
