@@ -6,7 +6,8 @@ services:
 
     fhv_tmd.trackPointUtil:
         class: FHV\Bundle\TmdBundle\Util\TrackPointUtil
-        arguments: [%tmd.planet_circumference%]
+        arguments:
+          - %tmd.planet_circumference%
 
     ##############################
     # Filter
@@ -16,15 +17,27 @@ services:
 
     fhv_tmd.fileReaderFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileReaderFilter
-          arguments: [%tmd.filter.min_trackpoints_per_segment%, %tmd.gpx_namespace%]
+          arguments:
+            - %tmd.filter.min_trackpoints_per_segment%
+            - %tmd.gpx_namespace%
 
     fhv_tmd.trackPointFilter:
           class: FHV\Bundle\TmdBundle\Filter\TrackPointFilter
-          arguments: [@fhv_tmd.trackPointUtil, %tmd.filter.max_distance%, %tmd.filter.min_distance%, %tmd.filter.max_altitude_change%, %tmd.filter.min_time_difference%, %tmd.filter.min_trackpoints_per_segment%, %tmd.filter.min_valid_in_row%, %tmd.filter.min_valid_points%]
+          arguments:
+            - @fhv_tmd.trackPointUtil
+            - %tmd.filter.max_distance%
+            - %tmd.filter.min_distance%
+            - %tmd.filter.max_altitude_change%
+            - %tmd.filter.min_time_difference%
+            - %tmd.filter.min_trackpoints_per_segment%
+            - %tmd.filter.min_valid_in_row%
+            - %tmd.filter.min_valid_points%
 
     fhv_tmd.segmentFilter:
           class: FHV\Bundle\TmdBundle\Filter\SegmentFilter
-          arguments: [@fhv_tmd.trackPointUtil, %tmd.filter.min_trackpoints_per_segment%]
+          arguments:
+            - @fhv_tmd.trackPointUtil
+            - %tmd.filter.min_trackpoints_per_segment%
 
     fhv_tmd.fileWriterFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileWriterFilter
@@ -36,10 +49,15 @@ services:
 
     fhv_tmd.trainingDataManager:
         class: FHV\Bundle\TmdBundle\Manager\TrainingDataManager
-        arguments: [@fhv_tmd.trackPointFilter, @fhv_tmd.fileReaderFilter, @fhv_tmd.fileWriterFilter, @fhv_tmd.segmentFilter]
+        arguments:
+          - @fhv_tmd.trackPointFilter
+          - @fhv_tmd.fileReaderFilter
+          - @fhv_tmd.fileWriterFilter
+          - @fhv_tmd.segmentFilter
 
     fhv_tmd.trackManager:
         class: FHV\Bundle\TmdBundle\Manager\TrackManager
-        arguments: [@doctrine.orm.entity_manager]
+        arguments:
+          - @doctrine.orm.entity_manager
 
 
