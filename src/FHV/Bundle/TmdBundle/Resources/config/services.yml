@@ -38,4 +38,8 @@ services:
         class: FHV\Bundle\TmdBundle\Manager\TrainingDataManager
         arguments: [@fhv_tmd.trackPointFilter, @fhv_tmd.fileReaderFilter, @fhv_tmd.fileWriterFilter, @fhv_tmd.segmentFilter]
 
+    fhv_tmd.trackManager:
+        class: FHV\Bundle\TmdBundle\Manager\TrackManager
+        arguments: [@doctrine.orm.entity_manager]
+
 

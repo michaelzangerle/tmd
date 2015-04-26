@@ -3,8 +3,10 @@
 namespace FHV\Bundle\TmdBundle\Controller;
 
 use FHV\Bundle\TmdBundle\Entity\Track;
+use FHV\Bundle\TmdBundle\Manager\TrackManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,7 +23,7 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
      */
     public function getAction($id)
     {
-
+        // TODO just a dummy implementation
         $view = $this->view(new Track(), 200);
 
         return $this->handleView($view);
@@ -34,20 +36,50 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
      */
     public function postAction(Request $request)
     {
+        /** @var UploadedFile $file */
         $file = $request->files->get('file');
-        if ($file->isValid() && $file->getMimeType() === 'application/xml') {
-            $content = file_get_contents($file->getPathName());
+        if ($this->isValidFile($file)) {
+            $timeStamp = (new \DateTime('now'))->format('U');
+            $fileName = substr(trim($file->getClientOriginalName()), 0, 60); // TODO security issue with file name
             $method = $request->get('method', $this->container->getParameter('tmd.analyze.default_method'));
+            $xmlFile = $file->move(__DIR__ . '/../uploaded', $timeStamp . '_' . $fileName);
 
-            // TODO start processing
-
-            $view = $this->view('', 204);
+            $this->getManager()->create($xmlFile, $method);
+            $view = $this->view('', 204); // TODO correct response
         } else {
-
             $view = $this->view('GPS file is incomplete or not valid!', 400);
         }
 
-        // TODO remove file when finished
+        // TODO remove file when finished?
         return $this->handleView($view);
+    }
+
+    /**
+     * Checks if the uploaded file is valid
+     *
+     * @param UploadedFile $file
+     *
+     * @return bool
+     */
+    private function isValidFile(UploadedFile $file)
+    {
+        if ($file != null && $file->isValid() &&
+            $file->getMimeType() === 'application/xml' &&
+            $file->getMaxFilesize() > $file->getSize()
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns a track manager implementation
+     *
+     * @return TrackManagerInterface
+     */
+    protected function getManager()
+    {
+        return $this->get('fhv_tmd.trackManager');
     }
 }

@@ -1,5 +1,11 @@
 define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function (googleMaps) {
 
+    /**
+     * TODO add some proper validation
+     * TODO extract constants into variables
+     * TODO extract map handling into a serparate component
+     */
+
     return {
 
         $formView: null,

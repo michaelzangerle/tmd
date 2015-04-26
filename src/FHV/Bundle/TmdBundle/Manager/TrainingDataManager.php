@@ -11,6 +11,8 @@ use FHV\Bundle\TmdBundle\Filter\TrackPointFilter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
+// TODO use interface
+
 /**
  * Class GPXTrainingDataManager
  * @package FHV\Bundle\TmdBundle\Manager

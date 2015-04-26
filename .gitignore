@@ -11,4 +11,8 @@
 /web/bundles/
 node_modules/
 
+/src/FHV/Bundle/TmdBundle/uploaded/*
+!/src/FHV/Bundle/TmdBundle/uploaded/.gitkeep
+
 .idea/
+
