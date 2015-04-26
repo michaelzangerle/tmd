@@ -26,6 +26,13 @@ class Pipe implements PipeInterface
     /**
      * @inheritdoc
      */
+    public function finished(){
+        $this->targetFilter->setParentHasFinished();
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function write($data)
     {
         if ($this->targetFilter !== null) {

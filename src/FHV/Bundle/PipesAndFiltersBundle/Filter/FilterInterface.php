@@ -26,4 +26,19 @@ interface FilterInterface
      * @param $data
      */
     public function write($data);
+
+    /**
+     * Will be called when the parent filter has finished
+     */
+    public function setParentHasFinished();
+
+    /**
+     * Returns true if parent filter has finished
+     */
+    public function getParentHasFinished();
+
+    /**
+     * Tells all pipes that this filter has finished
+     */
+    public function finished();
 }

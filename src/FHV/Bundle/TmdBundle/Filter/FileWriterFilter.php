@@ -97,6 +97,10 @@ class FileWriterFilter extends AbstractFilter
             $this->writeHeader($this->dir, $this->fileName, $this->delimiter);
             $this->writeData($this->dir, $this->fileName, $data, $this->delimiter);
         }
+
+        if($this->getParentHasFinished()) {
+            $this->finished();
+        }
     }
 
     /**

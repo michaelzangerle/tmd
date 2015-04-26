@@ -38,6 +38,9 @@ class SegmentFilter extends AbstractFilter
         if (isset($data['trackPoints'])) {
             $segment = $this->createSegment($data['trackPoints'], $data['type']);
             $this->write($segment);
+            if($this->getParentHasFinished()) {
+                $this->finished();
+            }
         } else {
             throw new InvalidArgumentException('SegmentFilter: Data param should contain trackpoints!');
         }

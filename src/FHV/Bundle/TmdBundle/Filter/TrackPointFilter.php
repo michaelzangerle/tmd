@@ -193,6 +193,9 @@ class TrackPointFilter extends AbstractFilter
                 $validPointThreshold >= $this->minValidPoints
             ) {
                 $this->write($data);
+                if($this->getParentHasFinished()) {
+                    $this->finished();
+                }
             } else {
                 throw new TrackException(
                     'TrackPointFilter: To many invalid or inaccurate trackpoints prevented further processing!'
