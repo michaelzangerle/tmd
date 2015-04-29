@@ -18,12 +18,7 @@ class Result
     /**
      * @var boolean
      */
-    private $correctedByUser;
-
-    /**
-     * @var float
-     */
-    private $precision;
+    private $correctedByUser = false;
 
     /**
      * @var integer
@@ -34,6 +29,11 @@ class Result
      * @var integer
      */
     private $id;
+
+    /**
+     * @var float
+     */
+    private $calcPrecision;
 
     /**
      * Set transportType
@@ -84,30 +84,6 @@ class Result
     }
 
     /**
-     * Set precision
-     *
-     * @param float $precision
-     *
-     * @return Result
-     */
-    public function setPrecision($precision)
-    {
-        $this->precision = $precision;
-
-        return $this;
-    }
-
-    /**
-     * Get precision
-     *
-     * @return float
-     */
-    public function getPrecision()
-    {
-        return $this->precision;
-    }
-
-    /**
      * Set analizationType
      *
      * @param integer $analizationType
@@ -139,5 +115,29 @@ class Result
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set calcPrecision
+     *
+     * @param float $calcPrecision
+     *
+     * @return Result
+     */
+    public function setCalcPrecision($calcPrecision)
+    {
+        $this->calcPrecision = $calcPrecision;
+
+        return $this;
+    }
+
+    /**
+     * Get calcPrecision
+     *
+     * @return float
+     */
+    public function getCalcPrecision()
+    {
+        return $this->calcPrecision;
     }
 }

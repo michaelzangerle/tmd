@@ -44,8 +44,8 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
             $method = $request->get('method', $this->container->getParameter('tmd.analyze.default_method'));
             $xmlFile = $file->move(__DIR__ . '/../uploaded', $timeStamp . '_' . $fileName);
 
-            $this->getManager()->create($xmlFile, $method);
-            $view = $this->view('', 204); // TODO correct response
+            $track = $this->getManager()->create($xmlFile, $method);
+            $view = $this->view($track, 200); // TODO correct response
         } else {
             $view = $this->view('GPS file is incomplete or not valid!', 400);
         }

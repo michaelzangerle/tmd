@@ -53,6 +53,7 @@ class TracksegmentFilter extends AbstractFilter
 
     function __construct(TrackpointUtil $util, $minTrackPointsPerSegment)
     {
+        parent::__construct();
         $this->util = $util;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
     }
@@ -77,14 +78,14 @@ class TracksegmentFilter extends AbstractFilter
         $time = 0;
         $prevVelocity = 0;
         $accTrackPoints = 0;
-        $trackPoints[] = new Trackpoint($trackPoints[0]);
+        $gpsTrackPoints[] = new Trackpoint($trackPoints[0]);
 
         if ($amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
             for ($i = 0; $i < $amountOfTrackPoints; $i++) {
                 $tp1 = new Trackpoint($trackPoints[$i]);
                 $tp2 = new Trackpoint($trackPoints[$i + 1]);
 
-                $trackPoints[] = $tp2;
+                $gpsTrackPoints[] = $tp2;
 
                 $currentDistance = $this->util->calcDistance($tp1, $tp2);
                 $currentTime = $this->util->calcTime($tp2, $tp1);
@@ -119,9 +120,9 @@ class TracksegmentFilter extends AbstractFilter
                 $maxVelocity,
                 $time,
                 $distance,
-                new Trackpoint($trackPoints[0]),
-                new Trackpoint($trackPoints[$amountOfTrackPoints]),
-                $trackPoints,
+                $gpsTrackPoints[0],
+                $gpsTrackPoints[$amountOfTrackPoints],
+                $gpsTrackPoints,
                 $type
             );
         }

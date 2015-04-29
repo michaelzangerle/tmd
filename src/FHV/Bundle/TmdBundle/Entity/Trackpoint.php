@@ -16,13 +16,13 @@ class Trackpoint
      * @Expose
      * @var float
      */
-    private $lat;
+    private $latitude;
 
     /**
      * @Expose
      * @var float
      */
-    private $long;
+    private $longitude;
 
     /**
      * @Expose
@@ -37,56 +37,9 @@ class Trackpoint
     private $id;
 
     /**
-     * @var \FHV\Bundle\TmdBundle\Entity\Tracksegment
+     * @var Tracksegment
      */
     private $segment;
-
-
-    /**
-     * Set lat
-     *
-     * @param float $lat
-     * @return Trackpoint
-     */
-    public function setLat($lat)
-    {
-        $this->lat = $lat;
-
-        return $this;
-    }
-
-    /**
-     * Get lat
-     *
-     * @return float 
-     */
-    public function getLat()
-    {
-        return $this->lat;
-    }
-
-    /**
-     * Set long
-     *
-     * @param float $long
-     * @return Trackpoint
-     */
-    public function setLong($long)
-    {
-        $this->long = $long;
-
-        return $this;
-    }
-
-    /**
-     * Get long
-     *
-     * @return float 
-     */
-    public function getLong()
-    {
-        return $this->long;
-    }
 
     /**
      * Set time
@@ -124,10 +77,10 @@ class Trackpoint
     /**
      * Set segment
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Tracksegment $segment
+     * @param Tracksegment $segment
      * @return Trackpoint
      */
-    public function setSegment(\FHV\Bundle\TmdBundle\Entity\Tracksegment $segment)
+    public function setSegment(Tracksegment $segment)
     {
         $this->segment = $segment;
 
@@ -137,10 +90,56 @@ class Trackpoint
     /**
      * Get segment
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Tracksegment 
+     * @return Tracksegment
      */
     public function getSegment()
     {
         return $this->segment;
+    }
+
+    /**
+     * Set latitude
+     *
+     * @param float $latitude
+     * @return Trackpoint
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    /**
+     * Get latitude
+     *
+     * @return float 
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * Set longitude
+     *
+     * @param float $longitude
+     * @return Trackpoint
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+
+        return $this;
+    }
+
+    /**
+     * Get longitude
+     *
+     * @return float 
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
     }
 }

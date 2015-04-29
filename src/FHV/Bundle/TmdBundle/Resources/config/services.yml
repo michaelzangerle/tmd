@@ -46,6 +46,7 @@ services:
     fhv_tmd.segmentationFilter:
           class: FHV\Bundle\TmdBundle\Filter\SegmentationFilter
           arguments:
+            - @doctrine.orm.entity_manager
             - @fhv_tmd.trackPointUtil
             - %tmd.segmentation.max_walk_velocity%
             - %tmd.segmentation.max_walk_acceleration%
@@ -67,7 +68,11 @@ services:
     fhv_tmd.trackManager:
         class: FHV\Bundle\TmdBundle\Manager\TrackManager
         arguments:
-          - @doctrine.orm.entity_manager
+        - @doctrine.orm.entity_manager
+        - @fhv_tmd.trackPointFilter
+        - @fhv_tmd.fileReaderFilter
+        - @fhv_tmd.segmentationFilter
+        - @fhv_tmd.segmentFilter
 
 
 

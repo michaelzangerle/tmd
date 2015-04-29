@@ -9,8 +9,8 @@
 
         <field name="transportType" type="integer" nullable="false"/>
         <field name="correctedByUser" type="boolean" nullable="false"/>
-        <field name="precision" type="float" nullable="false"/>
-        <field name="analizationType" type="integer" nullable="false"/>
+        <field name="calcPrecision" type="float" nullable="true"/>
+        <field name="analizationType" type="integer" nullable="true"/>
 
     </entity>
 </doctrine-mapping>

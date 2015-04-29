@@ -2,6 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\ExclusionPolicy;
@@ -21,19 +22,19 @@ class Tracksegment
 
     /**
      * @Expose
-     * @var \FHV\Bundle\TmdBundle\Entity\Trackpoint
+     * @var Trackpoint
      */
     private $start;
 
     /**
      * @Expose
-     * @var \FHV\Bundle\TmdBundle\Entity\Trackpoint
+     * @var Trackpoint
      */
     private $end;
 
     /**
      * @Expose
-     * @var \FHV\Bundle\TmdBundle\Entity\Result
+     * @var Result
      */
     private $result;
 
@@ -50,17 +51,22 @@ class Tracksegment
     private $features;
 
     /**
-     * @var \FHV\Bundle\TmdBundle\Entity\Track
+     * @var Track
      */
     private $track;
+
+    /**
+     * @var integer
+     */
+    private $seconds;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->trackpoints = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->features = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->trackpoints = new ArrayCollection();
+        $this->features = new ArrayCollection();
     }
 
     /**
@@ -76,21 +82,21 @@ class Tracksegment
     /**
      * Set start
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Trackpoint $start
+     * @param Trackpoint $start
      *
      * @return Tracksegment
      */
-    public function setStart(\FHV\Bundle\TmdBundle\Entity\Trackpoint $start = null)
+    public function setStart(Trackpoint $start = null)
     {
         $this->start = $start;
 
         return $this;
     }
-
+    
     /**
      * Get start
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Trackpoint
+     * @return Trackpoint
      */
     public function getStart()
     {
@@ -100,11 +106,11 @@ class Tracksegment
     /**
      * Set end
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Trackpoint $end
+     * @param Trackpoint $end
      *
      * @return Tracksegment
      */
-    public function setEnd(\FHV\Bundle\TmdBundle\Entity\Trackpoint $end = null)
+    public function setEnd(Trackpoint $end = null)
     {
         $this->end = $end;
 
@@ -114,7 +120,7 @@ class Tracksegment
     /**
      * Get end
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Trackpoint
+     * @return Trackpoint
      */
     public function getEnd()
     {
@@ -124,11 +130,11 @@ class Tracksegment
     /**
      * Set result
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Result $result
+     * @param Result $result
      *
      * @return Tracksegment
      */
-    public function setResult(\FHV\Bundle\TmdBundle\Entity\Result $result = null)
+    public function setResult(Result $result = null)
     {
         $this->result = $result;
 
@@ -138,7 +144,7 @@ class Tracksegment
     /**
      * Get result
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Result
+     * @return Result
      */
     public function getResult()
     {
@@ -148,11 +154,11 @@ class Tracksegment
     /**
      * Add trackpoints
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Trackpoint $trackpoints
+     * @param Trackpoint $trackpoints
      *
      * @return Tracksegment
      */
-    public function addTrackpoint(\FHV\Bundle\TmdBundle\Entity\Trackpoint $trackpoints)
+    public function addTrackpoint(Trackpoint $trackpoints)
     {
         $this->trackpoints[] = $trackpoints;
 
@@ -162,9 +168,9 @@ class Tracksegment
     /**
      * Remove trackpoints
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Trackpoint $trackpoints
+     * @param Trackpoint $trackpoints
      */
-    public function removeTrackpoint(\FHV\Bundle\TmdBundle\Entity\Trackpoint $trackpoints)
+    public function removeTrackpoint(Trackpoint $trackpoints)
     {
         $this->trackpoints->removeElement($trackpoints);
     }
@@ -196,11 +202,11 @@ class Tracksegment
     /**
      * Add features
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Feature $features
+     * @param Feature $features
      *
      * @return Tracksegment
      */
-    public function addFeature(\FHV\Bundle\TmdBundle\Entity\Feature $features)
+    public function addFeature(Feature $features)
     {
         $this->features[] = $features;
 
@@ -210,9 +216,9 @@ class Tracksegment
     /**
      * Remove features
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Feature $features
+     * @param Feature $features
      */
-    public function removeFeature(\FHV\Bundle\TmdBundle\Entity\Feature $features)
+    public function removeFeature(Feature $features)
     {
         $this->features->removeElement($features);
     }
@@ -230,11 +236,11 @@ class Tracksegment
     /**
      * Set track
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Track $track
+     * @param Track $track
      *
      * @return Tracksegment
      */
-    public function setTrack(\FHV\Bundle\TmdBundle\Entity\Track $track)
+    public function setTrack(Track $track)
     {
         $this->track = $track;
 
@@ -244,7 +250,7 @@ class Tracksegment
     /**
      * Get track
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Track
+     * @return Track
      */
     public function getTrack()
     {
@@ -253,13 +259,7 @@ class Tracksegment
     /**
      * @var float
      */
-    private $distance;
-
-    /**
-     * @var integer
-     */
-    private $time;
-
+    private $distance = 0;
 
     /**
      * Set distance
@@ -285,25 +285,25 @@ class Tracksegment
     }
 
     /**
-     * Set time
+     * Set seconds
      *
-     * @param integer $time
+     * @param integer $seconds
      * @return Tracksegment
      */
-    public function setTime($time)
+    public function setSeconds($seconds)
     {
-        $this->time = $time;
+        $this->seconds = $seconds;
 
         return $this;
     }
 
     /**
-     * Get time
+     * Get seconds
      *
      * @return integer 
      */
-    public function getTime()
+    public function getSeconds()
     {
-        return $this->time;
+        return $this->seconds;
     }
 }

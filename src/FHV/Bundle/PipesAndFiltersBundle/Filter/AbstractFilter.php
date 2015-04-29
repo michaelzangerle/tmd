@@ -15,13 +15,13 @@ abstract class AbstractFilter implements FilterInterface
      * Pipes to write the output to
      * @var PipeInterface[]
      */
-    private $pipes;
+    protected $pipes;
 
     /**
      * Will be set if parent filter is finished
      * @var Boolean
      */
-    private $parentHasFinished;
+    protected $parentHasFinished;
 
     function __construct()
     {

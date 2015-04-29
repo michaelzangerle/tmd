@@ -8,7 +8,7 @@
         </id>
 
         <field name="distance" type="float" nullable="false"/>
-        <field name="time" type="integer" nullable="false"/>
+        <field name="seconds" type="integer" nullable="false"/>
 
         <one-to-one field="start" target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint">
             <join-column name="idStartPoint" referenced-column-name="id" />

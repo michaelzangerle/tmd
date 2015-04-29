@@ -27,6 +27,7 @@ class FileReaderFilter extends AbstractFilter
 
     function __construct($minTrackPoints, $gpxNameSpace)
     {
+        parent::__construct();
         $this->minTrackPoints = $minTrackPoints;
         $this->gpxNameSpace = $gpxNameSpace;
     }

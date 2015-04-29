@@ -2,6 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -9,6 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Track
 {
+    const TYPE_UNKNOW = 0;
+    const TYPE_BASIC = 1;
+    const TYPE_GIS = 2;
+
     /**
      * @var integer
      */
@@ -29,7 +34,7 @@ class Track
      */
     public function __construct()
     {
-        $this->segments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->segments = new ArrayCollection();
     }
 
     /**
@@ -69,11 +74,11 @@ class Track
     /**
      * Add segments
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Tracksegment $segments
+     * @param Tracksegment $segments
      *
      * @return Track
      */
-    public function addSegment(\FHV\Bundle\TmdBundle\Entity\Tracksegment $segments)
+    public function addSegment(Tracksegment $segments)
     {
         $this->segments[] = $segments;
 
@@ -83,9 +88,9 @@ class Track
     /**
      * Remove segments
      *
-     * @param \FHV\Bundle\TmdBundle\Entity\Tracksegment $segments
+     * @param Tracksegment $segments
      */
-    public function removeSegment(\FHV\Bundle\TmdBundle\Entity\Tracksegment $segments)
+    public function removeSegment(Tracksegment $segments)
     {
         $this->segments->removeElement($segments);
     }
@@ -98,5 +103,15 @@ class Track
     public function getSegments()
     {
         return $this->segments;
+    }
+
+    /**
+     * Sets segments
+     *
+     * @param Tracksegment[] $segments
+     */
+    public function setSegments($segments)
+    {
+        $this->segments = $segments;
     }
 }

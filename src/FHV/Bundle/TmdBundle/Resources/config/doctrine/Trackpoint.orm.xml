@@ -7,8 +7,8 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="lat" type="float" nullable="false"/>
-        <field name="long" type="float" nullable="false"/>
+        <field name="latitude" type="float" nullable="false"/>
+        <field name="longitude" type="float" nullable="false"/>
         <field name="time" type="datetime" nullable="false"/>
 
         <many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" field="segment"

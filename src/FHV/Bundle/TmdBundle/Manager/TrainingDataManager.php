@@ -40,16 +40,16 @@ class TrainingDataManager
     protected $smFilter;
 
     /**
-     * @param TrackpointFilter $tpFilter
-     * @param FileReaderFilter $fileReaderFilter
-     * @param FileWriterFilter $fileWriterFilter
-     * @param TracksegmentFilter $segmentFilter
+     * @param FilterInterface $tpFilter
+     * @param FilterInterface $fileReaderFilter
+     * @param FilterInterface $fileWriterFilter
+     * @param FilterInterface $segmentFilter
      */
     function __construct(
-        TrackpointFilter $tpFilter,
-        FileReaderFilter $fileReaderFilter,
-        FileWriterFilter $fileWriterFilter,
-        TracksegmentFilter $segmentFilter
+        FilterInterface $tpFilter,
+        FilterInterface $fileReaderFilter,
+        FilterInterface $fileWriterFilter,
+        FilterInterface $segmentFilter
     ) {
         $this->tpFilter = $tpFilter;
         $this->frFilter = $fileReaderFilter;
