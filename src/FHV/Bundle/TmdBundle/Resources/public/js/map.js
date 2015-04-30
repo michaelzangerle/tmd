@@ -35,7 +35,7 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
          * @param segment
          */
         drawSegment: function (segment) {
-            if (!!segment.trackpoints) {
+            if (!!segment.trackpoints && segment.trackpoints.length >= 2) {
                 var coordinates = this.createCoordinates(segment.trackpoints);
                 var segmentPath = new google.maps.Polyline({
                     path: coordinates,
@@ -55,11 +55,18 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
          * @return LatLng[]
          */
         createCoordinates: function (trackPoints) {
-            var result = [];
+            var result = [], last;
+
+            if(!!this.lastCoordiante) {
+                result.push(this.lastCoordiante);
+            }
+
             trackPoints.forEach(function (tp) {
                 result.push(new google.maps.LatLng(tp.latitude, tp.longitude))
             }.bind(this));
 
+            last = trackPoints[trackPoints.length -1];
+            this.lastCoordiante = new google.maps.LatLng(last.latitude, last.longitude);
             return result;
         }
 
