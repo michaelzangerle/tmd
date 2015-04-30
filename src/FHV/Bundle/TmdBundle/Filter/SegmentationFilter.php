@@ -15,6 +15,7 @@ use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 use FHV\Bundle\TmdBundle\Model\Trackpoint;
 use FHV\Bundle\TmdBundle\Model\TracksegmentType;
+
 use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
 
@@ -106,7 +107,8 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     {
         $segments = $this->createSegments($gpsSegment);
         $segments = $this->mergeSegments($segments);
-        $this->track->setSegments($segments);
+        $this->track->addSegments($segments);
+
         $this->write($this->track);
     }
 
@@ -147,17 +149,15 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $isWalkPoint = $this->isWalkPoint($tmpDistance, $tmpTime, $prevVelocity);
             $tpEntity = $this->createTrackpointEntity($tp2);
 
+            // segment with one element und undefined type
             if (count($curSegment->getTrackpoints()) === 1) {
-                // segment with one element und undefined type
                 $this->createNewResultEntity($this->track->getAnalyzationType(), $isWalkPoint, $curSegment);
             } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment)) {
                 // more than 1 element in segment and different type
                 $segments[] = $this->setValuesForSegment(
                     $curSegment,
                     $time,
-                    $distance,
-                    $curSegment->getTrackpoints()->first(),
-                    $curSegment->getTrackpoints()->last()
+                    $distance
                 );
 
                 $curSegment = $this->createNewSegmentEntity();
@@ -174,9 +174,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $segments[] = $this->setValuesForSegment(
             $curSegment,
             $time,
-            $distance,
-            $curSegment->getTrackpoints()->first(),
-            $curSegment->getTrackpoints()->last()
+            $distance
         );
 
         return $segments;
@@ -185,20 +183,18 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     /**
      * Sets all needed values for a segment
      *
-     * @param SegmentEntity    $segment
-     * @param integer          $time
-     * @param float            $distance
-     * @param TrackpointEntity $first
-     * @param TrackpointEntity $last
+     * @param SegmentEntity $segment
+     * @param integer       $time
+     * @param float         $distance
      *
      * @return SegmentEntity
      */
-    private function setValuesForSegment($segment, $time, $distance, $first, $last)
+    private function setValuesForSegment($segment, $time, $distance)
     {
         $segment->setSeconds($time);
         $segment->setDistance($distance);
-        $segment->setEnd($last);
-        $segment->setStart($first);
+        $segment->setEnd($segment->getTrackpoints()->last());
+        $segment->setStart($segment->getTrackpoints()->first());
 
         return $segment;
     }
@@ -239,8 +235,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $result->setTransportType(TracksegmentType::UNDEFINIED);
         }
 
-        $this->em->persist($result);
-
         return $result;
     }
 
@@ -257,8 +251,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $trackpoint->setLongitude($tp->getLong());
         $trackpoint->setLatitude($tp->getLat());
         $trackpoint->setTime($tp->getTime());
-
-        $this->em->persist($trackpoint);
 
         return $trackpoint;
     }
@@ -311,7 +303,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
 
     /**
      * Merges segments which are below a distance or time threshold
-     * TODO merge first in second?
      *
      * @param SegmentEntity[] $segments
      *
@@ -319,15 +310,24 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      */
     private function mergeSegments(array $segments)
     {
-        $result[] = $segments[0];
         $i = 1;
         $j = 0;
+        $result[] = $segments[0];
+
+        // TODO merge first segment with second when too small
+        // to prevent starting signal issue
+//        if (count($segments) > 1 && $this->shouldSegementBeMerged($segments[0])) {
+//            $this->merge($segments[1], $segments[0]);
+//            $this->em->detach($segments[0]);
+//            $result[] = $segments[1];
+//            $i = 2;
+//        } else {
+//            $result[] = $segments[0];
+//        }
 
         while ($i < count($segments)) {
             // TODO check default/configured values
-            if ($segments[$i]->getDistance() < $this->minSegmentDistance ||
-                $segments[$i]->getSeconds() < $this->minSegmentTime
-            ) {
+            if ($this->shouldSegementBeMerged($segments[$i])) {
                 $this->merge($result[$j], $segments[$i]);
             } else {
                 $result[] = $segments[$i];
@@ -340,7 +340,20 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     }
 
     /**
-     * Merges the second segment into the first
+     * Determines if a segment should be merged with another or not
+     *
+     * @param SegmentEntity $segment
+     *
+     * @return bool
+     */
+    private function shouldSegementBeMerged(SegmentEntity $segment)
+    {
+        return $segment->getDistance() < $this->minSegmentDistance ||
+        $segment->getSeconds() < $this->minSegmentTime;
+    }
+
+    /**
+     * Merges the second segment into the first and detaches the second
      *
      * @param SegmentEntity $seg1
      * @param SegmentEntity $seg2
@@ -357,7 +370,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $tp->setSegment($seg1);
         }
 
-        if($seg2->getResult()) {
+        if ($seg2->getResult()) {
             $this->em->detach($seg2->getResult());
         }
 
