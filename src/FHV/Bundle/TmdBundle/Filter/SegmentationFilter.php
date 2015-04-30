@@ -18,6 +18,10 @@ use FHV\Bundle\TmdBundle\Model\TracksegmentType;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
 
+/**
+ * Class SegmentationFilter
+ * @package FHV\Bundle\TmdBundle\Filter
+ */
 class SegmentationFilter extends AbstractFilter implements SegmentationFilterInterface
 {
     /**
@@ -123,14 +127,10 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $time = 0;
         $distance = 0;
 
-        $curSegment = new SegmentEntity($this->track);
+        $curSegment = $this->createNewSegmentEntity();
         $trackPoint = $this->createTrackpointEntity($gpsSegment->getTrackPoints()[$i]);
         $curSegment->addTrackpoint($trackPoint);
         $trackPoint->setSegment($curSegment);
-        $curSegment->setTrack($this->track);
-
-        $this->em->persist($curSegment);
-//        $this->em->persist($trackPoint);
 
         // TODO bilijecki?
 
@@ -149,28 +149,18 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
 
             if (count($curSegment->getTrackpoints()) === 1) {
                 // segment with one element und undefined type
-                $result = new ResultEntity();
-                $this->em->persist($result);
-                $result->setTransportType($this->track->getAnalyzationType());
-                $result->setAnalizationType($this->track->getAnalyzationType());
-                $result->setSegment($curSegment);
-                $curSegment->setResult($result);
-                if ($isWalkPoint) {
-                    $result->setTransportType(TracksegmentType::WALK);
-                } else {
-                    $result->setTransportType(TracksegmentType::UNDEFINIED);
-                }
+                $this->createNewResultEntity($this->track->getAnalyzationType(), $isWalkPoint, $curSegment);
             } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment)) {
                 // more than 1 element in segment and different type
-                $segments[] = $curSegment;
-                $curSegment->setSeconds($time);
-                $curSegment->setDistance($distance);
-                $curSegment->setEnd($curSegment->getTrackpoints()->last());
-                $curSegment->setStart($curSegment->getTrackpoints()->first());
+                $segments[] = $this->setValuesForSegment(
+                    $curSegment,
+                    $time,
+                    $distance,
+                    $curSegment->getTrackpoints()->first(),
+                    $curSegment->getTrackpoints()->last()
+                );
 
-                $curSegment = new SegmentEntity();
-                $this->em->persist($curSegment);
-                $curSegment->setTrack($this->track);
+                $curSegment = $this->createNewSegmentEntity();
                 $time = 0;
                 $distance = 0;
             }
@@ -181,17 +171,81 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $i++;
         }
 
-        $curSegment->setSeconds($time);
-        $curSegment->setDistance($distance);
-        $curSegment->setEnd($curSegment->getTrackpoints()->last());
-        $curSegment->setStart($curSegment->getTrackpoints()->first());
-        $segments[] = $curSegment;
+        $segments[] = $this->setValuesForSegment(
+            $curSegment,
+            $time,
+            $distance,
+            $curSegment->getTrackpoints()->first(),
+            $curSegment->getTrackpoints()->last()
+        );
 
         return $segments;
     }
 
     /**
-     * Creates a trackpoint entity from a trackpoint model
+     * Sets all needed values for a segment
+     *
+     * @param SegmentEntity    $segment
+     * @param integer          $time
+     * @param float            $distance
+     * @param TrackpointEntity $first
+     * @param TrackpointEntity $last
+     *
+     * @return SegmentEntity
+     */
+    private function setValuesForSegment($segment, $time, $distance, $first, $last)
+    {
+        $segment->setSeconds($time);
+        $segment->setDistance($distance);
+        $segment->setEnd($last);
+        $segment->setStart($first);
+
+        return $segment;
+    }
+
+    /**
+     * Created a new segment entity, connects it with the tracks entity and persists it
+     * @return SegmentEntity
+     */
+    private function createNewSegmentEntity()
+    {
+        $segment = new SegmentEntity();
+        $segment->setTrack($this->track);
+        $this->track->addSegment($segment);
+        $this->em->persist($segment);
+
+        return $segment;
+    }
+
+    /**
+     * Creates a new result entity and sets the relation to the segment and persists it
+     *
+     * @param integer       $getAnalyzationType
+     * @param boolean       $isWalkPoint
+     * @param SegmentEntity $curSegment
+     *
+     * @return ResultEntity
+     */
+    private function createNewResultEntity($getAnalyzationType, $isWalkPoint, $curSegment)
+    {
+        $result = new ResultEntity();
+        $result->setAnalizationType($getAnalyzationType);
+        $result->setSegment($curSegment);
+        $curSegment->setResult($result);
+
+        if ($isWalkPoint) {
+            $result->setTransportType(TracksegmentType::WALK);
+        } else {
+            $result->setTransportType(TracksegmentType::UNDEFINIED);
+        }
+
+        $this->em->persist($result);
+
+        return $result;
+    }
+
+    /**
+     * Creates a trackpoint entity from a trackpoint model and persits it
      *
      * @param TrackpointInterface $tp
      *
@@ -200,11 +254,11 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     private function createTrackpointEntity(TrackpointInterface $tp)
     {
         $trackpoint = new TrackpointEntity();
-//        $this->em->persist($trackpoint);
-
         $trackpoint->setLongitude($tp->getLong());
         $trackpoint->setLatitude($tp->getLat());
         $trackpoint->setTime($tp->getTime());
+
+        $this->em->persist($trackpoint);
 
         return $trackpoint;
     }
@@ -258,6 +312,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     /**
      * Merges segments which are below a distance or time threshold
      * TODO merge first in second?
+     *
      * @param SegmentEntity[] $segments
      *
      * @return SegmentEntity[]
@@ -302,7 +357,11 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $tp->setSegment($seg1);
         }
 
-        $this->em->remove($seg2);
+        if($seg2->getResult()) {
+            $this->em->detach($seg2->getResult());
+        }
+
+        $this->em->detach($seg2);
     }
 
     /**

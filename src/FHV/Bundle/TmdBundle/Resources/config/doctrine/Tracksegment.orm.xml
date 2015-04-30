@@ -24,16 +24,10 @@
 
         <one-to-many target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint" mapped-by="segment"
                      field="trackpoints">
-            <cascade>
-                <cascade-persist/>
-            </cascade>
         </one-to-many>
 
         <one-to-many target-entity="FHV\Bundle\TmdBundle\Entity\Feature" mapped-by="segment"
                      field="features">
-            <cascade>
-                <cascade-persist/>
-            </cascade>
         </one-to-many>
 
         <many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Track" field="track"

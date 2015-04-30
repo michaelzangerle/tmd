@@ -55,7 +55,7 @@ define(['map'], function (Map) {
             event.stopPropagation();
 
             if (!!data) {
-                this.$submitButton.html('Sending file and data...');
+                this.$submitButton.html('Sending file and processing data...');
                 this.$submitButton.addClass('disabled');
                 this.submit(data, 'POST');
             } else {
