@@ -4,33 +4,46 @@ namespace FHV\Bundle\TmdBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FHV\Bundle\TmdBundle\Model\TracksegmentType;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
 
 /**
  * Result
+ * @ExclusionPolicy("all")
  */
 class Result
 {
     /**
+     * @var \FHV\Bundle\TmdBundle\Entity\Tracksegment
+     */
+    private $segment;
+
+    /**
+     * @Expose
      * @var integer
      */
     private $transportType = TracksegmentType::UNDEFINIED;
 
     /**
+     * @Expose
      * @var boolean
      */
     private $correctedByUser = false;
 
     /**
+     * @Expose
      * @var integer
      */
     private $analizationType;
 
     /**
+     * @Expose
      * @var integer
      */
     private $id;
 
     /**
+     * @Expose
      * @var float
      */
     private $calcPrecision;
@@ -139,5 +152,28 @@ class Result
     public function getCalcPrecision()
     {
         return $this->calcPrecision;
+    }
+
+    /**
+     * Set segment
+     *
+     * @param \FHV\Bundle\TmdBundle\Entity\Tracksegment $segment
+     * @return Result
+     */
+    public function setSegment(\FHV\Bundle\TmdBundle\Entity\Tracksegment $segment = null)
+    {
+        $this->segment = $segment;
+
+        return $this;
+    }
+
+    /**
+     * Get segment
+     *
+     * @return \FHV\Bundle\TmdBundle\Entity\Tracksegment 
+     */
+    public function getSegment()
+    {
+        return $this->segment;
     }
 }

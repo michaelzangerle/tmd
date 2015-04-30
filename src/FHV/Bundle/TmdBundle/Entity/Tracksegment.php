@@ -269,7 +269,7 @@ class Tracksegment
      */
     public function setDistance($distance)
     {
-        $this->distance = $distance;
+        $this->distance = round($distance,3);
 
         return $this;
     }

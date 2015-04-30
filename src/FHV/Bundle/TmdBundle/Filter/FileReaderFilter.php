@@ -34,7 +34,9 @@ class FileReaderFilter extends AbstractFilter
 
     /**
      * Starts a filter and processes the given data
+     *
      * @param $data
+     *
      * @throws FilterException
      */
     public function run($data)
@@ -49,6 +51,7 @@ class FileReaderFilter extends AbstractFilter
 
     /**
      * Reads all segments from a gpx file
+     *
      * @param string $fileName
      */
     protected function readSegments($fileName)
@@ -65,9 +68,9 @@ class FileReaderFilter extends AbstractFilter
     /**
      * Processes all points of a track segment and returns a segment model
      *
-*@param SimpleXmlElement $xmlSegment
+     * @param SimpleXmlElement $xmlSegment
      *
-*@return TracksegmentInterface
+     * @return TracksegmentInterface
      */
     private function processSegment($xmlSegment)
     {

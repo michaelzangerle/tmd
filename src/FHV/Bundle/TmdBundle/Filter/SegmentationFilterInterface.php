@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: mike
- * Date: 29.04.15
- * Time: 11:27
- */
 
 namespace FHV\Bundle\TmdBundle\Filter;
 

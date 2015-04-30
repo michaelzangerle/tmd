@@ -8,10 +8,10 @@ namespace FHV\Bundle\TmdBundle\Model;
  */
 class TracksegmentType
 {
-    const UNDEFINIED = 1;
-    const DRIVE = 2;
-    const BUS = 3;
-    const TRAIN = 4;
-    const WALK = 5;
-    const BIKE = 6;
+    const UNDEFINIED = 0;
+    const DRIVE = 1;
+    const BUS = 2;
+    const TRAIN = 3;
+    const WALK = 4;
+    const BIKE = 5;
 }

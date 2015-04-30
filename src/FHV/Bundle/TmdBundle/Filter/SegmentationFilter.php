@@ -153,6 +153,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
                 $this->em->persist($result);
                 $result->setTransportType($this->track->getAnalyzationType());
                 $result->setAnalizationType($this->track->getAnalyzationType());
+                $result->setSegment($curSegment);
                 $curSegment->setResult($result);
                 if ($isWalkPoint) {
                     $result->setTransportType(TracksegmentType::WALK);
@@ -256,7 +257,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
 
     /**
      * Merges segments which are below a distance or time threshold
-     *
+     * TODO merge first in second?
      * @param SegmentEntity[] $segments
      *
      * @return SegmentEntity[]

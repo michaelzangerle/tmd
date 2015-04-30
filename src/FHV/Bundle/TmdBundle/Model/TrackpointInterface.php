@@ -2,6 +2,10 @@
 
 namespace FHV\Bundle\TmdBundle\Model;
 
+/**
+ * Interface TrackpointInterface
+ * @package FHV\Bundle\TmdBundle\Model
+ */
 interface TrackpointInterface
 {
     /**

@@ -2,6 +2,10 @@
 
 namespace FHV\Bundle\TmdBundle\Model;
 
+/**
+ * Interface TracksegmentInterface
+ * @package FHV\Bundle\TmdBundle\Model
+ */
 interface TracksegmentInterface
 {
     /**
