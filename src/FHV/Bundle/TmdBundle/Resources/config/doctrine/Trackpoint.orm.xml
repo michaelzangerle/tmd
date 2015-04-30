@@ -11,13 +11,14 @@
         <field name="longitude" type="float" nullable="false"/>
         <field name="time" type="datetime" nullable="false"/>
 
-        <many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" field="segment"
-                     inversed-by="trackpoints">
-            <join-columns>
-                <join-column name="idTracksegments" referenced-column-name="id" nullable="false"
-                             on-delete="CASCADE"/>
-            </join-columns>
-        </many-to-one>
+        <!-- not needed for now -->
+        <!--<many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" field="segment"-->
+                     <!--inversed-by="trackpoints">-->
+            <!--<join-columns>-->
+                <!--<join-column name="idTracksegments" referenced-column-name="id" nullable="false"-->
+                             <!--on-delete="CASCADE"/>-->
+            <!--</join-columns>-->
+        <!--</many-to-one>-->
 
     </entity>
 </doctrine-mapping>
