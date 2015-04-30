@@ -2,6 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Manager;
 
+use FHV\Bundle\TmdBundle\Entity\Track;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -18,7 +19,7 @@ interface TrackManagerInterface
      * @param File   $file
      * @param string $method
      *
-     * @return mixed
+     * @return Track
      */
     public function create(File $file, $method);
 }

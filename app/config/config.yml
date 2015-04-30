@@ -90,10 +90,10 @@ fhv_tmd:
     min_valid_in_row: 3
     min_valid_points: 0.85
   segmentation:
-    max_walk_velocity: 3
-    max_walk_acceleration: 11
-    min_segment_time: 10
-    min_segment_distance: 100
+    max_walk_velocity: 2
+    max_walk_acceleration: 2.8
+    min_segment_time: 20
+    min_segment_distance: 50
   analyze:
     default_method: A
 

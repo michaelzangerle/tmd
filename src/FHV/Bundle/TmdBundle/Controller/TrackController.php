@@ -40,12 +40,12 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
         $file = $request->files->get('file');
         if ($this->isValidFile($file)) {
             $timeStamp = (new \DateTime('now'))->format('U');
-            $fileName = substr(trim($file->getClientOriginalName()), 0, 60); // TODO security issue with file name
+            $fileName = substr(trim($file->getClientOriginalName()), 0, 60); // TODO possible security issue with file name?
             $method = $request->get('method', $this->container->getParameter('tmd.analyze.default_method'));
             $xmlFile = $file->move(__DIR__ . '/../uploaded', $timeStamp . '_' . $fileName);
 
             $track = $this->getManager()->create($xmlFile, $method);
-            $view = $this->view($track, 200); // TODO correct response
+            $view = $this->view($track, 200);
         } else {
             $view = $this->view('GPS file is incomplete or not valid!', 400);
         }
