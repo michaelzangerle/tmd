@@ -110,8 +110,8 @@ class Track
      *
      * @param Tracksegment[] $segments
      */
-    public function setSegments($segments)
+    public function addSegments($segments)
     {
-        $this->segments = $segments;
+        $this->segments = new ArrayCollection(array_merge($this->getSegments()->getValues(), $segments));
     }
 }

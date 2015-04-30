@@ -85,7 +85,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('analyze')
                     ->children()
                         ->scalarNode('default_method')
-                            ->defaultValue('A')
+                            ->defaultValue(1)
                             ->info('Default method to analyze data.')
                         ->end()
                     ->end()

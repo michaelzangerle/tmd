@@ -83,17 +83,17 @@ fhv_tmd:
   gpx_namespace: "http://www.topografix.com/GPX/1/1"
   filter:
     max_distance: 45
-    min_distance: 0
+    min_distance: 0.5
     max_altitude_change: 25
     min_trackpoints_per_segment: 2
-    min_time_difference: 1
-    min_valid_in_row: 3
-    min_valid_points: 0.85
+    min_time_difference: 2
+    min_valid_in_row: 2
+    min_valid_points: 0.25
   segmentation:
     max_walk_velocity: 2
     max_walk_acceleration: 2.8
     min_segment_time: 20
     min_segment_distance: 50
   analyze:
-    default_method: A
+    default_method: 1
 
