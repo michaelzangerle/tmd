@@ -1,10 +1,17 @@
-define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function (googleMaps) {
+define(['map'], function (Map) {
 
     /**
      * TODO add some proper validation
      * TODO extract constants into variables
-     * TODO extract map handling into a serparate component
      */
+
+    var constants = {
+        mapId: 'map',
+        gpsFileSelector: '#gpsFile',
+
+        tracksUrl: '/api/tracks'
+    };
+
 
     return {
 
@@ -50,7 +57,7 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function (googleMaps
             if (!!data) {
                 this.$submitButton.html('Sending file and data...');
                 this.$submitButton.addClass('disabled');
-                this.submit(data);
+                this.submit(data, 'POST');
             } else {
                 this.showInvalidDataMessage();
             }
@@ -69,7 +76,7 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function (googleMaps
          * @returns FormData|null
          */
         getValidatedFormData: function () {
-            var file = $('#gpsFile')[0].files[0],
+            var file = $(constants.gpsFileSelector)[0].files[0],
                 method = $('input[name="typeOptions"]:checked').val(),
                 formData = new FormData();
 
@@ -84,44 +91,34 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function (googleMaps
         /**
          * Send data to server
          * @param data
+         * @param method
          */
-        submit: function (data) {
-            var request = $.ajax({
-                type: 'POST',
-                url: '/api/tracks',
+        submit: function (data, method) {
+            $.ajax({
+                type: method,
+                url: constants.tracksUrl,
                 data: data,
                 processData: false,
                 contentType: false
-            });
-
-            request.done(function () {
-                this.fileUploadedHandler();
-            }.bind(this));
-
-            request.fail(function () {
-                alert("error during upload or processing of the file!");
+            })
+            .done(function (data) {
+                this.fileUploadedHandler(data); // could be done earlier
+            }.bind(this))
+            .fail(function (jqXHR) {
+                console.error('error during upload or processing of the file!');
+                console.error(jqXHR.responseJSON.error.exception[0].message)
             });
         },
 
         /**
-         * Will handle
+         * Will be triggered when the file is uploaded
+         * Hides the form and shows a map
          */
-        fileUploadedHandler: function () {
+        fileUploadedHandler: function (data) {
             this.$formView.hide();
             this.$mapView.show();
-            this.initMap();
-        },
-
-        /**
-         * Initializes the map
-         */
-        initMap: function () {
-            var mapOptions = {
-                    zoom: 10,
-                    center: new google.maps.LatLng(47.185203,10.0249882)
-
-                },
-                map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            Map.initialize(constants.mapId);
+            Map.drawTrack(data);
         }
     };
 });
