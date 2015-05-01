@@ -15,6 +15,7 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
 
             };
 
+            this.bounds = new google.maps.LatLngBounds();
             this.map = new google.maps.Map(document.getElementById(selector), mapOptions);
         },
 
@@ -25,8 +26,10 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
         drawTrack: function (track) {
             if (!!track.segments) {
                 track.segments.forEach(function (segment) {
-                    this.drawSegment(segment);
+                    this.drawSegment(segment, false);
                 }.bind(this));
+
+                this.map.fitBounds(this.bounds);
             }
         },
 
@@ -55,20 +58,15 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
          * @return LatLng[]
          */
         createCoordinates: function (trackPoints) {
-            var result = [], last;
-
-            if(!!this.lastCoordiante) {
-                result.push(this.lastCoordiante);
-            }
+            var result = [], coordinate;
 
             trackPoints.forEach(function (tp) {
-                result.push(new google.maps.LatLng(tp.latitude, tp.longitude))
+                coordinate = new google.maps.LatLng(tp.latitude, tp.longitude);
+                result.push(coordinate);
+                this.bounds.extend(coordinate);
             }.bind(this));
 
-            last = trackPoints[trackPoints.length -1];
-            this.lastCoordiante = new google.maps.LatLng(last.latitude, last.longitude);
             return result;
         }
-
     };
 });
