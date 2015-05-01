@@ -22,7 +22,7 @@ class TrackpointFilter extends AbstractFilter
     /**
      * @var float percentage value (valid points in relation to all points in the track)
      */
-    private $minValidPoints;
+    private $minValidPointsRatio;
 
     /**
      * @var TrackpointUtilInterface
@@ -71,7 +71,7 @@ class TrackpointFilter extends AbstractFilter
         $this->maxAltitudeChange = $maxAltitudeChange;
         $this->minTimeDifference = $minTimeDifference;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
-        $this->minValidPoints = $minValidPoints;
+        $this->minValidPointsRatio = $minValidPoints;
         $this->minValidPointsInRow = $minValidPointsInRow;
     }
 
@@ -148,7 +148,7 @@ class TrackpointFilter extends AbstractFilter
     {
         $length = count($trackPoints);
         $i = $this->findValidStart($trackPoints);
-        $next = 1;
+        $next = $i + 1;
         $cleaned = [];
 
         if ($i > -1) { // valid start point found
@@ -158,7 +158,6 @@ class TrackpointFilter extends AbstractFilter
                 $tp1 = new Trackpoint($trackPoints[$i]);
                 $tp2 = new Trackpoint($trackPoints[$next]);
 
-                // time filter has to be used first to be sure time value > 0
                 if ($this->areTrackpointsValid($tp1, $tp2)) {
                     $this->validPointCounter++;
                     $cleaned[] = $trackPoints[$i];
@@ -190,7 +189,7 @@ class TrackpointFilter extends AbstractFilter
             $validPointThreshold = $this->validPointCounter / $totalAmountOfTrackPoints;
 
             if (count($data['trackPoints']) >= $this->minTrackPointsPerSegment &&
-                $validPointThreshold >= $this->minValidPoints
+                $validPointThreshold >= $this->minValidPointsRatio
             ) {
                 $this->write($data);
                 if ($this->getParentHasFinished()) {
@@ -216,14 +215,10 @@ class TrackpointFilter extends AbstractFilter
      */
     private function areTrackpointsValid($tp1, $tp2)
     {
-        if ($this->isValidTime($tp2, $tp1) &&
-            $this->isValidDistance($tp2, $tp1) &&
-            $this->isValidAltitudeChange($tp1, $tp2)
-        ) {
-            return true;
-        }
-
-        return false;
+        // time filter has to be used first to be sure time value > 0
+        return $this->isValidTime($tp2, $tp1) &&
+        $this->isValidDistance($tp2, $tp1) &&
+        $this->isValidAltitudeChange($tp1, $tp2);
     }
 
     /**

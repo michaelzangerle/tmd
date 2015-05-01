@@ -48,7 +48,7 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(3)
                             ->info('Minimum of valid points in a row to start processing (greater than equals). Has to be greater than 0!')
                         ->end()
-                        ->scalarNode('min_valid_points')
+                        ->scalarNode('min_valid_points_ratio')
                             ->defaultValue(0.85)
                             ->info('Minimum of valid points per track in percentage (greater than equals).')
                         ->end()

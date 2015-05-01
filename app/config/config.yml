@@ -82,13 +82,20 @@ fhv_tmd:
   planet_circumference: 6371000
   gpx_namespace: "http://www.topografix.com/GPX/1/1"
   filter:
-    max_distance: 45
-    min_distance: 0.5
+    # 180 km/h should be enough even for trains
+    max_distance: 50
+
+    # should be very small or even 0 otherwise very slow movements (biking upwards) get lost
+    # a lot of such data in the testdata
+    min_distance: 0.0001
     max_altitude_change: 25
     min_trackpoints_per_segment: 2
     min_time_difference: 2
-    min_valid_in_row: 2
-    min_valid_points: 0.25
+    min_valid_in_row: 1
+
+    # should also be quite low because test data showed that tracks with a lot of invalid
+    # data exist but they have still enough information to display reasonable routes
+    min_valid_points_ratio: 0.05
   segmentation:
     max_walk_velocity: 2
     max_walk_acceleration: 2.8

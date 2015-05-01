@@ -82,7 +82,6 @@ class FileReaderFilter extends AbstractFilter
             $this->write(
                 array(
                     'type' => $type,
-                    'segment' => $segment,
                     'trackPoints' => $trackPoints
                 )
             );
