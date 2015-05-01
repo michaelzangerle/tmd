@@ -91,7 +91,7 @@ fhv_tmd:
     max_altitude_change: 25
     min_trackpoints_per_segment: 2
     min_time_difference: 2
-    min_valid_in_row: 1
+    points_to_skip_from_start: 3
 
     # should also be quite low because test data showed that tracks with a lot of invalid
     # data exist but they have still enough information to display reasonable routes

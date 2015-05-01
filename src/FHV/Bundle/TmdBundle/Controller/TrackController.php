@@ -46,11 +46,11 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
 
             $track = $this->getManager()->create($xmlFile, $method);
             $view = $this->view($track, 200);
+            unlink($xmlFile);
         } else {
             $view = $this->view('GPS file is incomplete or not valid!', 400);
         }
 
-        // TODO remove file when finished?
         return $this->handleView($view);
     }
 

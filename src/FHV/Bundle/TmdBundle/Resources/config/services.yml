@@ -30,7 +30,7 @@ services:
             - %tmd.filter.max_altitude_change%
             - %tmd.filter.min_time_difference%
             - %tmd.filter.min_trackpoints_per_segment%
-            - %tmd.filter.min_valid_in_row%
+            - %tmd.filter.points_to_skip_from_start%
             - %tmd.filter.min_valid_points%
 
     fhv_tmd.segmentFilter:

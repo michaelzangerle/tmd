@@ -50,7 +50,7 @@ class FHVTmdExtension extends Extension
         $container->setParameter('tmd.filter.max_altitude_change', $config['filter']['max_altitude_change']);
         $container->setParameter('tmd.filter.min_trackpoints_per_segment', $config['filter']['min_trackpoints_per_segment']);
         $container->setParameter('tmd.filter.min_time_difference', $config['filter']['min_time_difference']);
-        $container->setParameter('tmd.filter.min_valid_in_row', $config['filter']['min_valid_in_row']);
+        $container->setParameter('tmd.filter.points_to_skip_from_start', $config['filter']['points_to_skip_from_start']);
         $container->setParameter('tmd.filter.min_valid_points', $config['filter']['min_valid_points_ratio']);
     }
 

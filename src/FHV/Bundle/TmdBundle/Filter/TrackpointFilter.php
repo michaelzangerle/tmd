@@ -45,9 +45,9 @@ class TrackpointFilter extends AbstractFilter
     private $maxAltitudeChange;
 
     /**
-     * @var float
+     * @var integer
      */
-    private $minValidPointsInRow;
+    private $pointsToSkip;
 
     /**
      * @var int
@@ -61,7 +61,7 @@ class TrackpointFilter extends AbstractFilter
         $maxAltitudeChange,
         $minTimeDifference,
         $minTrackPointsPerSegment,
-        $minValidPointsInRow,
+        $pointsToSkip,
         $minValidPoints
     ) {
         parent::__construct();
@@ -72,7 +72,7 @@ class TrackpointFilter extends AbstractFilter
         $this->minTimeDifference = $minTimeDifference;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
         $this->minValidPointsRatio = $minValidPoints;
-        $this->minValidPointsInRow = $minValidPointsInRow;
+        $this->pointsToSkip = $pointsToSkip;
     }
 
     /**
@@ -147,7 +147,7 @@ class TrackpointFilter extends AbstractFilter
     protected function filter(array $trackPoints)
     {
         $length = count($trackPoints);
-        $i = $this->findValidStart($trackPoints);
+        $i = $this->pointsToSkip;
         $next = $i + 1;
         $cleaned = [];
 
@@ -219,40 +219,5 @@ class TrackpointFilter extends AbstractFilter
         return $this->isValidTime($tp2, $tp1) &&
         $this->isValidDistance($tp2, $tp1) &&
         $this->isValidAltitudeChange($tp1, $tp2);
-    }
-
-    /**
-     * Searches for a valid start point
-     *
-     * @param array $trackPoints
-     *
-     * @return int returns -1 if none is found or index of the point to start from
-     */
-    private function findValidStart(array $trackPoints)
-    {
-        $validInRow = 0;
-        $i = 0;
-        $next = 1;
-        $length = count($trackPoints);
-
-        while ($next < $length) {
-            $tp1 = new Trackpoint($trackPoints[$i]);
-            $tp2 = new Trackpoint($trackPoints[$next]);
-
-            // time filter has to be used first to be sure time value > 0
-            if ($this->areTrackpointsValid($tp1, $tp2)) {
-                $validInRow++;
-                if ($validInRow === $this->minValidPointsInRow) {
-                    return ($next - $this->minValidPointsInRow);
-                }
-            } else {
-                $validInRow = 0;
-            }
-
-            $next++;
-            $i++;
-        }
-
-        return -1;
     }
 }
