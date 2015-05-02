@@ -316,7 +316,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      */
     private function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment, $time, $lowSpeedCounter)
     {
-        // TODO bilijecki?
         if (($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
             (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
             ($time > $this->maxTimeDifference) ||
