@@ -76,5 +76,7 @@ class FHVTmdExtension extends Extension
         $container->setParameter('tmd.segmentation.min_segment_distance', $config['segmentation']['min_segment_distance']);
         $container->setParameter('tmd.segmentation.min_segment_time', $config['segmentation']['min_segment_time']);
         $container->setParameter('tmd.segmentation.max_time_difference', $config['segmentation']['max_time_difference']);
+        $container->setParameter('tmd.segmentation.max_time_without_movement', $config['segmentation']['max_time_without_movement']);
+        $container->setParameter('tmd.segmentation.max_velocity_for_nearly_stoppoints', $config['segmentation']['max_velocity_for_nearly_stoppoints']);
     }
 }

@@ -62,7 +62,7 @@ class TrackpointFilter extends AbstractFilter
         $minTimeDifference,
         $minTrackPointsPerSegment,
         $pointsToSkip,
-        $minValidPoints
+        $minValidTime
     ) {
         parent::__construct();
         $this->util = $util;
@@ -71,7 +71,7 @@ class TrackpointFilter extends AbstractFilter
         $this->maxAltitudeChange = $maxAltitudeChange;
         $this->minTimeDifference = $minTimeDifference;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
-        $this->minValidPointsRatio = $minValidPoints;
+        $this->minValidPointsRatio = $minValidTime;
         $this->pointsToSkip = $pointsToSkip;
     }
 

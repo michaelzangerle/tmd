@@ -61,9 +61,19 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     private $em;
 
     /**
-     * @var int
+     * @var integer
      */
     private $maxTimeDifference;
+
+    /**
+     * @var integer
+     */
+    private $maxTimeWithoutMovement;
+
+    /**
+     * @var float
+     */
+    private $maxVelocityForNearlyStopPoints;
 
     function __construct(
         EntityManager $em,
@@ -72,7 +82,9 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $maxWalkAcceleration,
         $minSegmentTime,
         $minSegmentDistance,
-        $maxTimeDifference
+        $maxTimeDifference,
+        $maxTimeWithoutMovement,
+        $maxVelocityForNearlyStopPoints
     ) {
         parent::__construct();
 
@@ -84,6 +96,8 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $this->minSegmentDistance = $minSegmentDistance;
         $this->track = new TrackEntity();
         $this->maxTimeDifference = $maxTimeDifference;
+        $this->maxTimeWithoutMovement = $maxTimeWithoutMovement;
+        $this->maxVelocityForNearlyStopPoints = $maxVelocityForNearlyStopPoints;
     }
 
     /**
@@ -133,6 +147,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $prevVelocity = 0;
         $time = 0;
         $distance = 0;
+        $lowSpeedTimeCounter = 0;
 
         $curSegment = $this->createNewSegmentEntity();
         $trackPoint = $this->createTrackpointEntity($gpsSegment->getTrackPoints()[$i]);
@@ -149,13 +164,19 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $distance += $tmpDistance;
             $time += $tmpTime;
 
+            // bilijecki counts the points with speed below a certain value
+            // and starts a new segment when the threshold is reached
+            if($this->util->calcVelocity($tmpDistance, $tmpTime) < $this->maxVelocityForNearlyStopPoints) {
+                $lowSpeedTimeCounter += $tmpTime;
+            }
+
             $isWalkPoint = $this->isWalkPoint($tmpDistance, $tmpTime, $prevVelocity);
             $tpEntity = $this->createTrackpointEntity($tp2);
 
             // segment with one element und undefined type
             if (count($curSegment->getTrackpoints()) === 1) {
                 $this->createNewResultEntity($this->track->getAnalyzationType(), $isWalkPoint, $curSegment);
-            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime)) {
+            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime, $lowSpeedTimeCounter)) {
                 // more than 1 element in segment and different type
                 $segments[] = $this->setValuesForSegment(
                     $curSegment,
@@ -166,6 +187,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
                 $curSegment = $this->createNewSegmentEntity();
                 $time = 0;
                 $distance = 0;
+                $lowSpeedTimeCounter = 0;
             }
 
             $curSegment->addTrackpoint($tpEntity);
@@ -282,20 +304,23 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     /**
      * Checks if a new segment should be created because the types of the next
      * trackpoint and the current segment do not match or because there is big
-     * time difference between the current track points
+     * time difference between the current track points or because a lot of
+     * segments without or with little movement were discovered
      *
      * @param boolean       $isWalkPoint
      * @param SegmentEntity $curSegment
      * @param integer       $time
+     * @param integer       $lowSpeedCounter
      *
      * @return bool
      */
-    private function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment, $time)
+    private function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment, $time, $lowSpeedCounter)
     {
         // TODO bilijecki?
         if (($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
             (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
-            ($time > $this->maxTimeDifference)
+            ($time > $this->maxTimeDifference) ||
+            $lowSpeedCounter >= $this->maxTimeWithoutMovement
         ) {
             return true;
         }
