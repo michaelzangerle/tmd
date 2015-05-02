@@ -52,6 +52,7 @@ services:
             - %tmd.segmentation.max_walk_acceleration%
             - %tmd.segmentation.min_segment_time%
             - %tmd.segmentation.min_segment_distance%
+            - %tmd.segmentation.max_time_difference%
 
     ##############################
     # Manager

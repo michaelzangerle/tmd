@@ -60,13 +60,19 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      */
     private $em;
 
+    /**
+     * @var int
+     */
+    private $maxTimeDifference;
+
     function __construct(
         EntityManager $em,
         TrackpointUtilInterface $util,
         $maxWalkVelocity,
         $maxWalkAcceleration,
         $minSegmentTime,
-        $minSegmentDistance
+        $minSegmentDistance,
+        $maxTimeDifference
     ) {
         parent::__construct();
 
@@ -77,6 +83,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $this->minSegmentTime = $minSegmentTime;
         $this->minSegmentDistance = $minSegmentDistance;
         $this->track = new TrackEntity();
+        $this->maxTimeDifference = $maxTimeDifference;
     }
 
     /**
@@ -132,8 +139,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $curSegment->addTrackpoint($trackPoint);
         $trackPoint->setSegment($curSegment);
 
-        // TODO bilijecki?
-
         while ($next < $length) {
             /** @var TrackPoint $tp1 */
             /** @var TrackPoint $tp2 */
@@ -150,7 +155,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             // segment with one element und undefined type
             if (count($curSegment->getTrackpoints()) === 1) {
                 $this->createNewResultEntity($this->track->getAnalyzationType(), $isWalkPoint, $curSegment);
-            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment)) {
+            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime)) {
                 // more than 1 element in segment and different type
                 $segments[] = $this->setValuesForSegment(
                     $curSegment,
@@ -276,19 +281,21 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
 
     /**
      * Checks if a new segment should be created because the types of the next
-     * trackpoint and the current segment do not match
+     * trackpoint and the current segment do not match or because there is big
+     * time difference between the current track points
      *
      * @param boolean       $isWalkPoint
      * @param SegmentEntity $curSegment
+     * @param integer       $time
      *
      * @return bool
      */
-    private function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment)
+    private function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment, $time)
     {
-        if (($isWalkPoint &&
-                $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
-            (!$isWalkPoint &&
-                $curSegment->getResult()->getTransportType() === TracksegmentType::WALK)
+        // TODO bilijecki?
+        if (($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
+            (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
+            ($time > $this->maxTimeDifference)
         ) {
             return true;
         }
