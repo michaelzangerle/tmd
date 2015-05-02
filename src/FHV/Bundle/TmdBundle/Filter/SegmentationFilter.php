@@ -91,6 +91,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         if ($data !== null && $data instanceof TracksegmentInterface) {
             $this->process($data);
             if ($this->getParentHasFinished()) {
+                $this->write($this->track);
                 $this->finished();
             }
         } else {
@@ -106,10 +107,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     private function process(TracksegmentInterface $gpsSegment)
     {
         $segments = $this->createSegments($gpsSegment);
-        $segments = $this->mergeSegments($segments);
-        $this->track->addSegments($segments);
-
-        $this->write($this->track);
+        $this->mergeSegments($segments);
     }
 
     /**
@@ -200,15 +198,13 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     }
 
     /**
-     * Created a new segment entity, connects it with the tracks entity and persists it
+     * Created a new segment entity but do not connect it with the track because
+     * this will happen during the merge process
      * @return SegmentEntity
      */
     private function createNewSegmentEntity()
     {
         $segment = new SegmentEntity();
-        $segment->setTrack($this->track);
-        $this->track->addSegment($segment);
-        $this->em->persist($segment);
 
         return $segment;
     }
@@ -312,31 +308,35 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     {
         $i = 1;
         $j = 0;
-        $result[] = $segments[0];
+        $amount = count($segments);
 
-        // TODO merge first segment with second when too small
+        // merge first segment with second when too small
         // to prevent starting signal issue
-//        if (count($segments) > 1 && $this->shouldSegementBeMerged($segments[0])) {
-//            $this->merge($segments[1], $segments[0]);
-//            $this->em->detach($segments[0]);
-//            $result[] = $segments[1];
-//            $i = 2;
-//        } else {
-//            $result[] = $segments[0];
-//        }
+        if (count($segments) > 1 && $this->shouldSegementBeMerged($segments[0])) {
+            $this->merge($segments[1], $segments[0]);
+            $curSegment = $segments[1];
+            $i = 2;
+        } else {
+            $curSegment = $segments[0];
+        }
 
-        while ($i < count($segments)) {
+        $curSegment->setTrack($this->track);
+        $this->track->addSegment($curSegment);
+
+        while ($i < $amount) {
             // TODO check default/configured values
             if ($this->shouldSegementBeMerged($segments[$i])) {
-                $this->merge($result[$j], $segments[$i]);
+                $this->merge($curSegment, $segments[$i]);
             } else {
-                $result[] = $segments[$i];
+
+                // add segment only when it should not be merged
+                $segments[$i]->setTrack($this->track);
+                $this->track->addSegment($segments[$i]);
+                $curSegment = $segments[$i];
                 $j++;
             }
             $i++;
         }
-
-        return $result;
     }
 
     /**
@@ -369,12 +369,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $seg1->addTrackpoint($tp);
             $tp->setSegment($seg1);
         }
-
-        if ($seg2->getResult()) {
-            $this->em->detach($seg2->getResult());
-        }
-
-        $this->em->detach($seg2);
     }
 
     /**

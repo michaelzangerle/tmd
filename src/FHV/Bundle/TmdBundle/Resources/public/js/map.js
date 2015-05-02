@@ -39,13 +39,27 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
          */
         drawSegment: function (segment) {
             if (!!segment.trackpoints && segment.trackpoints.length >= 2) {
+
+                var lineSymbol = {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    strokeColor: 'red',
+                    strokeWeight: 4
+                };
+
                 var coordinates = this.createCoordinates(segment.trackpoints);
                 var segmentPath = new google.maps.Polyline({
                     path: coordinates,
                     geodesic: true,
-                    strokeColor: '#FF0000',
+                    strokeColor: 'red',
                     strokeOpacity: 1.0,
-                    strokeWeight: 2
+                    strokeWeight: 2,
+                    icons: [{
+                        icon: lineSymbol,
+                        offset: '100%'
+                    },{
+                        icon: lineSymbol,
+                        offset: '0%'
+                    }]
                 });
 
                 segmentPath.setMap(this.map);
@@ -58,7 +72,11 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
          * @return LatLng[]
          */
         createCoordinates: function (trackPoints) {
-            var result = [], coordinate;
+            var result = [], coordinate = null;
+
+            if(!!this.lastCoordinate) {
+                result.push(this.lastCoordinate);
+            }
 
             trackPoints.forEach(function (tp) {
                 coordinate = new google.maps.LatLng(tp.latitude, tp.longitude);
@@ -66,6 +84,7 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
                 this.bounds.extend(coordinate);
             }.bind(this));
 
+            this.lastCoordinate = coordinate;
             return result;
         }
     };

@@ -21,13 +21,11 @@ class Tracksegment
     private $id;
 
     /**
-     * @Expose
      * @var Trackpoint
      */
     private $start;
 
     /**
-     * @Expose
      * @var Trackpoint
      */
     private $end;
@@ -56,9 +54,16 @@ class Tracksegment
     private $track;
 
     /**
+     * @Expose
      * @var integer
      */
-    private $seconds;
+    private $seconds = 0;
+
+    /**
+     * @Expose
+     * @var float
+     */
+    private $distance = 0;
 
     /**
      * Constructor
@@ -92,7 +97,7 @@ class Tracksegment
 
         return $this;
     }
-    
+
     /**
      * Get start
      *
@@ -256,20 +261,17 @@ class Tracksegment
     {
         return $this->track;
     }
-    /**
-     * @var float
-     */
-    private $distance = 0;
 
     /**
      * Set distance
      *
      * @param float $distance
+     *
      * @return Tracksegment
      */
     public function setDistance($distance)
     {
-        $this->distance = round($distance,3);
+        $this->distance = round($distance, 3);
 
         return $this;
     }
@@ -277,7 +279,7 @@ class Tracksegment
     /**
      * Get distance
      *
-     * @return float 
+     * @return float
      */
     public function getDistance()
     {
@@ -288,6 +290,7 @@ class Tracksegment
      * Set seconds
      *
      * @param integer $seconds
+     *
      * @return Tracksegment
      */
     public function setSeconds($seconds)
@@ -300,7 +303,7 @@ class Tracksegment
     /**
      * Get seconds
      *
-     * @return integer 
+     * @return integer
      */
     public function getSeconds()
     {
