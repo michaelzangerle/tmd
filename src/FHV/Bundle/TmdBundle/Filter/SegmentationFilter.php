@@ -267,7 +267,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $acc = $this->util->calcAcceleration($velocity, $time, $prevVelocity);
         $prevVelocity = $velocity;
 
-        // TODO check default/configured values
         if ($acc < $this->maxWalkAcceleration && $velocity < $this->maxWalkVelocity) {
             return true;
         }
@@ -324,11 +323,9 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $this->track->addSegment($curSegment);
 
         while ($i < $amount) {
-            // TODO check default/configured values
             if ($this->shouldSegementBeMerged($segments[$i])) {
                 $this->merge($curSegment, $segments[$i]);
             } else {
-
                 // add segment only when it should not be merged
                 $segments[$i]->setTrack($this->track);
                 $this->track->addSegment($segments[$i]);
