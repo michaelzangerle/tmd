@@ -158,6 +158,7 @@ class Result
      * Set segment
      *
      * @param \FHV\Bundle\TmdBundle\Entity\Tracksegment $segment
+     *
      * @return Result
      */
     public function setSegment(\FHV\Bundle\TmdBundle\Entity\Tracksegment $segment = null)
@@ -170,7 +171,7 @@ class Result
     /**
      * Get segment
      *
-     * @return \FHV\Bundle\TmdBundle\Entity\Tracksegment 
+     * @return \FHV\Bundle\TmdBundle\Entity\Tracksegment
      */
     public function getSegment()
     {

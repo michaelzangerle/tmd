@@ -17,19 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TrackController extends FOSRestController implements ClassResourceInterface
 {
     /**
-     * @param $id
-     *
-     * @return Response
-     */
-    public function getAction($id)
-    {
-        // TODO just a dummy implementation
-        $view = $this->view(new Track(), 200);
-
-        return $this->handleView($view);
-    }
-
-    /**
+     * Processes a post request for a new track
      * @param Request $request
      *
      * @return Response
@@ -40,7 +28,11 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
         $file = $request->files->get('file');
         if ($this->isValidFile($file)) {
             $timeStamp = (new \DateTime('now'))->format('U');
-            $fileName = substr(trim($file->getClientOriginalName()), 0, 60); // TODO possible security issue with file name?
+            $fileName = substr(
+                trim($file->getClientOriginalName()),
+                0,
+                60
+            ); // TODO possible security issue with file name?
             $method = $request->get('method', $this->container->getParameter('tmd.analyze.default_method'));
             $xmlFile = $file->move(__DIR__ . '/../uploaded', $timeStamp . '_' . $fileName);
 
@@ -61,7 +53,7 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
      *
      * @return bool
      */
-    private function isValidFile(UploadedFile $file)
+    protected function isValidFile(UploadedFile $file)
     {
         if ($file != null && $file->isValid() &&
             $file->getMimeType() === 'application/xml' &&

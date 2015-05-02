@@ -45,6 +45,7 @@ class Trackpoint
      * Set time
      *
      * @param \DateTime $time
+     *
      * @return Trackpoint
      */
     public function setTime($time)
@@ -57,7 +58,7 @@ class Trackpoint
     /**
      * Get time
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTime()
     {
@@ -67,7 +68,7 @@ class Trackpoint
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -78,6 +79,7 @@ class Trackpoint
      * Set segment
      *
      * @param Tracksegment $segment
+     *
      * @return Trackpoint
      */
     public function setSegment(Tracksegment $segment)
@@ -101,6 +103,7 @@ class Trackpoint
      * Set latitude
      *
      * @param float $latitude
+     *
      * @return Trackpoint
      */
     public function setLatitude($latitude)
@@ -113,7 +116,7 @@ class Trackpoint
     /**
      * Get latitude
      *
-     * @return float 
+     * @return float
      */
     public function getLatitude()
     {
@@ -124,6 +127,7 @@ class Trackpoint
      * Set longitude
      *
      * @param float $longitude
+     *
      * @return Trackpoint
      */
     public function setLongitude($longitude)
@@ -136,7 +140,7 @@ class Trackpoint
     /**
      * Get longitude
      *
-     * @return float 
+     * @return float
      */
     public function getLongitude()
     {

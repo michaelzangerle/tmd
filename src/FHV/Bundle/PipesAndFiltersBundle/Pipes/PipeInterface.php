@@ -2,10 +2,14 @@
 
 namespace FHV\Bundle\PipesAndFiltersBundle\Pipes;
 
+/**
+ * Interface PipeInterface
+ * @package FHV\Bundle\PipesAndFiltersBundle\Pipes
+ */
 interface PipeInterface
 {
     /**
-     * Writes data to the following filter
+     * Writes data to the connected filter
      *
      * @param $data
      *
@@ -14,7 +18,7 @@ interface PipeInterface
     public function write($data);
 
     /**
-     * Tells the next filter that parent has finished
+     * Tells the next filter that the parent filter has finished work
      */
     public function finished();
 }

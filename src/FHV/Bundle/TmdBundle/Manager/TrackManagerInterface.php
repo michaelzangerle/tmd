@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 interface TrackManagerInterface
 {
-
     /**
      * Creates a track from a gxp file and a for a selected process method
      *

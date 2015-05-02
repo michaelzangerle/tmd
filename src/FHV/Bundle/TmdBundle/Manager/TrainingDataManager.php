@@ -59,9 +59,10 @@ class TrainingDataManager
 
     /**
      * Reads gpx files from directory, processes them and generates a file with the result
+     *
      * @param OutputInterface $output
-     * @param string $dir
-     * @param $resultFileName
+     * @param string          $dir
+     * @param                 $resultFileName
      */
     public function process($output, $dir = '.', $resultFileName = 'results.csv')
     {

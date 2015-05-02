@@ -72,7 +72,7 @@ class FileReaderFilter extends AbstractFilter
      *
      * @return TracksegmentInterface
      */
-    private function processSegment($xmlSegment)
+    protected function processSegment($xmlSegment)
     {
         $type = (string)$xmlSegment['type'];
         $segment = (array)$xmlSegment;

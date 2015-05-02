@@ -50,7 +50,7 @@ class TrackManager implements TrackManagerInterface
     /**
      * @var Track
      */
-    private $track;
+    protected $track;
 
     function __construct(
         EntityManager $em,

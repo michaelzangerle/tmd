@@ -20,13 +20,13 @@ class Pipe implements PipeInterface
     {
         $this->targetFilter = $targetFilter;
         $inputFilter->register($this);
-
     }
 
     /**
      * @inheritdoc
      */
-    public function finished(){
+    public function finished()
+    {
         $this->targetFilter->parentHasFinished();
     }
 

@@ -47,7 +47,7 @@ class FileWriterFilter extends AbstractFilter
      */
     public function setDir($dir)
     {
-        if(substr($dir, -1) !== '/'){
+        if (substr($dir, -1) !== '/') {
             $dir .= '/';
         }
 
@@ -88,7 +88,9 @@ class FileWriterFilter extends AbstractFilter
 
     /**
      * Starts a filter and processes the given data
+     *
      * @param $data
+     *
      * @throws FilterException
      */
     public function run($data)
@@ -98,7 +100,7 @@ class FileWriterFilter extends AbstractFilter
             $this->writeData($this->dir, $this->fileName, $data, $this->delimiter);
         }
 
-        if($this->getParentHasFinished()) {
+        if ($this->getParentHasFinished()) {
             $this->finished();
         }
     }
@@ -106,10 +108,10 @@ class FileWriterFilter extends AbstractFilter
     /**
      * Writes the csv result file for all analyzed segments
      *
-*@param string $dir
-     * @param $fileName
+     * @param string                $dir
+     * @param                       $fileName
      * @param TracksegmentInterface $seg
-     * @param string $delimiter
+     * @param string                $delimiter
      */
     protected function writeData($dir, $fileName, TracksegmentInterface $seg, $delimiter)
     {
@@ -120,8 +122,9 @@ class FileWriterFilter extends AbstractFilter
 
     /**
      * Writes the header of a csv file
-     * @param $dir
-     * @param $fileName
+     *
+     * @param        $dir
+     * @param        $fileName
      * @param string $delimiter
      */
     protected function writeHeader($dir, $fileName, $delimiter)

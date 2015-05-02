@@ -125,7 +125,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @param TracksegmentInterface $gpsSegment
      */
-    private function process(TracksegmentInterface $gpsSegment)
+    protected function process(TracksegmentInterface $gpsSegment)
     {
         $segments = $this->createSegments($gpsSegment);
         $this->mergeSegments($segments);
@@ -138,7 +138,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return SegmentEntity[]
      */
-    private function createSegments(TracksegmentInterface $gpsSegment)
+    protected function createSegments(TracksegmentInterface $gpsSegment)
     {
         $segments = [];
         $i = 0;
@@ -166,7 +166,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
 
             // bilijecki counts the points with speed below a certain value
             // and starts a new segment when the threshold is reached
-            if($this->util->calcVelocity($tmpDistance, $tmpTime) < $this->maxVelocityForNearlyStopPoints) {
+            if ($this->util->calcVelocity($tmpDistance, $tmpTime) < $this->maxVelocityForNearlyStopPoints) {
                 $lowSpeedTimeCounter += $tmpTime;
             }
 
@@ -214,7 +214,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return SegmentEntity
      */
-    private function setValuesForSegment($segment, $time, $distance)
+    protected function setValuesForSegment($segment, $time, $distance)
     {
         $segment->setSeconds($time);
         $segment->setDistance($distance);
@@ -229,7 +229,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      * this will happen during the merge process
      * @return SegmentEntity
      */
-    private function createNewSegmentEntity()
+    protected function createNewSegmentEntity()
     {
         $segment = new SegmentEntity();
 
@@ -245,7 +245,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return ResultEntity
      */
-    private function createNewResultEntity($getAnalyzationType, $isWalkPoint, $curSegment)
+    protected function createNewResultEntity($getAnalyzationType, $isWalkPoint, $curSegment)
     {
         $result = new ResultEntity();
         $result->setAnalizationType($getAnalyzationType);
@@ -268,7 +268,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return TrackpointEntity
      */
-    private function createTrackpointEntity(TrackpointInterface $tp)
+    protected function createTrackpointEntity(TrackpointInterface $tp)
     {
         $trackpoint = new TrackpointEntity();
         $trackpoint->setLongitude($tp->getLong());
@@ -288,7 +288,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return bool
      */
-    private function isWalkPoint($distance, $time, &$prevVelocity)
+    protected function isWalkPoint($distance, $time, &$prevVelocity)
     {
         $velocity = $this->util->calcVelocity($distance, $time);
         $acc = $this->util->calcAcceleration($velocity, $time, $prevVelocity);
@@ -314,7 +314,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return bool
      */
-    private function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment, $time, $lowSpeedCounter)
+    protected function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment, $time, $lowSpeedCounter)
     {
         if (($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
             (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
@@ -334,7 +334,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return SegmentEntity[]
      */
-    private function mergeSegments(array $segments)
+    protected function mergeSegments(array $segments)
     {
         $i = 1;
         $j = 0;
@@ -372,7 +372,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      *
      * @return bool
      */
-    private function shouldSegementBeMerged(SegmentEntity $segment)
+    protected function shouldSegementBeMerged(SegmentEntity $segment)
     {
         return $segment->getDistance() < $this->minSegmentDistance ||
         $segment->getSeconds() < $this->minSegmentTime;
@@ -384,7 +384,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      * @param SegmentEntity $seg1
      * @param SegmentEntity $seg2
      */
-    private function merge(SegmentEntity $seg1, SegmentEntity $seg2)
+    protected function merge(SegmentEntity $seg1, SegmentEntity $seg2)
     {
         $seg1->setSeconds($seg1->getSeconds() + $seg2->getSeconds());
         $seg1->setDistance(($seg1->getDistance() + $seg2->getDistance()));

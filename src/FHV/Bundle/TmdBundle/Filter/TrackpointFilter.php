@@ -213,7 +213,7 @@ class TrackpointFilter extends AbstractFilter
      *
      * @return bool
      */
-    private function areTrackpointsValid($tp1, $tp2)
+    protected function areTrackpointsValid($tp1, $tp2)
     {
         // time filter has to be used first to be sure time value > 0
         return $this->isValidTime($tp2, $tp1) &&
