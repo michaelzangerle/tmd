@@ -319,7 +319,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         if (($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
             (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
             ($time > $this->maxTimeDifference) ||
-            $lowSpeedCounter >= $this->maxTimeWithoutMovement
+            ($lowSpeedCounter >= $this->maxTimeWithoutMovement)
         ) {
             return true;
         }
@@ -343,12 +343,10 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         // merge first segment with second when too small
         // to prevent starting signal issue
         if (count($segments) > 1 && $this->shouldSegementBeMerged($segments[0])) {
-            $this->merge($segments[1], $segments[0]);
-            $curSegment = $segments[1];
+            $this->merge($segments[0], $segments[1]);
             $i = 2;
-        } else {
-            $curSegment = $segments[0];
         }
+        $curSegment = $segments[0];
 
         $curSegment->setTrack($this->track);
         $this->track->addSegment($curSegment);
@@ -381,7 +379,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     }
 
     /**
-     * Merges the second segment into the first and detaches the second
+     * Merges the second segment into the first
      *
      * @param SegmentEntity $seg1
      * @param SegmentEntity $seg2
