@@ -195,11 +195,8 @@ class TrackpointFilter extends AbstractFilter
                 if ($this->getParentHasFinished()) {
                     $this->finished();
                 }
-            } else {
-                throw new TrackException(
-                    'TrackPointFilter: To many invalid or inaccurate trackpoints prevented further processing!'
-                );
             }
+            // else just skip this segment
         } else {
             throw new TrackException('TrackPointFilter: Data param should contain trackpoints!');
         }
