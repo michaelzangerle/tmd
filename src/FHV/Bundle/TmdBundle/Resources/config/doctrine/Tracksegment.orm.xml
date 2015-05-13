@@ -18,15 +18,6 @@
             <join-column name="idResult" referenced-column-name="id"/>
         </one-to-one>
 
-        <!-- not needed for now -->
-        <!--<one-to-one field="start" target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint">-->
-        <!--<join-column name="idStartPoint" referenced-column-name="id" on-delete="CASCADE"/>-->
-        <!--</one-to-one>-->
-
-        <!--<one-to-one field="end" target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint">-->
-        <!--<join-column name="idEndPoint" referenced-column-name="id" on-delete="CASCADE"/>-->
-        <!--</one-to-one>-->
-
         <!--<one-to-many target-entity="FHV\Bundle\TmdBundle\Entity\Trackpoint" mapped-by="segment"-->
                      <!--field="trackpoints">-->
         <!--</one-to-many>-->

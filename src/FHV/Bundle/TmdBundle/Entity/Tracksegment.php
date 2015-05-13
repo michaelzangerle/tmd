@@ -21,16 +21,6 @@ class Tracksegment
     private $id;
 
     /**
-     * @var Trackpoint
-     */
-    private $start;
-
-    /**
-     * @var Trackpoint
-     */
-    private $end;
-
-    /**
      * @Expose
      * @var Result
      */
@@ -82,54 +72,6 @@ class Tracksegment
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set start
-     *
-     * @param Trackpoint $start
-     *
-     * @return Tracksegment
-     */
-    public function setStart(Trackpoint $start = null)
-    {
-        $this->start = $start;
-
-        return $this;
-    }
-
-    /**
-     * Get start
-     *
-     * @return Trackpoint
-     */
-    public function getStart()
-    {
-        return $this->start;
-    }
-
-    /**
-     * Set end
-     *
-     * @param Trackpoint $end
-     *
-     * @return Tracksegment
-     */
-    public function setEnd(Trackpoint $end = null)
-    {
-        $this->end = $end;
-
-        return $this;
-    }
-
-    /**
-     * Get end
-     *
-     * @return Trackpoint
-     */
-    public function getEnd()
-    {
-        return $this->end;
     }
 
     /**

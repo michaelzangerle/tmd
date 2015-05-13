@@ -86,8 +86,6 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
         $segment->setDistance($sm->getDistance());
         $segment->setTime($sm->getTime());
         $segment->setTrack($this->track);
-        $segment->setStart($this->generateTrackpointEntityFromModel($sm->getStartPoint(), $segment));
-        $segment->setEnd($this->generateTrackpointEntityFromModel($sm->getEndPoint(), $segment));
         $segment->setResult($this->generateResultEntityFromModel($sm->getResult(), $segment));
         $this->track->addSegment($segment);
 
@@ -124,7 +122,7 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
     }
 
     /**
-     * @param                    $key
+     * @param string             $key
      * @param                    $value
      * @param TracksegmentEntity $segment
      *
