@@ -86,7 +86,7 @@ fhv_tmd:
     # 180 km/h should be enough even for trains
     max_distance: 50
 
-    # should be very small or even 0 otherwise very slow movements (biking upwards) get lost
+    # should be very small or even 0 otherwise very slow movements (biking upwards, slow traffic) get lost
     # biking 0.1
     # others up to 1
     # but details decrease of course
@@ -100,13 +100,23 @@ fhv_tmd:
     # data exist but they have still enough information to display reasonable routes
     min_valid_points_ratio: 0
 
+    # ~ 2 km/h
+    max_velocity_for_nearly_stoppoints: 0.55
+    max_time_without_movement: 5
+
   segmentation:
-    max_walk_velocity: 2.2
-    max_walk_acceleration: 2.8
+    # schuessler 2.78
+    # zheng 2.5
+    max_walk_velocity: 2.5
+
+    # schuessler 0.1
+    # zheng 1.5
+    max_walk_acceleration: 1.5
     min_segment_time: 20
     min_segment_distance: 50
     max_time_without_movement: 12
     max_velocity_for_nearly_stoppoints: 0.55
+    max_time_difference: 30
 
   analyze:
     default_method: 1
