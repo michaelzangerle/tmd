@@ -150,6 +150,8 @@ class TrackpointFilter extends AbstractFilter
         $i = $this->pointsToSkip;
         $next = $i + 1;
         $cleaned = [];
+        $tp1 = null;
+        $tp2 = null;
 
         if ($i > -1) { // valid start point found
             $this->validPointCounter++; // first point
@@ -160,11 +162,16 @@ class TrackpointFilter extends AbstractFilter
 
                 if ($this->areTrackpointsValid($tp1, $tp2)) {
                     $this->validPointCounter++;
-                    $cleaned[] = $trackPoints[$i];
+                    $cleaned[] = $tp1;
                     $i = $next;
                 }
 
                 $next++;
+            }
+
+            // when last pair was valid add also last point
+            if ($i + 1 === $next) {
+                $cleaned[] = $tp2;
             }
 
             return $cleaned;

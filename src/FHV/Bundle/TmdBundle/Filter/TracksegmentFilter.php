@@ -78,12 +78,12 @@ class TracksegmentFilter extends AbstractFilter
         $time = 0;
         $prevVelocity = 0;
         $accTrackPoints = 0;
-        $gpsTrackPoints[] = new Trackpoint($trackPoints[0]);
+        $gpsTrackPoints[] = $trackPoints[0];
 
         if ($amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
             for ($i = 0; $i < $amountOfTrackPoints; $i++) {
-                $tp1 = new Trackpoint($trackPoints[$i]);
-                $tp2 = new Trackpoint($trackPoints[$i + 1]);
+                $tp1 = $trackPoints[$i];
+                $tp2 = $trackPoints[$i + 1];
 
                 $gpsTrackPoints[] = $tp2;
 
