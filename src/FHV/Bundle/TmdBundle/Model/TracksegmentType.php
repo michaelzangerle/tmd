@@ -6,7 +6,7 @@ namespace FHV\Bundle\TmdBundle\Model;
  * Class TracksegmentType
  * @package FHV\Bundle\TmdBundle\Model
  */
-class TracksegmentType
+final class TracksegmentType
 {
     const UNDEFINIED = 0;
     const DRIVE = 1;
@@ -14,4 +14,8 @@ class TracksegmentType
     const TRAIN = 3;
     const WALK = 4;
     const BIKE = 5;
+
+    private function __construct()
+    {
+    }
 }

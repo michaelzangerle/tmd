@@ -17,22 +17,22 @@ class FileWriterFilter extends AbstractFilter
     /**
      * @var string
      */
-    private $dir = '../gpx/';
+    protected $dir = '../gpx/';
 
     /**
      * @var string
      */
-    private $fileName = 'results.csv';
+    protected $fileName = 'results.csv';
 
     /**
      * @var string
      */
-    private $delimiter = ';';
+    protected $delimiter = ';';
 
     /**
      * @var bool
      */
-    private $headerWritten = false;
+    protected $headerWritten = false;
 
     /**
      * @return string

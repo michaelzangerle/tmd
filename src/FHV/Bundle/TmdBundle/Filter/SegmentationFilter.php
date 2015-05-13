@@ -28,52 +28,52 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     /**
      * @var TrackpointUtil
      */
-    private $util;
+    protected $util;
 
     /**
      * @var float
      */
-    private $maxWalkVelocity;
+    protected $maxWalkVelocity;
 
     /**
      * @var float
      */
-    private $maxWalkAcceleration;
+    protected $maxWalkAcceleration;
 
     /**
      * @var float
      */
-    private $minSegmentDistance;
+    protected $minSegmentDistance;
 
     /**
      * @var int
      */
-    private $minSegmentTime;
+    protected $minSegmentTime;
 
     /**
      * @var TrackEntity
      */
-    private $track;
+    protected $track;
 
     /**
      * @var EntityManager
      */
-    private $em;
+    protected $em;
 
     /**
      * @var integer
      */
-    private $maxTimeDifference;
+    protected $maxTimeDifference;
 
     /**
      * @var integer
      */
-    private $maxTimeWithoutMovement;
+    protected $maxTimeWithoutMovement;
 
     /**
      * @var float
      */
-    private $maxVelocityForNearlyStopPoints;
+    protected $maxVelocityForNearlyStopPoints;
 
     function __construct(
         EntityManager $em,

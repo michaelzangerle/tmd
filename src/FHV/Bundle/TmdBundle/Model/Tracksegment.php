@@ -21,53 +21,53 @@ class Tracksegment implements TracksegmentInterface
     /**
      * @var float m/s2
      */
-    private $meanAcceleration;
+    protected $meanAcceleration;
 
     /**
      * @var float m/s
      */
-    private $meanVelocity;
+    protected $meanVelocity;
 
     /**
      * @var float  m/s2
      */
-    private $maxAcceleration;
+    protected $maxAcceleration;
 
     /**
      * @var float m/s
      */
-    private $maxVelocity;
+    protected $maxVelocity;
 
     /**
      * @var float seconds
      */
-    private $duration;
+    protected $duration;
 
     /**
      * @var float in meters
      */
-    private $distance;
+    protected $distance;
 
     /**
      * Type of transport mode
      * @var int
      */
-    private $type;
+    protected $type;
 
     /**
      * @var TrackpointInterface
      */
-    private $startPoint;
+    protected $startPoint;
 
     /**
      * @var TrackpointInterface
      */
-    private $endPoint;
+    protected $endPoint;
 
     /**
      * @var TrackpointInterface[]
      */
-    private $trackPoints;
+    protected $trackPoints;
 
     /**
      * @param float                 $meanAcceleration in m/s
@@ -272,7 +272,7 @@ class Tracksegment implements TracksegmentInterface
      *
      * @return bool|int
      */
-    private function getValidType($type)
+    protected function getValidType($type)
     {
         if (is_string($type)) {
             switch (strtolower($type)) {
@@ -319,7 +319,7 @@ class Tracksegment implements TracksegmentInterface
     /**
      * @return string returns string for type
      */
-    private function getTypeAsString()
+    protected function getTypeAsString()
     {
         switch ($this->getType()) {
             case TracksegmentType::DRIVE:

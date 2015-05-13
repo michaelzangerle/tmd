@@ -17,42 +17,42 @@ class TrackpointFilter extends AbstractFilter
     /**
      * @var int
      */
-    private $minTimeDifference;
+    protected $minTimeDifference;
 
     /**
      * @var float percentage value (valid points in relation to all points in the track)
      */
-    private $minValidPointsRatio;
+    protected $minValidPointsRatio;
 
     /**
      * @var TrackpointUtilInterface
      */
-    private $util;
+    protected $util;
 
     /**
      * @var float
      */
-    private $maxDistance;
+    protected $maxDistance;
 
     /**
      * @var float
      */
-    private $minDistance;
+    protected $minDistance;
 
     /**
      * @var float
      */
-    private $maxAltitudeChange;
+    protected $maxAltitudeChange;
 
     /**
      * @var integer
      */
-    private $pointsToSkip;
+    protected $pointsToSkip;
 
     /**
      * @var int
      */
-    private $validPointCounter = 0;
+    protected $validPointCounter = 0;
 
     function __construct(
         $util,

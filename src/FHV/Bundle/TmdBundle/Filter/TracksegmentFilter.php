@@ -29,7 +29,7 @@ class TracksegmentFilter extends AbstractFilter
      * Util obj for calculations
      * @var TrackpointUtil
      */
-    private $util;
+    protected $util;
 
     /**
      * Starts a filter and processes the given data

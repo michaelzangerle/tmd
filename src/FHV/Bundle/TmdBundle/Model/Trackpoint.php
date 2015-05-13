@@ -12,22 +12,22 @@ class Trackpoint implements TrackpointInterface
     /**
      * @var float
      */
-    private $ele;
+    protected $ele;
 
     /**
      * @var float
      */
-    private $lat;
+    protected $lat;
 
     /**
      * @var float
      */
-    private $long;
+    protected $long;
 
     /**
      * @var \DateTime
      */
-    private $time;
+    protected $time;
 
     function __construct(\SimpleXMLElement $xml)
     {
@@ -113,7 +113,7 @@ class Trackpoint implements TrackpointInterface
      *
      * @return bool
      */
-    private function isValidPointXML($xml)
+    protected function isValidPointXML($xml)
     {
         if ($xml->ele && $xml->time && $xml->attributes()->lat && $xml->attributes()->lon) {
             return true;
