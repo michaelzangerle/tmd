@@ -1,7 +1,6 @@
 <?php
 
-use FHV\Bundle\TmdBundle\Model\TrackInterface;
-use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
+namespace FHV\Bundle\TmdBundle\Model;
 
 /**
  * Class Track

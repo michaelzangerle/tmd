@@ -53,8 +53,13 @@ class TracksegmentFilter extends AbstractFilter
      */
     public function run($data)
     {
-        if ($data instanceof TrackInterface) {
-            foreach ($data->getSegments() as $segment) {
+        if ($data !== null &&
+            array_key_exists('track', $data) && $data['track'] !== null &&
+            array_key_exists('analyseType', $data) && $data['analyseType'] !== null
+        ) {
+
+            /** @var TracksegmentInterface $segment */
+            foreach ($data['track']->getSegments() as $segment) {
                 $features = $this->getSegmentFeatures($segment->getTrackPoints(), $segment->getType());
                 $this->setFeaturesForSegment($segment, $features);
             }
@@ -214,7 +219,7 @@ class TracksegmentFilter extends AbstractFilter
      */
     protected function setFeaturesForSegment($segment, $features)
     {
-        foreach($features as $key => $feature) {
+        foreach ($features as $key => $feature) {
             $segment->setFeature($key, $feature);
         }
     }

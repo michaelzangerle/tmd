@@ -82,4 +82,19 @@ interface TracksegmentInterface
      * @param $value
      */
     public function setFeature($key, $value);
+
+    /**
+     * @param TrackpointInterface $trackpoint
+     */
+    public function addTrackpoint($trackpoint);
+
+    /**
+     * @return Result
+     */
+    public function getResult();
+
+    /**
+     * @param Result $result
+     */
+    public function setResult($result);
 }

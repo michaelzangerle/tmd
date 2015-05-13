@@ -3,7 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Filter;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
-use FHV\Bundle\TmdBundle\Entity\Track;
+use FHV\Bundle\TmdBundle\Model\TrackInterface;
 
 /**
  * Interface SegmentationFilterInterface
@@ -12,9 +12,7 @@ use FHV\Bundle\TmdBundle\Entity\Track;
 interface SegmentationFilterInterface extends FilterInterface
 {
     /**
-     * Sets the track for the segmentation filter
-     *
-     * @param Track $track
+     * @return TrackInterface
      */
-    public function setTrack(Track $track);
+    public function getTrack();
 }

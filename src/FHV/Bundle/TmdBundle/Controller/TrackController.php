@@ -33,7 +33,9 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
                 0,
                 60
             ); // TODO possible security issue with file name?
-            $method = $request->get('method', $this->container->getParameter('tmd.analyze.default_method'));
+
+            // TODO inject analyse config
+            $method = $request->get('method', 'basic');
             $xmlFile = $file->move(__DIR__ . '/../uploaded', $timeStamp . '_' . $fileName);
 
             $track = $this->getManager()->create($xmlFile, $method);

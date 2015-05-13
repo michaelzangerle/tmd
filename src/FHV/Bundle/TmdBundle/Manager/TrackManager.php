@@ -79,7 +79,8 @@ class TrackManager implements TrackManagerInterface
     {
         $this->track->setAnalyzationType($this->getType($method));
         $this->initFilters();
-        $this->frFilter->run($file);
+        $this->frFilter->run(['fileName' => $file, 'analyseType' => $method]);
+        $this->frFilter->parentHasFinished();
         $this->em->persist($this->track);
         $this->em->flush();
 
@@ -109,11 +110,8 @@ class TrackManager implements TrackManagerInterface
      */
     protected function initFilters()
     {
-        $this->segmentationFilter->setTrack($this->track);
-
         new Pipe($this->frFilter, $this->tpFilter);
-        new Pipe($this->tpFilter, $this->segmentFilter);
-        new Pipe($this->segmentFilter, $this->segmentationFilter);
-        // TODO!!!!!!!
+        new Pipe($this->tpFilter, $this->segmentationFilter);
+        new Pipe($this->segmentationFilter,$this->segmentFilter);
     }
 }

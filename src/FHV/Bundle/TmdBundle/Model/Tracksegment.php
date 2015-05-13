@@ -19,6 +19,11 @@ class Tracksegment implements TracksegmentInterface
     protected $features = [];
 
     /**
+     * @var Result
+     */
+    protected $result;
+
+    /**
      * @param                       $time
      * @param float                 $distance in meters
      * @param TrackpointInterface   $startPoint
@@ -27,11 +32,11 @@ class Tracksegment implements TracksegmentInterface
      * @param string                $type of segment
      */
     function __construct(
-        $time,
-        $distance,
-        $startPoint,
-        $endPoint,
-        $trackPoints,
+        $time = 0,
+        $distance = 0.0,
+        $startPoint = null,
+        $endPoint = null,
+        $trackPoints = [],
         $type = 'undefined'
     ) {
         $this->features['time'] = $time;
@@ -73,6 +78,17 @@ class Tracksegment implements TracksegmentInterface
     }
 
     /**
+     * Adds a trackpoints
+     * @param TrackpointInterface $trackPoint
+     */
+    public function addTrackPoint($trackPoint)
+    {
+        if(array_key_exists('trackPoints', $this->features)) {
+            $this->features['trackPoints'][] = $trackPoint;
+        }
+    }
+
+    /**
      * @return TrackpointInterface[]
      */
     public function getTrackPoints()
@@ -85,7 +101,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setTrackPoints($trackPoints)
     {
-        $feature['trackpoints'] = $trackPoints;
+        $this->features['trackPoints'] = $trackPoints;
     }
 
     /**
@@ -101,7 +117,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setStartPoint($startPoint)
     {
-        $feature['startPoint'] = $startPoint;
+        $this->features['startPoint'] = $startPoint;
     }
 
     /**
@@ -117,7 +133,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setEndPoint($endPoint)
     {
-        $feature['endPoint'] = $endPoint;
+        $this->features['endPoint'] = $endPoint;
     }
 
     /**
@@ -133,7 +149,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setType($type)
     {
-        $feature['type'] = $type;
+        $this->features['type'] = $type;
     }
 
     /**
@@ -149,7 +165,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setDistance($distance)
     {
-        $feature['distance'] = $distance;
+        $this->features['distance'] = $distance;
     }
 
     /**
@@ -165,6 +181,22 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setTime($time)
     {
-        $feature['time'] = $time;
+        $this->features['time'] = $time;
+    }
+
+    /**
+     * @return Result
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param Result $result
+     */
+    public function setResult($result)
+    {
+        $this->result = $result;
     }
 }
