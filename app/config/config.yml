@@ -119,5 +119,12 @@ fhv_tmd:
     max_time_difference: 30
 
   analyze:
-    default_method: 1
-
+    basic:
+      id: 1
+      csv_fileHeaders:
+        - "stopRate"
+        - "meanVelocity"
+        - "meanAcceleration"
+        - "maxVelocity"
+        - "maxAcceleration"
+        - "type"

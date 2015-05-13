@@ -103,14 +103,17 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('analyze')
-                    ->children()
-                        ->scalarNode('default_method')
-                            ->defaultValue(1)
-                            ->info('Default method to analyze data.')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('id')
+                                ->defaultValue(1)
+                            ->end()
+                            ->arrayNode('csv_fileHeaders')
+                                ->prototype('scalar')->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
-
             ->end()
         ;
 

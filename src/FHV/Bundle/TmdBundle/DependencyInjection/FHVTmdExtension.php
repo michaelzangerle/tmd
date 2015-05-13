@@ -80,7 +80,7 @@ class FHVTmdExtension extends Extension
      */
     protected function setAnalyzeParameters($container, $config)
     {
-        $container->setParameter('tmd.analyze.default_method', $config['analyze']['default_method']);
+        $container->setParameter('tmd.analyze', $config['analyze']);
     }
 
     /**

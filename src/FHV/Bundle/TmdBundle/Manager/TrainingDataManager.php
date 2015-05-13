@@ -71,8 +71,8 @@ class TrainingDataManager
             if (count($files) > 0) {
 
                 $this->connectFilters();
-                $this->fwFilter->setDir($dir);
-                $this->fwFilter->setFileName($resultFileName);
+                $this->fwFilter->setFilePath($dir . $resultFileName);
+                $this->fwFilter->setAnalyseType('basic'); // TODO get from cli params and check if it exists at all
 
                 foreach ($files as $fileName) {
                     $output->write('<info>Processing "' . $fileName . '"</info>', true);

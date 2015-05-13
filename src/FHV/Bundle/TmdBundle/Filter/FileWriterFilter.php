@@ -17,12 +17,17 @@ class FileWriterFilter extends AbstractFilter
     /**
      * @var string
      */
-    protected $dir = '../gpx/';
+    protected $analyseType = 'basic';
+
+    /**
+     * @var array
+     */
+    protected $config;
 
     /**
      * @var string
      */
-    protected $fileName = 'results.csv';
+    protected $filePath = 'results.csv';
 
     /**
      * @var string
@@ -40,40 +45,26 @@ class FileWriterFilter extends AbstractFilter
      */
     protected $data = [];
 
-    /**
-     * @return string
-     */
-    public function getDir()
+    function __construct($analyzeConfiguration)
     {
-        return $this->dir;
-    }
-
-    /**
-     * @param string $dir
-     */
-    public function setDir($dir)
-    {
-        if (substr($dir, -1) !== '/') {
-            $dir .= '/';
-        }
-
-        $this->dir = $dir;
+        parent::__construct();
+        $this->config = $analyzeConfiguration;
     }
 
     /**
      * @return string
      */
-    public function getFileName()
+    public function getFilePath()
     {
-        return $this->fileName;
+        return $this->filePath;
     }
 
     /**
-     * @param string $fileName
+     * @param string $filePath
      */
-    public function setFileName($fileName)
+    public function setFilePath($filePath)
     {
-        $this->fileName = $fileName;
+        $this->filePath = $filePath;
     }
 
     /**
@@ -90,6 +81,22 @@ class FileWriterFilter extends AbstractFilter
     public function setDelimiter($delimiter)
     {
         $this->delimiter = $delimiter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAnalyseType()
+    {
+        return $this->analyseType;
+    }
+
+    /**
+     * @param string $analyseType
+     */
+    public function setAnalyseType($analyseType)
+    {
+        $this->analyseType = $analyseType;
     }
 
     /**
@@ -119,35 +126,33 @@ class FileWriterFilter extends AbstractFilter
     }
 
     /**
+     * Returns csv file headers depending on the given analyse type
+     *
+     * @param string $analyseType
+     *
      * @return array
      */
-    public function getCSVFeatureKeys()
+    public function getCSVFeatureKeys($analyseType = 'basic')
     {
-        return [
-            'stoprate',
-            'meanVelocity',
-            'meanAcceleration',
-            'maxVelocity',
-            'maxAcceleration',
-            'type'
-        ];
+        return $this->config[$analyseType]['csv_fileHeaders'];
     }
 
     /**
      * @param TracksegmentInterface $seg
      *
+     * @param string                $analyseType
+     *
      * @return array
      */
-    public function getCSVFeatureValues(TracksegmentInterface $seg)
+    public function getCSVFeatureValues(TracksegmentInterface $seg, $analyseType = 'basic')
     {
-        return [
-            'stopRate' => $seg->getFeature('stopRate'),
-            'meanVelocity' => $seg->getFeature('meanVelocity'),
-            'meanAcceleration' => $seg->getFeature('meanAcceleration'),
-            'maxVelocity' => $seg->getFeature('maxVelocity'),
-            'maxAcceleration' => $seg->getFeature('maxAcceleration'),
-            'type' => $seg->getTypeAsString()
-        ];
+        $fields = $this->config[$analyseType]['csv_fileHeaders'];
+        $result = [];
+        foreach ($fields as $field) {
+            $result[$field] = $seg->getFeature($field);
+        }
+
+        return $result;
     }
 
     /**
@@ -167,16 +172,16 @@ class FileWriterFilter extends AbstractFilter
      */
     public function parentHasFinished()
     {
-        $fp = fopen($this->dir . $this->fileName, 'a+');
+        $fp = fopen($this->filePath, 'a+');
         flock($fp, LOCK_EX);
         // for multiple files
         if (!$this->headerWritten) {
             $this->headerWritten = true;
-            $this->writeHeader($fp, $this->getCSVFeatureKeys(), $this->delimiter);
+            $this->writeHeader($fp, $this->getCSVFeatureKeys($this->analyseType), $this->delimiter);
         }
 
         foreach ($this->data as $seg) {
-            $this->writeData($fp, $this->getCSVFeatureValues($seg), $this->delimiter);
+            $this->writeData($fp, $this->getCSVFeatureValues($seg, $this->analyseType), $this->delimiter);
         }
         flock($fp, LOCK_UN);
         fclose($fp);

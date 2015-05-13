@@ -43,12 +43,12 @@ services:
 
     fhv_tmd.fileWriterFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileWriterFilter
-          arguments: []
+          arguments:
+            - %tmd.analyze%
 
     fhv_tmd.segmentationFilter:
           class: FHV\Bundle\TmdBundle\Filter\SegmentationFilter
           arguments:
-            - @doctrine.orm.entity_manager
             - @fhv_tmd.trackPointUtil
             - %tmd.segmentation.max_walk_velocity%
             - %tmd.segmentation.max_walk_acceleration%

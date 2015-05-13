@@ -82,10 +82,4 @@ interface TracksegmentInterface
      * @param $value
      */
     public function setFeature($key, $value);
-
-    /**
-     * Returns type as string
-     * @return string
-     */
-    public function getTypeAsString();
 }

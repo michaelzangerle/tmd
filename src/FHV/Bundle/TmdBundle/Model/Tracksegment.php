@@ -12,8 +12,8 @@ class Tracksegment implements TracksegmentInterface
     /**
      * Array with features
      * Contains basic features like distance and time and
-     * depending on the analyzation type different other
-     * featuers
+     * depending on the analysis type different other
+     * features
      * @var array
      */
     protected $features = [];
@@ -24,7 +24,7 @@ class Tracksegment implements TracksegmentInterface
      * @param TrackpointInterface   $startPoint
      * @param TrackpointInterface   $endPoint
      * @param TrackpointInterface[] $trackPoints
-     * @param int                   $type of segment
+     * @param string                $type of segment
      */
     function __construct(
         $time,
@@ -32,11 +32,11 @@ class Tracksegment implements TracksegmentInterface
         $startPoint,
         $endPoint,
         $trackPoints,
-        $type = 5
+        $type = 'undefined'
     ) {
         $this->features['time'] = $time;
         $this->features['distance'] = round($distance, 2);
-        $this->features['type'] = $this->getValidType($type);
+        $this->features['type'] = $type;
         $this->features['endPoint'] = $endPoint;
         $this->features['startPoint'] = $startPoint;
         $this->features['trackPoints'] = $trackPoints;
@@ -166,61 +166,5 @@ class Tracksegment implements TracksegmentInterface
     public function setTime($time)
     {
         $feature['time'] = $time;
-    }
-
-    /**
-     * Validates the given type and returns a valid type
-     *
-     * @param string | int $type
-     *
-     * @return bool|int
-     */
-    protected function getValidType($type)
-    {
-        if (is_string($type)) {
-            switch (strtolower($type)) {
-                case 'walk':
-                    return TracksegmentType::WALK;
-                case 'bus':
-                    return TracksegmentType::BUS;
-                case 'train':
-                    return TracksegmentType::TRAIN;
-                case 'car':
-                    return TracksegmentType::DRIVE;
-                case 'bike':
-                    return TracksegmentType::BIKE;
-                default:
-                    return TracksegmentType::UNDEFINIED;
-            }
-        } else {
-            if (is_int($type)) {
-                if ($type > 0 && $type < 7) {
-                    return $type;
-                }
-            }
-        }
-
-        return TracksegmentType::UNDEFINIED;
-    }
-
-    /**
-     * @return string returns string for type
-     */
-    public function getTypeAsString()
-    {
-        switch ($this->getType()) {
-            case TracksegmentType::DRIVE:
-                return 'car';
-            case TracksegmentType::BUS:
-                return 'bus';
-            case TracksegmentType::TRAIN:
-                return 'train';
-            case TracksegmentType::WALK:
-                return 'walk';
-            case TracksegmentType::BIKE:
-                return 'bike';
-            default:
-                return 'undefined';
-        }
     }
 }
