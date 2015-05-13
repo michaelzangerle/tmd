@@ -5,10 +5,13 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
+use FHV\Bundle\TmdBundle\Model\TrackInterface;
+use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Model\Tracksegment;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 use FHV\Bundle\TmdBundle\Model\Trackpoint;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
+use Track;
 
 // TODO add functionallity for other analyzation types
 // should also be added to segmentation and further analyzation filters
@@ -50,14 +53,20 @@ class TracksegmentFilter extends AbstractFilter
      */
     public function run($data)
     {
-        if (isset($data['trackPoints'])) {
-            $segment = $this->createSegment($data['trackPoints'], $data['type']);
-            $this->write($segment);
-            if ($this->getParentHasFinished()) {
-                $this->finished();
+        if ($data instanceof TrackInterface) {
+            foreach ($data->getSegments() as $segment) {
+                $features = $this->getSegmentFeatures($segment->getTrackPoints(), $segment->getType());
+                $this->setFeaturesForSegment($segment, $features);
             }
+            $this->write($data);
         } else {
-            throw new InvalidArgumentException('SegmentFilter: Data param should contain trackpoints!');
+            if (isset($data['trackPoints'])) {
+                $features = $this->getSegmentFeatures($data['trackPoints'], $data['type']);
+                $segment = $this->createSegment($features);
+                $this->write($segment);
+            } else {
+                throw new InvalidArgumentException('SegmentFilter: Data param should contain trackpoints!');
+            }
         }
     }
 
@@ -77,17 +86,17 @@ class TracksegmentFilter extends AbstractFilter
     /**
      * Returns a segment for the given trackpoints
      *
-     * @param array       $trackPoints
-     * @param string|null $type
+     * @param TrackpointInterface[] $trackPoints
+     * @param string|null           $type
      *
-     * @return TracksegmentInterface
+     * @return array with calculated features
      * @throws InvalidArgumentException
      */
-    public function createSegment(array $trackPoints, $type = null)
+    public function getSegmentFeatures(array $trackPoints, $type = null)
     {
-        $meanAcceleration = 0;
+        $totalAcceleration = 0;
         $amountOfTrackPoints = count($trackPoints) - 1;
-        $meanVelocity = 0;
+        $totalVelocity = 0;
         $maxAcceleration = 0;
         $maxVelocity = 0;
         $distance = 0;
@@ -113,7 +122,7 @@ class TracksegmentFilter extends AbstractFilter
 
                 $distance += $currentDistance;
                 $time += $currentTime;
-                $meanVelocity += $currentVelocity;
+                $totalVelocity += $currentVelocity;
 
                 if ($currentVelocity > $maxVelocity) {
                     $maxVelocity = $currentVelocity;
@@ -124,7 +133,7 @@ class TracksegmentFilter extends AbstractFilter
                 }
 
                 if ($currentAcceleration > 0) {
-                    $meanAcceleration += $currentAcceleration;
+                    $totalAcceleration += $currentAcceleration;
                     $accTrackPoints++;
                 }
 
@@ -134,7 +143,7 @@ class TracksegmentFilter extends AbstractFilter
                 if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
                     $lowSpeedTimeCounter += $currentTime;
 
-                    if($lowSpeedTimeCounter >= $this->maxTimeWithoutMovement) {
+                    if ($lowSpeedTimeCounter >= $this->maxTimeWithoutMovement) {
                         $stopCounter++;
                         $lowSpeedTimeCounter = 0;
                     }
@@ -145,23 +154,59 @@ class TracksegmentFilter extends AbstractFilter
                 $prevVelocity = $currentAcceleration;
             }
 
-            return new Tracksegment(
-                $meanAcceleration / $accTrackPoints,
-                $meanVelocity / $amountOfTrackPoints,
-                $maxAcceleration,
-                $maxVelocity,
-                $time,
-                $distance,
-                $gpsTrackPoints[0],
-                $gpsTrackPoints[$amountOfTrackPoints],
-                $gpsTrackPoints,
-                $stopCounter / $distance,
-                $type
-            );
+            return [
+                'meanAcceleration' => $totalAcceleration / $accTrackPoints,
+                'meanVelocity' => $totalVelocity / $amountOfTrackPoints,
+                'maxAcceleration' => $maxAcceleration,
+                'maxVelocity' => $maxVelocity,
+                'time' => $time,
+                'distance' => $distance,
+                'start' => $gpsTrackPoints[0],
+                'stop' => $gpsTrackPoints[$amountOfTrackPoints],
+                'trackPoints' => $gpsTrackPoints,
+                'stopRate' => $stopCounter / $distance,
+                'type' => $type
+            ];
         }
 
         throw new InvalidArgumentException(
             'SegmentFilter: There should at least be ' . $this->minTrackPointsPerSegment . ' trackpoints present!'
         );
+    }
+
+    /**
+     * Creates and sets the features for a segment
+     *
+     * @param $features
+     *
+     * @return TracksegmentInterface
+     */
+    protected function createSegment($features)
+    {
+        $seg =  new Tracksegment(
+            $features['time'],
+            $features['distance'],
+            $features['start'],
+            $features['stop'],
+            $features['trackPoints'],
+            $features['type']
+        );
+
+        $seg->setFeature('meanVelocity',$features['meanVelocity']);
+        $seg->setFeature('meanAcceleration',$features['meanAcceleration']);
+        $seg->setFeature('maxAcceleration',$features['maxAcceleration']);
+        $seg->setFeature('maxVelocity',$features['maxVelocity']);
+        $seg->setFeature('stopRate',$features['stopRate']);
+
+        return $seg;
+    }
+
+    /**
+     * Sets features for a existing segment
+     * @param TracksegmentInterface $segment
+     * @param array $features
+     */
+    protected function setFeaturesForSegment($segment, $features)
+    {
     }
 }
