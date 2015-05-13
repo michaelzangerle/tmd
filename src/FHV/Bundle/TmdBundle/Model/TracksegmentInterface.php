@@ -41,46 +41,6 @@ interface TracksegmentInterface
     /**
      * @return float
      */
-    public function getMeanAcceleration();
-
-    /**
-     * @param float $meanAcceleration
-     */
-    public function setMeanAcceleration($meanAcceleration);
-
-    /**
-     * @return float
-     */
-    public function getMeanVelocity();
-
-    /**
-     * @param float $meanVelocity
-     */
-    public function setMeanVelocity($meanVelocity);
-
-    /**
-     * @return float
-     */
-    public function getMaxAcceleration();
-
-    /**
-     * @param float $maxAcceleration
-     */
-    public function setMaxAcceleration($maxAcceleration);
-
-    /**
-     * @return float
-     */
-    public function getMaxVelocity();
-
-    /**
-     * @param float $maxVelocity
-     */
-    public function setMaxVelocity($maxVelocity);
-
-    /**
-     * @return float
-     */
     public function getDistance();
 
     /**
@@ -89,24 +49,14 @@ interface TracksegmentInterface
     public function setDistance($distance);
 
     /**
-     * @return float duration of segment in seconds
+     * @return float time of segment in seconds
      */
-    public function getDuration();
+    public function getTime();
 
     /**
-     * @param float $stopRate
+     * @param float $time of segment in seconds
      */
-    public function setStopRate($stopRate);
-
-    /**
-     * @return float stop rate of segment
-     */
-    public function getStopRate();
-
-    /**
-     * @param float $duration of segment in seconds
-     */
-    public function setDuration($duration);
+    public function setTime($time);
 
     /**
      * @return TrackpointInterface[]
@@ -119,8 +69,23 @@ interface TracksegmentInterface
     public function setTrackPoints($trackPoints);
 
     /**
-     * Returns a segment partially as array
-     * @return array
+     * Returns a feature by key
+     * @param $key
+     *
+     * @return mixed
      */
-    public function toCSVArray();
+    public function getFeature($key);
+
+    /**
+     * Sets a feature
+     * @param $key
+     * @param $value
+     */
+    public function setFeature($key, $value);
+
+    /**
+     * Returns type as string
+     * @return string
+     */
+    public function getTypeAsString();
 }

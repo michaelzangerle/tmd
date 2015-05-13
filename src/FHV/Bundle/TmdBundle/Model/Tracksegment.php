@@ -9,108 +9,67 @@ namespace FHV\Bundle\TmdBundle\Model;
  */
 class Tracksegment implements TracksegmentInterface
 {
-    public static $ATTRIBUTES = array(
-        'stoprate',
-        'mean velocity',
-        'mean acceleration',
-        'max velocity',
-        'max acceleration',
-        'type'
-    );
-
     /**
-     * @var float m/s2
+     * Array with features
+     * Contains basic features like distance and time and
+     * depending on the analyzation type different other
+     * featuers
+     * @var array
      */
-    protected $meanAcceleration;
+    protected $features = [];
 
     /**
-     * @var float m/s
-     */
-    protected $meanVelocity;
-
-    /**
-     * @var float  m/s2
-     */
-    protected $maxAcceleration;
-
-    /**
-     * @var float m/s
-     */
-    protected $maxVelocity;
-
-    /**
-     * @var float seconds
-     */
-    protected $duration;
-
-    /**
-     * @var float in meters
-     */
-    protected $distance;
-
-    /**
-     * Type of transport mode
-     * @var int
-     */
-    protected $type;
-
-    /**
-     * @var TrackpointInterface
-     */
-    protected $startPoint;
-
-    /**
-     * @var TrackpointInterface
-     */
-    protected $endPoint;
-
-    /**
-     * @var TrackpointInterface[]
-     */
-    protected $trackPoints;
-
-    /**
-     * @var float
-     */
-    protected $stopRate;
-
-    /**
-     * @param float                 $meanAcceleration in m/s
-     * @param float                 $meanVelocity in m/s
-     * @param float                 $maxAcceleration in m/s
-     * @param float                 $maxVelocity in m/s
-     * @param float                 $duration in seconds
+     * @param                       $time
      * @param float                 $distance in meters
      * @param TrackpointInterface   $startPoint
      * @param TrackpointInterface   $endPoint
      * @param TrackpointInterface[] $trackPoints
-     * @param                       $stopRate
      * @param int                   $type of segment
      */
     function __construct(
-        $meanAcceleration,
-        $meanVelocity,
-        $maxAcceleration,
-        $maxVelocity,
-        $duration,
+        $time,
         $distance,
         $startPoint,
         $endPoint,
         $trackPoints,
-        $stopRate,
         $type = 5
     ) {
-        $this->meanAcceleration = $meanAcceleration;
-        $this->meanVelocity = $meanVelocity;
-        $this->maxAcceleration = $maxAcceleration;
-        $this->maxVelocity = $maxVelocity;
-        $this->duration = $duration;
-        $this->distance = $distance;
-        $this->type = $this->getValidType($type);
-        $this->endPoint = $endPoint;
-        $this->startPoint = $startPoint;
-        $this->trackPoints = $trackPoints;
-        $this->stopRate = round($stopRate,16);
+        $this->features['time'] = $time;
+        $this->features['distance'] = round($distance, 2);
+        $this->features['type'] = $this->getValidType($type);
+        $this->features['endPoint'] = $endPoint;
+        $this->features['startPoint'] = $startPoint;
+        $this->features['trackPoints'] = $trackPoints;
+    }
+
+    /**
+     * Sets a feature
+     *
+     * @param $key
+     * @param $value
+     */
+    public function setFeature($key, $value)
+    {
+        if(is_float($value)){
+            $value = round($value, 16);
+        }
+        $this->features[$key] = $value;
+    }
+
+    /**
+     * Returns a value of a feature or null if it does not exist
+     *
+     * @param $key
+     *
+     * @return mixed
+     */
+    public function getFeature($key)
+    {
+        if (array_key_exists($key, $this->features)) {
+            return $this->features[$key];
+        }
+
+        return null;
     }
 
     /**
@@ -118,7 +77,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function getTrackPoints()
     {
-        return $this->trackPoints;
+        return $this->features['trackPoints'];
     }
 
     /**
@@ -126,7 +85,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setTrackPoints($trackPoints)
     {
-        $this->trackPoints = $trackPoints;
+        $feature['trackpoints'] = $trackPoints;
     }
 
     /**
@@ -134,7 +93,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function getStartPoint()
     {
-        return $this->startPoint;
+        return $this->features['startPoint'];
     }
 
     /**
@@ -142,7 +101,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setStartPoint($startPoint)
     {
-        $this->startPoint = $startPoint;
+        $feature['startPoint'] = $startPoint;
     }
 
     /**
@@ -150,7 +109,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function getEndPoint()
     {
-        return $this->endPoint;
+        return $this->features['endPoint'];
     }
 
     /**
@@ -158,7 +117,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setEndPoint($endPoint)
     {
-        $this->endPoint = $endPoint;
+        $feature['endPoint'] = $endPoint;
     }
 
     /**
@@ -166,7 +125,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function getType()
     {
-        return $this->type;
+        return $this->features['type'];
     }
 
     /**
@@ -174,71 +133,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setType($type)
     {
-        $this->type = $type;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMeanAcceleration()
-    {
-        return $this->meanAcceleration;
-    }
-
-    /**
-     * @param mixed $meanAcceleration
-     */
-    public function setMeanAcceleration($meanAcceleration)
-    {
-        $this->meanAcceleration = $meanAcceleration;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMeanVelocity()
-    {
-        return $this->meanVelocity;
-    }
-
-    /**
-     * @param mixed $meanVelocity
-     */
-    public function setMeanVelocity($meanVelocity)
-    {
-        $this->meanVelocity = $meanVelocity;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMaxAcceleration()
-    {
-        return $this->maxAcceleration;
-    }
-
-    /**
-     * @param mixed $maxAcceleration
-     */
-    public function setMaxAcceleration($maxAcceleration)
-    {
-        $this->maxAcceleration = $maxAcceleration;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMaxVelocity()
-    {
-        return $this->maxVelocity;
-    }
-
-    /**
-     * @param mixed $maxVelocity
-     */
-    public function setMaxVelocity($maxVelocity)
-    {
-        $this->maxVelocity = $maxVelocity;
+        $feature['type'] = $type;
     }
 
     /**
@@ -246,7 +141,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function getDistance()
     {
-        return $this->distance;
+        return $this->features['distance'];
     }
 
     /**
@@ -254,23 +149,23 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setDistance($distance)
     {
-        $this->distance = $distance;
+        $feature['distance'] = $distance;
     }
 
     /**
      * @return float
      */
-    public function getDuration()
+    public function getTime()
     {
-        return $this->duration;
+        return $this->features['time'];
     }
 
     /**
-     * @param float $duration
+     * @param float $time
      */
-    public function setDuration($duration)
+    public function setTime($time)
     {
-        $this->duration = $duration;
+        $feature['time'] = $time;
     }
 
     /**
@@ -309,41 +204,9 @@ class Tracksegment implements TracksegmentInterface
     }
 
     /**
-     * @return float
-     */
-    public function getStopRate()
-    {
-        return $this->stopRate;
-    }
-
-    /**
-     * @param float $stopRate
-     */
-    public function setStopRate($stopRate)
-    {
-        $this->stopRate = round($stopRate,16);
-    }
-
-    /**
-     * Returns a partial segment as array
-     * @return array
-     */
-    public function toCSVArray()
-    {
-        return array(
-            $this->getStopRate(),
-            $this->getMeanVelocity(),
-            $this->getMeanAcceleration(),
-            $this->getMaxVelocity(),
-            $this->getMaxAcceleration(),
-            $this->getTypeAsString()
-        );
-    }
-
-    /**
      * @return string returns string for type
      */
-    protected function getTypeAsString()
+    public function getTypeAsString()
     {
         switch ($this->getType()) {
             case TracksegmentType::DRIVE:

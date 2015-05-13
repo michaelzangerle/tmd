@@ -36,7 +36,7 @@ class FileWriterFilter extends AbstractFilter
 
     /**
      * Array to collect data to write
-     * @var array
+     * @var TracksegmentInterface[]
      */
     protected $data = [];
 
@@ -101,7 +101,7 @@ class FileWriterFilter extends AbstractFilter
      */
     public function run($data)
     {
-        if ($data !== null) {
+        if ($data !== null && $data instanceof TracksegmentInterface) {
             $this->data[] = $data;
         }
     }
@@ -110,23 +110,56 @@ class FileWriterFilter extends AbstractFilter
      * Writes the csv result file for all analyzed segments
      *
      * @param                       $fp
-     * @param TracksegmentInterface $seg
+     * @param array                 $values
      * @param string                $delimiter
      */
-    protected function writeData($fp, TracksegmentInterface $seg, $delimiter)
+    protected function writeData($fp, array $values, $delimiter)
     {
-        fputcsv($fp, $seg->toCSVArray(), $delimiter);
+        fputcsv($fp, $values, $delimiter);
+    }
+
+    /**
+     * @return array
+     */
+    public function getCSVFeatureKeys()
+    {
+        return [
+            'stoprate',
+            'meanVelocity',
+            'meanAcceleration',
+            'maxVelocity',
+            'maxAcceleration',
+            'type'
+        ];
+    }
+
+    /**
+     * @param TracksegmentInterface $seg
+     *
+     * @return array
+     */
+    public function getCSVFeatureValues(TracksegmentInterface $seg)
+    {
+        return [
+            'stopRate' => $seg->getFeature('stopRate'),
+            'meanVelocity' => $seg->getFeature('meanVelocity'),
+            'meanAcceleration' => $seg->getFeature('meanAcceleration'),
+            'maxVelocity' => $seg->getFeature('maxVelocity'),
+            'maxAcceleration' => $seg->getFeature('maxAcceleration'),
+            'type' => $seg->getTypeAsString()
+        ];
     }
 
     /**
      * Writes the header of a csv file
      *
      * @param        $fp
+     * @param        $keys
      * @param string $delimiter
      */
-    protected function writeHeader($fp, $delimiter)
+    protected function writeHeader($fp, $keys, $delimiter)
     {
-        fputcsv($fp, Tracksegment::$ATTRIBUTES, $delimiter);
+        fputcsv($fp, $keys, $delimiter);
     }
 
     /**
@@ -139,12 +172,11 @@ class FileWriterFilter extends AbstractFilter
         // for multiple files
         if (!$this->headerWritten) {
             $this->headerWritten = true;
-            $this->writeHeader($fp, $this->delimiter);
-
+            $this->writeHeader($fp, $this->getCSVFeatureKeys(), $this->delimiter);
         }
 
-        foreach ($this->data as $values) {
-            $this->writeData($fp, $values, $this->delimiter);
+        foreach ($this->data as $seg) {
+            $this->writeData($fp, $this->getCSVFeatureValues($seg), $this->delimiter);
         }
         flock($fp, LOCK_UN);
         fclose($fp);
