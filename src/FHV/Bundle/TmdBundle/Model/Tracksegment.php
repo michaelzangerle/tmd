@@ -10,7 +10,7 @@ namespace FHV\Bundle\TmdBundle\Model;
 class Tracksegment implements TracksegmentInterface
 {
     public static $ATTRIBUTES = array(
-        'distance',
+        'stoprate',
         'mean velocity',
         'mean acceleration',
         'max velocity',
@@ -70,6 +70,11 @@ class Tracksegment implements TracksegmentInterface
     protected $trackPoints;
 
     /**
+     * @var float
+     */
+    protected $stopRate;
+
+    /**
      * @param float                 $meanAcceleration in m/s
      * @param float                 $meanVelocity in m/s
      * @param float                 $maxAcceleration in m/s
@@ -79,6 +84,7 @@ class Tracksegment implements TracksegmentInterface
      * @param TrackpointInterface   $startPoint
      * @param TrackpointInterface   $endPoint
      * @param TrackpointInterface[] $trackPoints
+     * @param                       $stopRate
      * @param int                   $type of segment
      */
     function __construct(
@@ -91,6 +97,7 @@ class Tracksegment implements TracksegmentInterface
         $startPoint,
         $endPoint,
         $trackPoints,
+        $stopRate,
         $type = 5
     ) {
         $this->meanAcceleration = $meanAcceleration;
@@ -103,6 +110,7 @@ class Tracksegment implements TracksegmentInterface
         $this->endPoint = $endPoint;
         $this->startPoint = $startPoint;
         $this->trackPoints = $trackPoints;
+        $this->stopRate = round($stopRate,16);
     }
 
     /**
@@ -301,13 +309,29 @@ class Tracksegment implements TracksegmentInterface
     }
 
     /**
+     * @return float
+     */
+    public function getStopRate()
+    {
+        return $this->stopRate;
+    }
+
+    /**
+     * @param float $stopRate
+     */
+    public function setStopRate($stopRate)
+    {
+        $this->stopRate = round($stopRate,16);
+    }
+
+    /**
      * Returns a partial segment as array
      * @return array
      */
     public function toCSVArray()
     {
         return array(
-            $this->getDistance(),
+            $this->getStopRate(),
             $this->getMeanVelocity(),
             $this->getMeanAcceleration(),
             $this->getMaxVelocity(),

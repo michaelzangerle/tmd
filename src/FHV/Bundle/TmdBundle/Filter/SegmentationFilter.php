@@ -168,6 +168,9 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             // and starts a new segment when the threshold is reached
             if ($this->util->calcVelocity($tmpDistance, $tmpTime) < $this->maxVelocityForNearlyStopPoints) {
                 $lowSpeedTimeCounter += $tmpTime;
+            } else {
+                // reset when below threshold
+                $lowSpeedTimeCounter = 0;
             }
 
             $isWalkPoint = $this->isWalkPoint($tmpDistance, $tmpTime, $prevVelocity);
@@ -316,10 +319,10 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
      */
     protected function newSegmentNeeded($isWalkPoint, SegmentEntity $curSegment, $time, $lowSpeedCounter)
     {
-        if (($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
+        if (count($curSegment->getTrackpoints()) >= 2 && (($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINIED) ||
             (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
             ($time > $this->maxTimeDifference) ||
-            ($lowSpeedCounter >= $this->maxTimeWithoutMovement)
+            ($lowSpeedCounter >= $this->maxTimeWithoutMovement))
         ) {
             return true;
         }

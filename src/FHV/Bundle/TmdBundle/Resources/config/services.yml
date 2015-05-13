@@ -38,6 +38,8 @@ services:
           arguments:
             - @fhv_tmd.trackPointUtil
             - %tmd.filter.min_trackpoints_per_segment%
+            - %tmd.filter.max_velocity_for_nearly_stoppoints%
+            - %tmd.filter.max_time_without_movement%
 
     fhv_tmd.fileWriterFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileWriterFilter

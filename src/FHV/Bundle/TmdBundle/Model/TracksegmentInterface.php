@@ -94,6 +94,16 @@ interface TracksegmentInterface
     public function getDuration();
 
     /**
+     * @param float $stopRate
+     */
+    public function setStopRate($stopRate);
+
+    /**
+     * @return float stop rate of segment
+     */
+    public function getStopRate();
+
+    /**
      * @param float $duration of segment in seconds
      */
     public function setDuration($duration);

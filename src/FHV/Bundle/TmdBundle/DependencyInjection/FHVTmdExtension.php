@@ -62,6 +62,14 @@ class FHVTmdExtension extends Extension
             $config['filter']['points_to_skip_from_start']
         );
         $container->setParameter('tmd.filter.min_valid_points', $config['filter']['min_valid_points_ratio']);
+        $container->setParameter(
+            'tmd.filter.max_velocity_for_nearly_stoppoints',
+            $config['filter']['max_velocity_for_nearly_stoppoints']
+        );
+        $container->setParameter(
+            'tmd.filter.max_time_without_movement',
+            $config['filter']['max_time_without_movement']
+        );
     }
 
     /**

@@ -32,6 +32,16 @@ class TracksegmentFilter extends AbstractFilter
     protected $util;
 
     /**
+     * @var float
+     */
+    protected $maxVelocityForNearlyStopPoints;
+
+    /**
+     * @var int
+     */
+    protected $maxTimeWithoutMovement;
+
+    /**
      * Starts a filter and processes the given data
      *
      * @param $data
@@ -51,11 +61,17 @@ class TracksegmentFilter extends AbstractFilter
         }
     }
 
-    function __construct(TrackpointUtil $util, $minTrackPointsPerSegment)
-    {
+    function __construct(
+        TrackpointUtil $util,
+        $minTrackPointsPerSegment,
+        $maxVelocityForNearlyStopPoints,
+        $maxTimeWithoutMovement
+    ) {
         parent::__construct();
         $this->util = $util;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
+        $this->maxVelocityForNearlyStopPoints = $maxVelocityForNearlyStopPoints;
+        $this->maxTimeWithoutMovement = $maxTimeWithoutMovement;
     }
 
     /**
@@ -79,6 +95,8 @@ class TracksegmentFilter extends AbstractFilter
         $prevVelocity = 0;
         $accTrackPoints = 0;
         $gpsTrackPoints[] = $trackPoints[0];
+        $lowSpeedTimeCounter = 0;
+        $stopCounter = 0;
 
         if ($amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
             for ($i = 0; $i < $amountOfTrackPoints; $i++) {
@@ -110,6 +128,20 @@ class TracksegmentFilter extends AbstractFilter
                     $accTrackPoints++;
                 }
 
+                // bilijecki counts the points with speed below a certain value
+                // when a certain amount is below a the velocity threshold it
+                // counts as a stop
+                if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
+                    $lowSpeedTimeCounter += $currentTime;
+
+                    if($lowSpeedTimeCounter >= $this->maxTimeWithoutMovement) {
+                        $stopCounter++;
+                        $lowSpeedTimeCounter = 0;
+                    }
+                } else {
+                    $lowSpeedTimeCounter = 0;
+                }
+
                 $prevVelocity = $currentAcceleration;
             }
 
@@ -123,6 +155,7 @@ class TracksegmentFilter extends AbstractFilter
                 $gpsTrackPoints[0],
                 $gpsTrackPoints[$amountOfTrackPoints],
                 $gpsTrackPoints,
+                $stopCounter / $distance,
                 $type
             );
         }
