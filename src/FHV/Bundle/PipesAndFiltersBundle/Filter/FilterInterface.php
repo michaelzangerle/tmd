@@ -42,11 +42,6 @@ interface FilterInterface
     public function parentHasFinished();
 
     /**
-     * Returns true if parent filter has finished work
-     */
-    public function getParentHasFinished();
-
-    /**
      * Tells all pipes that this filter has finished
      */
     public function finished();

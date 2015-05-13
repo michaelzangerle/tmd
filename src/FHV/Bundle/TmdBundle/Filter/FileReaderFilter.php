@@ -43,7 +43,6 @@ class FileReaderFilter extends AbstractFilter
     {
         if ($data !== null && is_file($data)) {
             $this->readSegments($data);
-            $this->finished();
         } else {
             throw new InvalidArgumentException('FileReaderFilter: Parameter should be a valid file name!');
         }

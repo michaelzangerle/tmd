@@ -78,6 +78,7 @@ class TrainingDataManager
                     $output->write('<info>Processing "' . $fileName . '"</info>', true);
                     $this->frFilter->run($fileName);
                 }
+                $this->frFilter->parentHasFinished();
                 $output->write(PHP_EOL . '<info>' . count($files) . ' gpx files found and processed!</info>' . PHP_EOL);
             } else {
                 $output->write('<info>No gpx files found!</info>' . PHP_EOL);

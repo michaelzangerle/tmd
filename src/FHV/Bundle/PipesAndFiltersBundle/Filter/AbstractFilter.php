@@ -17,32 +17,9 @@ abstract class AbstractFilter implements FilterInterface
      */
     protected $pipes;
 
-    /**
-     * Will be set if parent filter is finished
-     * @var Boolean
-     */
-    protected $parentHasFinished;
-
     function __construct()
     {
         $this->pipes = [];
-        $this->parentHasFinished = false;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getParentHasFinished()
-    {
-        return $this->parentHasFinished;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function parentHasFinished()
-    {
-        $this->parentHasFinished = true;
     }
 
     /**
@@ -77,5 +54,13 @@ abstract class AbstractFilter implements FilterInterface
         foreach ($this->pipes as $pipe) {
             $pipe->finished();
         }
+    }
+
+    /**
+     * Will be called when the parent filter has finished work
+     */
+    public function parentHasFinished()
+    {
+        $this->finished();
     }
 }

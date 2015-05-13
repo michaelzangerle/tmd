@@ -199,9 +199,6 @@ class TrackpointFilter extends AbstractFilter
                 $validPointThreshold >= $this->minValidPointsRatio
             ) {
                 $this->write($data);
-                if ($this->getParentHasFinished()) {
-                    $this->finished();
-                }
             }
             // else just skip this segment
         } else {

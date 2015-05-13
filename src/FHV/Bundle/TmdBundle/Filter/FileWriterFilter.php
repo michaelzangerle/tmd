@@ -35,6 +35,12 @@ class FileWriterFilter extends AbstractFilter
     protected $headerWritten = false;
 
     /**
+     * Array to collect data to write
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * @return string
      */
     public function getDir()
@@ -96,44 +102,54 @@ class FileWriterFilter extends AbstractFilter
     public function run($data)
     {
         if ($data !== null) {
-            $this->writeHeader($this->dir, $this->fileName, $this->delimiter);
-            $this->writeData($this->dir, $this->fileName, $data, $this->delimiter);
-        }
-
-        if ($this->getParentHasFinished()) {
-            $this->finished();
+            $this->data[] = $data;
         }
     }
 
     /**
      * Writes the csv result file for all analyzed segments
      *
-     * @param string                $dir
-     * @param                       $fileName
+     * @param                       $fp
      * @param TracksegmentInterface $seg
      * @param string                $delimiter
      */
-    protected function writeData($dir, $fileName, TracksegmentInterface $seg, $delimiter)
+    protected function writeData($fp, TracksegmentInterface $seg, $delimiter)
     {
-        $fp = fopen($dir . $fileName, 'a+');
         fputcsv($fp, $seg->toCSVArray(), $delimiter);
-        fclose($fp);
     }
 
     /**
      * Writes the header of a csv file
      *
-     * @param        $dir
-     * @param        $fileName
+     * @param        $fp
      * @param string $delimiter
      */
-    protected function writeHeader($dir, $fileName, $delimiter)
+    protected function writeHeader($fp, $delimiter)
     {
+        fputcsv($fp, Tracksegment::$ATTRIBUTES, $delimiter);
+    }
+
+    /**
+     * Will be called when the parent filter has finished work
+     */
+    public function parentHasFinished()
+    {
+        $fp = fopen($this->dir . $this->fileName, 'a+');
+        flock($fp, LOCK_EX);
+        // for multiple files
         if (!$this->headerWritten) {
             $this->headerWritten = true;
-            $fp = fopen($dir . $fileName, 'w');
-            fputcsv($fp, Tracksegment::$ATTRIBUTES, $delimiter);
-            fclose($fp);
+            $this->writeHeader($fp, $this->delimiter);
+
         }
+
+        foreach ($this->data as $values) {
+            $this->writeData($fp, $values, $this->delimiter);
+        }
+        flock($fp, LOCK_UN);
+        fclose($fp);
+
+        $this->data = [];
+        $this->finished();
     }
 }
