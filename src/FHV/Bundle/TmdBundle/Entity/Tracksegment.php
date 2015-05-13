@@ -57,7 +57,7 @@ class Tracksegment
      * @Expose
      * @var integer
      */
-    private $seconds = 0;
+    private $time = 0;
 
     /**
      * @Expose
@@ -191,20 +191,6 @@ class Tracksegment
     }
 
     /**
-     * Set trackpoints
-     *
-     * @param Collection $trackpoints
-     *
-     * @return Tracksegment
-     */
-    public function setTrackpoints(Collection $trackpoints)
-    {
-        $this->trackpoints = $trackpoints;
-
-        return $this;
-    }
-
-    /**
      * Add features
      *
      * @param Feature $features
@@ -289,13 +275,13 @@ class Tracksegment
     /**
      * Set seconds
      *
-     * @param integer $seconds
+     * @param integer $time
      *
      * @return Tracksegment
      */
-    public function setSeconds($seconds)
+    public function setTime($time)
     {
-        $this->seconds = $seconds;
+        $this->time = $time;
 
         return $this;
     }
@@ -305,8 +291,8 @@ class Tracksegment
      *
      * @return integer
      */
-    public function getSeconds()
+    public function getTime()
     {
-        return $this->seconds;
+        return $this->time;
     }
 }

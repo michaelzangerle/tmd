@@ -6,15 +6,8 @@ use Doctrine\ORM\EntityManager;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
 use FHV\Bundle\TmdBundle\Entity\Track;
-use FHV\Bundle\TmdBundle\Entity\Tracksegment;
-use FHV\Bundle\TmdBundle\Filter\FileReaderFilter;
-use FHV\Bundle\TmdBundle\Filter\SegmentationFilter;
-use FHV\Bundle\TmdBundle\Filter\SegmentationFilterInterface;
-use FHV\Bundle\TmdBundle\Filter\TrackpointFilter;
-use FHV\Bundle\TmdBundle\Filter\TracksegmentFilter;
-use FHV\Bundle\TmdBundle\Model\Trackpoint;
+use FHV\Bundle\TmdBundle\Filter\DatabaseFilterInterface;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Class TrackManager
@@ -38,7 +31,7 @@ class TrackManager implements TrackManagerInterface
     protected $frFilter;
 
     /**
-     * @var SegmentationFilterInterface
+     * @var FilterInterface
      */
     protected $segmentationFilter;
 
@@ -56,14 +49,16 @@ class TrackManager implements TrackManagerInterface
         EntityManager $em,
         FilterInterface $tpFilter,
         FilterInterface $fileReaderFilter,
-        SegmentationFilterInterface $segmentationFilter,
-        FilterInterface $segmentFilter
+        FilterInterface $segmentationFilter,
+        FilterInterface $segmentFilter,
+        DatabaseFilterInterface $databaseFilterInterface
     ) {
         $this->em = $em;
         $this->tpFilter = $tpFilter;
         $this->frFilter = $fileReaderFilter;
         $this->segmentationFilter = $segmentationFilter;
         $this->segmentFilter = $segmentFilter;
+        $this->dbFilter = $databaseFilterInterface;
         $this->track = new Track();
     }
 
@@ -77,7 +72,7 @@ class TrackManager implements TrackManagerInterface
      */
     public function create(File $file, $method)
     {
-        $this->track->setAnalyzationType($this->getType($method));
+        $this->track->setAnalyseType($method);
         $this->initFilters();
         $this->frFilter->run(['fileName' => $file, 'analyseType' => $method]);
         $this->frFilter->parentHasFinished();
@@ -88,24 +83,6 @@ class TrackManager implements TrackManagerInterface
     }
 
     /**
-     * Returns the analyzation method type
-     *
-     * @param $method
-     *
-     * @return int
-     */
-    protected function getType($method)
-    {
-        switch ($method) {
-            case Track::TYPE_BASIC:
-            case Track::TYPE_GIS:
-                return $method;
-            default:
-                return Track::TYPE_UNKNOW;
-        }
-    }
-
-    /**
      * Initializes and connects filters
      */
     protected function initFilters()
@@ -113,5 +90,8 @@ class TrackManager implements TrackManagerInterface
         new Pipe($this->frFilter, $this->tpFilter);
         new Pipe($this->tpFilter, $this->segmentationFilter);
         new Pipe($this->segmentationFilter,$this->segmentFilter);
+        new Pipe($this->segmentFilter, $this->dbFilter);
+
+        $this->dbFilter->provideTrack($this->track);
     }
 }

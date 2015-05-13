@@ -118,7 +118,7 @@ fhv_tmd:
     max_velocity_for_nearly_stoppoints: 0.55
     max_time_difference: 30
 
-  analyze:
+  analyse:
     basic:
       id: 1
       csv_fileHeaders:
@@ -127,4 +127,3 @@ fhv_tmd:
         - "meanAcceleration"
         - "maxVelocity"
         - "maxAcceleration"
-        - "type"

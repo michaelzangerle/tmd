@@ -32,9 +32,9 @@ class Result
 
     /**
      * @Expose
-     * @var integer
+     * @var string
      */
-    private $analizationType;
+    private $analyseType;
 
     /**
      * @Expose
@@ -99,13 +99,13 @@ class Result
     /**
      * Set analizationType
      *
-     * @param integer $analizationType
+     * @param string $analyseType
      *
      * @return Result
      */
-    public function setAnalizationType($analizationType)
+    public function setAnalyseType($analyseType)
     {
-        $this->analizationType = $analizationType;
+        $this->analyseType = $analyseType;
 
         return $this;
     }
@@ -113,11 +113,11 @@ class Result
     /**
      * Get analizationType
      *
-     * @return integer
+     * @return string
      */
-    public function getAnalizationType()
+    public function getAnalyseType()
     {
-        return $this->analizationType;
+        return $this->analyseType;
     }
 
     /**

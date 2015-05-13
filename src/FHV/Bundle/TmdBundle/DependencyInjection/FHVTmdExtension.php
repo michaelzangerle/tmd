@@ -26,7 +26,7 @@ class FHVTmdExtension extends Extension
         $container->setParameter('tmd.gpx_namespace', $config['gpx_namespace']);
 
         $this->setFilterParameters($container, $config);
-        $this->setAnalyzeParameters($container, $config);
+        $this->setAnalyseParameters($container, $config);
         $this->setSegmentationParameters($container, $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -73,14 +73,14 @@ class FHVTmdExtension extends Extension
     }
 
     /**
-     * Sets the parameters needed for the analyze operations
+     * Sets the parameters needed for the analyse operations
      *
      * @param $container
      * @param $config
      */
-    protected function setAnalyzeParameters($container, $config)
+    protected function setAnalyseParameters($container, $config)
     {
-        $container->setParameter('tmd.analyze', $config['analyze']);
+        $container->setParameter('tmd.analyse', $config['analyse']);
     }
 
     /**

@@ -13,9 +13,6 @@ use FHV\Bundle\TmdBundle\Model\Trackpoint;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
 use Track;
 
-// TODO add functionallity for other analyzation types
-// should also be added to segmentation and further analyzation filters
-
 /**
  * Creates a segment from trackpoints
  * Class SegmentFilter
@@ -171,8 +168,8 @@ class TracksegmentFilter extends AbstractFilter
                 'maxVelocity' => $maxVelocity,
                 'time' => $time,
                 'distance' => $distance,
-                'start' => $gpsTrackPoints[0],
-                'stop' => $gpsTrackPoints[$amountOfTrackPoints],
+                'startPoint' => $gpsTrackPoints[0],
+                'endPoint' => $gpsTrackPoints[$amountOfTrackPoints],
                 'trackPoints' => $gpsTrackPoints,
                 'stopRate' => $stopCounter / $distance,
                 'type' => $type
@@ -196,8 +193,8 @@ class TracksegmentFilter extends AbstractFilter
         $seg = new Tracksegment(
             $features['time'],
             $features['distance'],
-            $features['start'],
-            $features['stop'],
+            $features['startPoint'],
+            $features['endPoint'],
             $features['trackPoints'],
             $features['type']
         );
@@ -217,10 +214,32 @@ class TracksegmentFilter extends AbstractFilter
      * @param TracksegmentInterface $segment
      * @param array                 $features
      */
-    protected function setFeaturesForSegment($segment, $features)
+    protected function setFeaturesForSegment(TracksegmentInterface $segment, $features)
     {
         foreach ($features as $key => $feature) {
-            $segment->setFeature($key, $feature);
+            switch ($key) {
+                case 'time':
+                    $segment->setTime($feature);
+                    break;
+                case 'distance':
+                    $segment->setDistance($feature);
+                    break;
+                case 'trackPoints':
+                    $segment->setTrackPoints($feature);
+                    break;
+                case 'startPoint':
+                    $segment->setStartPoint($feature);
+                    break;
+                case 'endPoint':
+                    $segment->setEndPoint($feature);
+                    break;
+                case 'type':
+                    $segment->setType($feature);
+                    break;
+                default:
+                    $segment->setFeature($key, $feature);
+                    break;
+            }
         }
     }
 }

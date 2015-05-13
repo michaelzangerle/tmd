@@ -102,7 +102,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                ->arrayNode('analyze')
+                ->arrayNode('analyse')
                     ->prototype('array')
                         ->children()
                             ->scalarNode('id')

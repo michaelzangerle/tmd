@@ -8,7 +8,6 @@ use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\TmdBundle\Model\Result;
 use FHV\Bundle\TmdBundle\Model\ResultInterface;
 use FHV\Bundle\TmdBundle\Model\Track;
-use FHV\Bundle\TmdBundle\Model\TrackInterface;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Model\Trackpoint;
 use FHV\Bundle\TmdBundle\Model\Tracksegment;
@@ -22,7 +21,7 @@ use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
  * Class SegmentationFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class SegmentationFilter extends AbstractFilter implements SegmentationFilterInterface
+class SegmentationFilter extends AbstractFilter
 {
     /**
      * @var TrackpointUtil
@@ -127,6 +126,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         $segments = $this->createSegments($trackpoints);
         $segments = $this->mergeSegments($segments);
         $this->track->setSegments($segments);
+        $this->track->setAnalysisType($this->analyseType);
     }
 
     /**
@@ -173,7 +173,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
 
             // segment with one element und undefined type
             if (count($curSegment->getTrackpoints()) === 1) {
-                $this->createNewResultEntity($this->track->getAnalysisType(), $isWalkPoint, $curSegment);
+                $this->createNewResultEntity($this->analyseType, $isWalkPoint, $curSegment);
             } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime, $lowSpeedTimeCounter)) {
                 // more than 1 element in segment and different type
                 $segments[] = $this->setValuesForSegment(
@@ -237,16 +237,16 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
     /**
      * Creates a new result entity and sets the relation to the segment and persists it
      *
-     * @param integer               $getAnalyzationType
+     * @param integer               $getAnalyseType
      * @param boolean               $isWalkPoint
      * @param TracksegmentInterface $curSegment
      *
      * @return ResultInterface
      */
-    protected function createNewResultEntity($getAnalyzationType, $isWalkPoint, $curSegment)
+    protected function createNewResultEntity($getAnalyseType, $isWalkPoint, $curSegment)
     {
         $result = new Result();
-        $result->setAnalizationType($getAnalyzationType);
+        $result->setAnalizationType($getAnalyseType);
         $curSegment->setResult($result);
 
         if ($isWalkPoint) {
@@ -255,6 +255,7 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
             $result->setTransportType(TracksegmentType::UNDEFINIED);
         }
 
+        $curSegment->setType($result->getTransportType());
         return $result;
     }
 
@@ -376,14 +377,6 @@ class SegmentationFilter extends AbstractFilter implements SegmentationFilterInt
         foreach ($seg2->getTrackpoints() as $tp) {
             $seg1->addTrackpoint($tp);
         }
-    }
-
-    /**
-     * @return TrackInterface
-     */
-    public function getTrack()
-    {
-        return $this->track;
     }
 
     public function parentHasFinished()

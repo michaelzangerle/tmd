@@ -7,7 +7,7 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="analyzationType" type="integer" nullable="false"/>
+        <field name="analyseType" type="string" nullable="false"/>
 
         <one-to-many target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" mapped-by="track"
                      field="segments">

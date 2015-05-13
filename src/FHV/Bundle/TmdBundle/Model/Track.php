@@ -18,7 +18,7 @@ class Track implements TrackInterface
     protected $analysisType = 0;
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getSegments()
     {
@@ -26,7 +26,7 @@ class Track implements TrackInterface
     }
 
     /**
-     * @param TracksegmentInterface[] $segments
+     * {@inheritdoc}
      */
     public function setSegments(array $segments)
     {
@@ -34,7 +34,7 @@ class Track implements TrackInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getAnalysisType()
     {
@@ -42,7 +42,7 @@ class Track implements TrackInterface
     }
 
     /**
-     * @param mixed $analysisType
+     * {@inheritdoc}
      */
     public function setAnalysisType($analysisType)
     {
@@ -50,9 +50,7 @@ class Track implements TrackInterface
     }
 
     /**
-     * Adds a track segment to the track
-     *
-     * @param TracksegmentInterface $segment
+     * {@inheritdoc}
      */
     public function addSegment(TracksegmentInterface $segment)
     {

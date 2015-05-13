@@ -13,8 +13,6 @@ services:
     # Filter
     ##############################
 
-    # TODO check if they should be reinstaniated for each "request"
-
     fhv_tmd.fileReaderFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileReaderFilter
           arguments:
@@ -44,7 +42,7 @@ services:
     fhv_tmd.fileWriterFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileWriterFilter
           arguments:
-            - %tmd.analyze%
+            - %tmd.analyse%
 
     fhv_tmd.segmentationFilter:
           class: FHV\Bundle\TmdBundle\Filter\SegmentationFilter
@@ -58,8 +56,12 @@ services:
             - %tmd.segmentation.max_time_without_movement%
             - %tmd.segmentation.max_velocity_for_nearly_stoppoints%
 
+    fhv_tmd.databaseFilter:
+          class: FHV\Bundle\TmdBundle\Filter\DatabaseFilter
+          arguments: []
+
     ##############################
-    # Manager
+    # Training manager
     ##############################
 
     fhv_tmd.trainingDataManager:
@@ -70,6 +72,10 @@ services:
           - @fhv_tmd.fileWriterFilter
           - @fhv_tmd.segmentFilter
 
+    ##############################
+    # Track manager
+    ##############################
+
     fhv_tmd.trackManager:
         class: FHV\Bundle\TmdBundle\Manager\TrackManager
         arguments:
@@ -78,6 +84,7 @@ services:
         - @fhv_tmd.fileReaderFilter
         - @fhv_tmd.segmentationFilter
         - @fhv_tmd.segmentFilter
+        - @fhv_tmd.databaseFilter
 
 
 

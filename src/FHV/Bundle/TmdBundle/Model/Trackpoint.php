@@ -43,7 +43,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @return float
+     * {@inheritdoc}
      */
     public function getEle()
     {
@@ -51,7 +51,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @param float $ele
+     * {@inheritdoc}
      */
     public function setEle($ele)
     {
@@ -59,7 +59,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @return float
+     * {@inheritdoc}
      */
     public function getLat()
     {
@@ -67,7 +67,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @param float $lat
+     * {@inheritdoc}
      */
     public function setLat($lat)
     {
@@ -75,7 +75,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @return float
+     * {@inheritdoc}
      */
     public function getLong()
     {
@@ -83,7 +83,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @param float $long
+     * {@inheritdoc}
      */
     public function setLong($long)
     {
@@ -91,7 +91,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @return \DateTime
+     * {@inheritdoc}
      */
     public function getTime()
     {
@@ -99,7 +99,7 @@ class Trackpoint implements TrackpointInterface
     }
 
     /**
-     * @param \DateTime $time
+     * {@inheritdoc}
      */
     public function setTime($time)
     {

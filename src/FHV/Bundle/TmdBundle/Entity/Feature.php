@@ -14,9 +14,9 @@ class Feature
 {
     /**
      * @Expose
-     * @var float
+     * @var string
      */
-    private $key;
+    private $description;
 
     /**
      * @Expose
@@ -38,13 +38,13 @@ class Feature
     /**
      * Set key
      *
-     * @param float $key
+     * @param string $description
      *
      * @return Feature
      */
-    public function setKey($key)
+    public function setDescription($description)
     {
-        $this->key = $key;
+        $this->description = $description;
 
         return $this;
     }
@@ -52,11 +52,11 @@ class Feature
     /**
      * Get key
      *
-     * @return float
+     * @return string
      */
-    public function getKey()
+    public function getDescription()
     {
-        return $this->key;
+        return $this->description;
     }
 
     /**

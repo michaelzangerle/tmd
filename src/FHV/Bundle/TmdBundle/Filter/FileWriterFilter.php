@@ -44,10 +44,10 @@ class FileWriterFilter extends AbstractFilter
      */
     protected $data = [];
 
-    function __construct($analyzeConfiguration)
+    function __construct($analyseConfiguration)
     {
         parent::__construct();
-        $this->config = $analyzeConfiguration;
+        $this->config = $analyseConfiguration;
     }
 
     /**
@@ -154,6 +154,7 @@ class FileWriterFilter extends AbstractFilter
             $result[$field] = $seg->getFeature($field);
         }
 
+        $result[] = $seg->getType();
         return $result;
     }
 
@@ -166,6 +167,7 @@ class FileWriterFilter extends AbstractFilter
      */
     protected function writeHeader($fp, $keys, $delimiter)
     {
+        $keys[] = 'type';
         fputcsv($fp, $keys, $delimiter);
     }
 

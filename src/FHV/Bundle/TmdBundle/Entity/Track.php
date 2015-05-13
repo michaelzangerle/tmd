@@ -10,14 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Track
 {
-    const TYPE_UNKNOW = 0;
-    const TYPE_BASIC = 1;
-    const TYPE_GIS = 2;
-
     /**
-     * @var integer
+     * @var string
      */
-    private $analyzationType;
+    private $analyseType;
 
     /**
      * @var integer
@@ -38,27 +34,27 @@ class Track
     }
 
     /**
-     * Set analyzationType
+     * Set analyseType
      *
-     * @param integer $analyzationType
+     * @param string $analyseType
      *
      * @return Track
      */
-    public function setAnalyzationType($analyzationType)
+    public function setAnalyseType($analyseType)
     {
-        $this->analyzationType = $analyzationType;
+        $this->analyseType = $analyseType;
 
         return $this;
     }
 
     /**
-     * Get analyzationType
+     * Get analyseType
      *
-     * @return integer
+     * @return string
      */
-    public function getAnalyzationType()
+    public function getAnalyseType()
     {
-        return $this->analyzationType;
+        return $this->analyseType;
     }
 
     /**

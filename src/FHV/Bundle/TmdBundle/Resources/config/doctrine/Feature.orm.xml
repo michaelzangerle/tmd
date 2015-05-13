@@ -7,7 +7,7 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="key" type="float" nullable="false"/>
+        <field name="description" type="string" length="255" nullable="false"/>
         <field name="value" type="float" nullable="false"/>
 
         <many-to-one target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" field="segment"

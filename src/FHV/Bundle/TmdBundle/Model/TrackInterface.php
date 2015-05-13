@@ -10,14 +10,14 @@ interface TrackInterface
 {
     /**
      * Returns the type of analysis that is used for this track
-     * @return int
+     * @return string
      */
     public function getAnalysisType();
 
     /**
      * Sets the type of analysis that is used for this track
      *
-     * @param int $type
+     * @param string $type
      */
     public function setAnalysisType($type);
 

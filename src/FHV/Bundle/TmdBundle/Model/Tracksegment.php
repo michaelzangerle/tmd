@@ -10,7 +10,7 @@ namespace FHV\Bundle\TmdBundle\Model;
 class Tracksegment implements TracksegmentInterface
 {
     /**
-     * Array with features
+     * Array with scalar features
      * Contains basic features like distance and time and
      * depending on the analysis type different other
      * features
@@ -19,9 +19,39 @@ class Tracksegment implements TracksegmentInterface
     protected $features = [];
 
     /**
+     * @var TrackpointInterface[]
+     */
+    protected $trackpoints = [];
+
+    /**
+     * @var TrackpointInterface
+     */
+    protected $startPoint;
+
+    /**
+     * @var TrackpointInterface
+     */
+    protected $endPoint;
+
+    /**
      * @var Result
      */
     protected $result;
+
+    /**
+     * @var int
+     */
+    protected $type;
+
+    /**
+     * @var int
+     */
+    protected $time;
+
+    /**
+     * @var float
+     */
+    protected $distance;
 
     /**
      * @param                       $time
@@ -39,19 +69,16 @@ class Tracksegment implements TracksegmentInterface
         $trackPoints = [],
         $type = 'undefined'
     ) {
-        $this->features['time'] = $time;
-        $this->features['distance'] = round($distance, 2);
-        $this->features['type'] = $type;
-        $this->features['endPoint'] = $endPoint;
-        $this->features['startPoint'] = $startPoint;
-        $this->features['trackPoints'] = $trackPoints;
+        $this->time = $time;
+        $this->distance = round($distance, 2);
+        $this->type = $type;
+        $this->endPoint = $endPoint;
+        $this->startPoint = $startPoint;
+        $this->trackpoints = $trackPoints;
     }
 
     /**
-     * Sets a feature
-     *
-     * @param $key
-     * @param $value
+     * {@inheritdoc}
      */
     public function setFeature($key, $value)
     {
@@ -62,11 +89,7 @@ class Tracksegment implements TracksegmentInterface
     }
 
     /**
-     * Returns a value of a feature or null if it does not exist
-     *
-     * @param $key
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getFeature($key)
     {
@@ -78,114 +101,111 @@ class Tracksegment implements TracksegmentInterface
     }
 
     /**
-     * Adds a trackpoints
-     * @param TrackpointInterface $trackPoint
+     * {@inheritdoc}
      */
-    public function addTrackPoint($trackPoint)
+    public function addTrackPoint(TrackpointInterface $trackPoint)
     {
-        if(array_key_exists('trackPoints', $this->features)) {
-            $this->features['trackPoints'][] = $trackPoint;
-        }
+        $this->trackpoints[] = $trackPoint;
     }
 
     /**
-     * @return TrackpointInterface[]
+     * {@inheritdoc}
      */
     public function getTrackPoints()
     {
-        return $this->features['trackPoints'];
+        return $this->trackpoints;
     }
 
     /**
-     * @param TrackpointInterface[] $trackPoints
+     * {@inheritdoc}
      */
     public function setTrackPoints($trackPoints)
     {
-        $this->features['trackPoints'] = $trackPoints;
+        $this->trackpoints;
     }
 
     /**
-     * @return Trackpoint
+     * {@inheritdoc}
      */
     public function getStartPoint()
     {
-        return $this->features['startPoint'];
+        return $this->startPoint;
     }
 
     /**
-     * @param Trackpoint $startPoint
+     * {@inheritdoc}
      */
     public function setStartPoint($startPoint)
     {
-        $this->features['startPoint'] = $startPoint;
+        $this->startPoint = $startPoint;
     }
 
     /**
-     * @return Trackpoint
+     * {@inheritdoc}
      */
     public function getEndPoint()
     {
-        return $this->features['endPoint'];
+        return $this->endPoint;
     }
 
     /**
-     * @param Trackpoint $endPoint
+     * {@inheritdoc}
      */
     public function setEndPoint($endPoint)
     {
-        $this->features['endPoint'] = $endPoint;
+        $this->endPoint = $endPoint;
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getType()
     {
-        return $this->features['type'];
+        return $this->type;
     }
 
     /**
-     * @param mixed $type
+     * {@inheritdoc}
      */
     public function setType($type)
     {
-        $this->features['type'] = $type;
+        $this->type = $type;
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getDistance()
     {
-        return $this->features['distance'];
+        return $this->distance;
     }
 
     /**
-     * @param mixed $distance
+     * {@inheritdoc}
      */
     public function setDistance($distance)
     {
-        $this->features['distance'] = $distance;
+        $this->distance = $distance;
     }
 
     /**
-     * @return float
+     * {@inheritdoc}
      */
     public function getTime()
     {
-        return $this->features['time'];
+        return $this->time;
     }
 
     /**
-     * @param float $time
+     * {@inheritdoc}
      */
     public function setTime($time)
     {
-        $this->features['time'] = $time;
+        $this->time = $time;
     }
 
     /**
-     * @return Result
+     * {@inheritdoc}
      */
     public function getResult()
     {
@@ -193,10 +213,18 @@ class Tracksegment implements TracksegmentInterface
     }
 
     /**
-     * @param Result $result
+     * {@inheritdoc}
      */
     public function setResult($result)
     {
         $this->result = $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFeatures()
+    {
+        return $this->features;
     }
 }
