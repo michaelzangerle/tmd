@@ -4,7 +4,6 @@ namespace FHV\Bundle\TmdBundle\Filter;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
-use FHV\Bundle\TmdBundle\Model\Tracksegment;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 
 /**
@@ -108,8 +107,11 @@ class FileWriterFilter extends AbstractFilter
      */
     public function run($data)
     {
-        if ($data !== null && $data instanceof TracksegmentInterface) {
-            $this->data[] = $data;
+        if ($data !== null &&
+            array_key_exists('segment', $data) && $data['segment'] instanceof TracksegmentInterface &&
+            array_key_exists('analyseType', $data) && $data['analyseType'] !== null
+        ) {
+            $this->data[] = $data['segment'];
         }
     }
 

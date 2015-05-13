@@ -11,8 +11,6 @@ use FHV\Bundle\TmdBundle\Filter\TrackpointFilter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
-// TODO use interface
-
 /**
  * Class GPXTrainingDataManager
  * @package FHV\Bundle\TmdBundle\Manager
@@ -72,11 +70,15 @@ class TrainingDataManager
 
                 $this->connectFilters();
                 $this->fwFilter->setFilePath($dir . $resultFileName);
-                $this->fwFilter->setAnalyseType('basic'); // TODO get from cli params and check if it exists at all
 
                 foreach ($files as $fileName) {
                     $output->write('<info>Processing "' . $fileName . '"</info>', true);
-                    $this->frFilter->run($fileName);
+                    $this->frFilter->run(
+                        [
+                            'fileName' => $fileName,
+                            'analyseType' => 'basic'
+                        ]
+                    ); // TODO get from cli params and check if it exists at all
                 }
                 $this->frFilter->parentHasFinished();
                 $output->write(PHP_EOL . '<info>' . count($files) . ' gpx files found and processed!</info>' . PHP_EOL);

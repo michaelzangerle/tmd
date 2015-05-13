@@ -25,6 +25,11 @@ class FileReaderFilter extends AbstractFilter
      */
     protected $gpxNameSpace;
 
+    /**
+     * @var string
+     */
+    protected $analyseType;
+
     function __construct($minTrackPoints, $gpxNameSpace)
     {
         parent::__construct();
@@ -41,10 +46,16 @@ class FileReaderFilter extends AbstractFilter
      */
     public function run($data)
     {
-        if ($data !== null && is_file($data)) {
-            $this->readSegments($data);
+        if ($data !== null &&
+            array_key_exists('fileName', $data) && is_file($data['fileName']) &&
+            array_key_exists('analyseType', $data) && $data['analyseType'] !== null
+        ) {
+            $this->analyseType = $data['analyseType'];
+            $this->readSegments($data['fileName']);
         } else {
-            throw new InvalidArgumentException('FileReaderFilter: Parameter should be a valid file name!');
+            throw new InvalidArgumentException(
+                'FileReaderFilter: Data should contain a valid file name and a analyse type!'
+            );
         }
     }
 
@@ -80,6 +91,7 @@ class FileReaderFilter extends AbstractFilter
         if (count($trackPoints) >= $this->minTrackPoints) {
             $this->write(
                 array(
+                    'analyseType' => $this->analyseType,
                     'type' => $type,
                     'trackPoints' => $trackPoints
                 )

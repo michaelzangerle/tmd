@@ -63,7 +63,12 @@ class TracksegmentFilter extends AbstractFilter
             if (isset($data['trackPoints'])) {
                 $features = $this->getSegmentFeatures($data['trackPoints'], $data['type']);
                 $segment = $this->createSegment($features);
-                $this->write($segment);
+                $this->write(
+                    [
+                        'segment' => $segment,
+                        'analyseType' => $data['analyseType']
+                    ]
+                );
             } else {
                 throw new InvalidArgumentException('SegmentFilter: Data param should contain trackpoints!');
             }
@@ -183,7 +188,7 @@ class TracksegmentFilter extends AbstractFilter
      */
     protected function createSegment($features)
     {
-        $seg =  new Tracksegment(
+        $seg = new Tracksegment(
             $features['time'],
             $features['distance'],
             $features['start'],
@@ -192,21 +197,25 @@ class TracksegmentFilter extends AbstractFilter
             $features['type']
         );
 
-        $seg->setFeature('meanVelocity',$features['meanVelocity']);
-        $seg->setFeature('meanAcceleration',$features['meanAcceleration']);
-        $seg->setFeature('maxAcceleration',$features['maxAcceleration']);
-        $seg->setFeature('maxVelocity',$features['maxVelocity']);
-        $seg->setFeature('stopRate',$features['stopRate']);
+        $seg->setFeature('meanVelocity', $features['meanVelocity']);
+        $seg->setFeature('meanAcceleration', $features['meanAcceleration']);
+        $seg->setFeature('maxAcceleration', $features['maxAcceleration']);
+        $seg->setFeature('maxVelocity', $features['maxVelocity']);
+        $seg->setFeature('stopRate', $features['stopRate']);
 
         return $seg;
     }
 
     /**
      * Sets features for a existing segment
+     *
      * @param TracksegmentInterface $segment
-     * @param array $features
+     * @param array                 $features
      */
     protected function setFeaturesForSegment($segment, $features)
     {
+        foreach($features as $key => $feature) {
+            $segment->setFeature($key, $feature);
+        }
     }
 }
