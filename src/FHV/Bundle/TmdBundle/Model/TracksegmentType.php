@@ -8,12 +8,12 @@ namespace FHV\Bundle\TmdBundle\Model;
  */
 final class TracksegmentType
 {
-    const UNDEFINIED = 0;
-    const DRIVE = 1;
-    const BUS = 2;
-    const TRAIN = 3;
-    const WALK = 4;
-    const BIKE = 5;
+    const UNDEFINIED = 'unknown';
+    const DRIVE = 'drive';
+    const BUS = 'bus';
+    const TRAIN = 'train';
+    const WALK = 'walk';
+    const BIKE = 'bike';
 
     private function __construct()
     {

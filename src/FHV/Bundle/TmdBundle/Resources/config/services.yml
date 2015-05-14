@@ -56,6 +56,10 @@ services:
             - %tmd.segmentation.max_time_without_movement%
             - %tmd.segmentation.max_velocity_for_nearly_stoppoints%
 
+    fhv_tmd.travelModeFilter:
+          class: FHV\Bundle\TmdBundle\Filter\TravelModeFilter
+          arguments: []
+
     fhv_tmd.databaseFilter:
           class: FHV\Bundle\TmdBundle\Filter\DatabaseFilter
           arguments: []
@@ -84,6 +88,7 @@ services:
         - @fhv_tmd.fileReaderFilter
         - @fhv_tmd.segmentationFilter
         - @fhv_tmd.segmentFilter
+        - @fhv_tmd.travelModeFilter
         - @fhv_tmd.databaseFilter
 
 

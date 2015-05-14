@@ -34,13 +34,13 @@ interface TracksegmentInterface
 
     /**
      * Gets the type
-     * @return int
+     * @return string
      */
     public function getType();
 
     /**
      * Sets the type
-     * @param int $type
+     * @param string $type
      */
     public function setType($type);
 

@@ -247,10 +247,12 @@ class BasicDecissionTree
      * Process values by tree
      *
      * @param array $values
+     *
+     * @return array
      */
     public function process(array $values)
     {
-        $this->tree->process($values);
+        return $this->tree->process($values);
     }
 
     /**

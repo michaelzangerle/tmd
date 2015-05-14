@@ -20,7 +20,7 @@ class Result
 
     /**
      * @Expose
-     * @var integer
+     * @var string
      */
     private $transportType = TracksegmentType::UNDEFINIED;
 
@@ -51,7 +51,7 @@ class Result
     /**
      * Set transportType
      *
-     * @param integer $transportType
+     * @param string $transportType
      *
      * @return Result
      */
@@ -65,7 +65,7 @@ class Result
     /**
      * Get transportType
      *
-     * @return integer
+     * @return string
      */
     public function getTransportType()
     {

@@ -39,7 +39,7 @@ class Tracksegment implements TracksegmentInterface
     protected $result;
 
     /**
-     * @var int
+     * @var string
      */
     protected $type;
 

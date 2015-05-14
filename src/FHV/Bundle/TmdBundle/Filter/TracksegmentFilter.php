@@ -70,7 +70,7 @@ class TracksegmentFilter extends AbstractFilter
                     ]
                 );
             } else {
-                throw new InvalidArgumentException('SegmentFilter: Data param should contain trackpoints!');
+                throw new InvalidArgumentException('SegmentFilter: Data param should contain trackpoints or a track with the analyse type!');
             }
         }
     }

@@ -9,7 +9,7 @@ namespace FHV\Bundle\TmdBundle\Model;
 class Result implements ResultInterface
 {
     /**
-     * @var integer
+     * @var string
      */
     private $transportType = TracksegmentType::UNDEFINIED;
 
@@ -17,6 +17,11 @@ class Result implements ResultInterface
      * @var integer
      */
     private $analizationType;
+
+    /**
+     * @var float
+     */
+    private $calcPrecision;
 
     /**
      * Set transportType
@@ -64,5 +69,21 @@ class Result implements ResultInterface
     public function getAnalizationType()
     {
         return $this->analizationType;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCalcPrecision()
+    {
+        return $this->calcPrecision;
+    }
+
+    /**
+     * @param float $calcPrecision
+     */
+    public function setCalcPrecision($calcPrecision)
+    {
+        $this->calcPrecision = $calcPrecision;
     }
 }
