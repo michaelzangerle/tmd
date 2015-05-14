@@ -34,7 +34,6 @@ class TrackController extends FOSRestController implements ClassResourceInterfac
                 60
             ); // TODO possible security issue with file name?
 
-            // TODO inject analyse config
             $method = $request->get('method', 'basic');
             $xmlFile = $file->move(__DIR__ . '/../uploaded', $timeStamp . '_' . $fileName);
 

@@ -72,8 +72,9 @@ class TrackManager implements TrackManagerInterface
      */
     public function create(File $file, $method)
     {
+        // TODO inject analyse config and check if given mode exists
         $this->track->setAnalyseType($method);
-        $this->initFilters();
+        $this->initBasicFilters();
         $this->frFilter->run(['fileName' => $file, 'analyseType' => $method]);
         $this->frFilter->parentHasFinished();
         $this->em->persist($this->track);
@@ -83,9 +84,9 @@ class TrackManager implements TrackManagerInterface
     }
 
     /**
-     * Initializes and connects filters
+     * Initializes and connects filters for basic analyse method
      */
-    protected function initFilters()
+    protected function initBasicFilters()
     {
         new Pipe($this->frFilter, $this->tpFilter);
         new Pipe($this->tpFilter, $this->segmentationFilter);

@@ -5,13 +5,11 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
-use FHV\Bundle\TmdBundle\Model\TrackInterface;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Model\Tracksegment;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
-use FHV\Bundle\TmdBundle\Model\Trackpoint;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
-use Track;
+use FHV\Bundle\TmdBundle\Model\Feature;
 
 /**
  * Creates a segment from trackpoints
@@ -162,16 +160,16 @@ class TracksegmentFilter extends AbstractFilter
             }
 
             return [
-                'meanAcceleration' => $totalAcceleration / $accTrackPoints,
-                'meanVelocity' => $totalVelocity / $amountOfTrackPoints,
-                'maxAcceleration' => $maxAcceleration,
-                'maxVelocity' => $maxVelocity,
+                Feature::MEAN_ACCELERATION => $totalAcceleration / $accTrackPoints,
+                Feature::MEAN_VELOCITY => $totalVelocity / $amountOfTrackPoints,
+                Feature::MAX_ACCELERATION => $maxAcceleration,
+                Feature::MAX_VELOCITY => $maxVelocity,
                 'time' => $time,
                 'distance' => $distance,
                 'startPoint' => $gpsTrackPoints[0],
                 'endPoint' => $gpsTrackPoints[$amountOfTrackPoints],
                 'trackPoints' => $gpsTrackPoints,
-                'stopRate' => $stopCounter / $distance,
+                Feature::STOP_RATE => $stopCounter / $distance,
                 'type' => $type
             ];
         }
@@ -199,11 +197,11 @@ class TracksegmentFilter extends AbstractFilter
             $features['type']
         );
 
-        $seg->setFeature('meanVelocity', $features['meanVelocity']);
-        $seg->setFeature('meanAcceleration', $features['meanAcceleration']);
-        $seg->setFeature('maxAcceleration', $features['maxAcceleration']);
-        $seg->setFeature('maxVelocity', $features['maxVelocity']);
-        $seg->setFeature('stopRate', $features['stopRate']);
+        $seg->setFeature(Feature::MEAN_VELOCITY, $features[Feature::MEAN_VELOCITY]);
+        $seg->setFeature(Feature::MEAN_ACCELERATION, $features[Feature::MEAN_ACCELERATION]);
+        $seg->setFeature(Feature::MAX_ACCELERATION, $features[Feature::MAX_ACCELERATION]);
+        $seg->setFeature(Feature::MAX_VELOCITY, $features[Feature::MAX_VELOCITY]);
+        $seg->setFeature(Feature::STOP_RATE, $features[Feature::STOP_RATE]);
 
         return $seg;
     }
