@@ -63,12 +63,19 @@ class FileReaderFilter extends AbstractFilter
      * Reads all segments from a gpx file
      *
      * @param string $fileName
+     *
+     * @throws InvalidArgumentException
      */
     protected function readSegments($fileName)
     {
         $doc = new \SimpleXMLElement($fileName, 0, true);
-        $doc->registerXPathNamespace('gpx', $this->gpxNameSpace);
+        $ns = $this->getNamespace($doc->getNamespaces());
+        $doc->registerXPathNamespace('gpx', $ns);
         $segments = $doc->xpath('//gpx:trkseg');
+
+        if(count($segments) === 0) {
+            throw new InvalidArgumentException('FileReaderFilter: No segments found!');
+        }
 
         foreach ($segments as $segment) {
             $this->processSegment($segment);
@@ -97,5 +104,25 @@ class FileReaderFilter extends AbstractFilter
                 )
             );
         }
+    }
+
+    /**
+     * Returns first namespace with containing gpx or default
+     *
+     * @param array $nspaces
+     *
+     * @return string
+     */
+    protected function getNamespace(array $nspaces)
+    {
+        $ns = $this->gpxNameSpace;
+        foreach($nspaces as $nspace){
+            $tmpNs = strtolower($nspace);
+            if(strpos($tmpNs, 'gpx') !== false){
+                $ns = $nspace;
+                break;
+            }
+        }
+        return $ns;
     }
 }
