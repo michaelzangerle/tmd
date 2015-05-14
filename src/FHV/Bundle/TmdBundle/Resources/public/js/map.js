@@ -40,29 +40,51 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
         drawSegment: function (segment) {
             if (!!segment.trackpoints && segment.trackpoints.length >= 2) {
 
-                var lineSymbol = {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    strokeColor: 'red',
-                    strokeWeight: 4
-                };
+                var color = this.getColorByType(segment.result.transport_type),
+                    lineSymbol = {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        strokeColor: color,
+                        strokeWeight: 4
+                    },
 
-                var coordinates = this.createCoordinates(segment.trackpoints);
-                var segmentPath = new google.maps.Polyline({
-                    path: coordinates,
-                    geodesic: true,
-                    strokeColor: 'red',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2,
-                    icons: [{
-                        icon: lineSymbol,
-                        offset: '100%'
-                    },{
-                        icon: lineSymbol,
-                        offset: '0%'
-                    }]
-                });
+                    coordinates = this.createCoordinates(segment.trackpoints),
+                    segmentPath = new google.maps.Polyline({
+                        path: coordinates,
+                        geodesic: true,
+                        strokeColor: color,
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2,
+                        icons: [{
+                            icon: lineSymbol,
+                            offset: '100%'
+                        }, {
+                            icon: lineSymbol,
+                            offset: '0%'
+                        }]
+                    });
 
                 segmentPath.setMap(this.map);
+            }
+        },
+
+        /**
+         * Gets color for a transport mode type
+         * @param type
+         */
+        getColorByType: function(type){
+            switch(type){
+                case 'drive':
+                    return 'black';
+                case 'bus':
+                    return 'yellow';
+                case 'train':
+                    return 'red';
+                case 'bike':
+                    return 'green';
+                case 'walk':
+                    return 'brown';
+                default:
+                    return 'pink';
             }
         },
 
@@ -74,7 +96,7 @@ define(['async!//maps.googleapis.com/maps/api/js?v=3.exp'], function () {
         createCoordinates: function (trackPoints) {
             var result = [], coordinate = null;
 
-            if(!!this.lastCoordinate) {
+            if (!!this.lastCoordinate) {
                 result.push(this.lastCoordinate);
             }
 
