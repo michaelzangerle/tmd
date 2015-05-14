@@ -60,6 +60,10 @@ services:
           class: FHV\Bundle\TmdBundle\Filter\TravelModeFilter
           arguments: []
 
+    fhv_tmd.postProcessFilter:
+          class: FHV\Bundle\TmdBundle\Filter\PostprocessFilter
+          arguments: []
+
     fhv_tmd.databaseFilter:
           class: FHV\Bundle\TmdBundle\Filter\DatabaseFilter
           arguments: []
@@ -89,6 +93,7 @@ services:
         - @fhv_tmd.segmentationFilter
         - @fhv_tmd.segmentFilter
         - @fhv_tmd.travelModeFilter
+        - @fhv_tmd.postProcessFilter
         - @fhv_tmd.databaseFilter
 
 

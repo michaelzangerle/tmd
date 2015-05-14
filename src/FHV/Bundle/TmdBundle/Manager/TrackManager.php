@@ -50,6 +50,11 @@ class TrackManager implements TrackManagerInterface
      */
     protected $tmFilter;
 
+    /**
+     * @var FilterInterface
+     */
+    protected $ppFilter;
+
     function __construct(
         EntityManager $em,
         FilterInterface $tpFilter,
@@ -57,6 +62,7 @@ class TrackManager implements TrackManagerInterface
         FilterInterface $segmentationFilter,
         FilterInterface $segmentFilter,
         FilterInterface $travelModeFilter,
+    FilterInterface $postProcessFilter,
         DatabaseFilterInterface $databaseFilterInterface
     ) {
         $this->em = $em;
@@ -65,6 +71,7 @@ class TrackManager implements TrackManagerInterface
         $this->segmentationFilter = $segmentationFilter;
         $this->segmentFilter = $segmentFilter;
         $this->tmFilter = $travelModeFilter;
+        $this->ppFilter = $postProcessFilter;
         $this->dbFilter = $databaseFilterInterface;
         $this->track = new Track();
     }
@@ -99,7 +106,8 @@ class TrackManager implements TrackManagerInterface
         new Pipe($this->tpFilter, $this->segmentationFilter);
         new Pipe($this->segmentationFilter, $this->segmentFilter);
         new Pipe($this->segmentFilter, $this->tmFilter);
-        new Pipe($this->tmFilter, $this->dbFilter);
+        new Pipe($this->tmFilter, $this->ppFilter);
+        new Pipe($this->ppFilter, $this->dbFilter);
 
         $this->dbFilter->provideTrack($this->track);
     }

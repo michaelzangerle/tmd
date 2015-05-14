@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 
+use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\Entity\Track as TrackEntity;
 use FHV\Bundle\TmdBundle\Entity\Tracksegment as TracksegmentEntity;
 use FHV\Bundle\TmdBundle\Entity\Trackpoint as TrackpointEntity;
@@ -42,11 +43,12 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
      */
     public function run($data)
     {
-        if ($data !== null &&
-            array_key_exists('track', $data) && $data['track'] instanceof TrackModel &&
-            array_key_exists('analyseType', $data) && $data['analyseType'] !== null
-        ) {
-            $this->generateTrackEntityFromModel($data['track']);
+        if ($data !== null && $data instanceof TrackModel) {
+            $this->generateTrackEntityFromModel($data);
+        } else {
+            throw new InvalidArgumentException(
+                'DatabaseFilter: Data param should be instance of Track!'
+            );
         }
     }
 

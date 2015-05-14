@@ -34,15 +34,12 @@ class TravelModeFilter extends AbstractFilter
      */
     public function run($data)
     {
-        if ($data !== null &&
-            array_key_exists('track', $data) && $data['track'] !== null &&
-            array_key_exists('analyseType', $data) && $data['analyseType'] !== null
-        ) {
-            $this->process($data['track']);
+        if ($data !== null && $data instanceof Track) {
+            $this->process($data);
             $this->write($data);
         } else {
             throw new InvalidArgumentException(
-                'TravelModeFilter: Data param should contain a track and a analyse type!'
+                'TravelModeFilter: Data param should be instance of track!'
             );
         }
     }

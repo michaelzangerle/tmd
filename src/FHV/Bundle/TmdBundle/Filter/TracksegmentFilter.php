@@ -58,7 +58,7 @@ class TracksegmentFilter extends AbstractFilter
                 $features = $this->getSegmentFeatures($segment->getTrackPoints(), $segment->getType());
                 $this->setFeaturesForSegment($segment, $features);
             }
-            $this->write($data);
+            $this->write($data['track']);
         } else {
             if (isset($data['trackPoints'])) {
                 $features = $this->getSegmentFeatures($data['trackPoints'], $data['type']);
