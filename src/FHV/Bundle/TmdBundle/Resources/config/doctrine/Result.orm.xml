@@ -9,7 +9,7 @@
 
         <field name="transportType" type="string" nullable="false"/>
         <field name="correctedByUser" type="boolean" nullable="false"/>
-        <field name="calcPrecision" type="float" nullable="true"/>
+        <field name="probability" type="float" nullable="true"/>
         <field name="analyseType" type="string" nullable="true"/>
 
         <one-to-one field="segment" target-entity="FHV\Bundle\TmdBundle\Entity\Tracksegment" inversed-by="result">

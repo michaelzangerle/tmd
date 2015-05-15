@@ -46,7 +46,7 @@ class Result
      * @Expose
      * @var float
      */
-    private $calcPrecision;
+    private $probability;
 
     /**
      * Set transportType
@@ -131,27 +131,27 @@ class Result
     }
 
     /**
-     * Set calcPrecision
+     * Set probability
      *
-     * @param float $calcPrecision
+     * @param float $probability
      *
      * @return Result
      */
-    public function setCalcPrecision($calcPrecision)
+    public function setProbability($probability)
     {
-        $this->calcPrecision = $calcPrecision;
+        $this->probability = $probability;
 
         return $this;
     }
 
     /**
-     * Get calcPrecision
+     * Get probability
      *
      * @return float
      */
-    public function getCalcPrecision()
+    public function getProbability()
     {
-        return $this->calcPrecision;
+        return $this->probability;
     }
 
     /**

@@ -96,6 +96,11 @@ services:
         - @fhv_tmd.postProcessFilter
         - @fhv_tmd.databaseFilter
 
+    fhv_tmd.resultManager:
+        class: FHV\Bundle\TmdBundle\Manager\ResultManager
+        arguments:
+        - @doctrine.orm.entity_manager
+
 
 
 

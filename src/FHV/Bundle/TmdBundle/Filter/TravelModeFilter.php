@@ -55,7 +55,7 @@ class TravelModeFilter extends AbstractFilter
             $treeResult = $this->tree->process($segment->getFeatures());
 
             $result = $segment->getResult();
-            $result->setCalcPrecision(round($treeResult->getMaxValue()/$treeResult->getTotal(),2));
+            $result->setProbability(round($treeResult->getMaxValue()/$treeResult->getTotal(),2));
             $result->setTransportType($treeResult->getMaxName());
             $segment->setType($treeResult->getMaxName());
         }

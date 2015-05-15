@@ -153,7 +153,7 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
         $result->setSegment($segment);
         $result->setAnalyseType($rm->getAnalizationType());
         $result->setTransportType($rm->getTransportType());
-        $result->setCalcPrecision($rm->getCalcPrecision());
+        $result->setProbability($rm->getProbability());
         $segment->setResult($result);
 
         return $result;

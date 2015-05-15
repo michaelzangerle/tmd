@@ -118,4 +118,12 @@ interface TracksegmentInterface
      * @return array
      */
     public function getFeatures();
+
+    /**
+     * Append trackpoints to the existing ones
+     * @param TrackpointInterface[] $trackPoints
+     *
+     * @return mixed
+     */
+    public function addTrackPoints(array $trackPoints);
 }

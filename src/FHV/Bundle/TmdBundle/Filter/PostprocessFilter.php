@@ -42,7 +42,8 @@ class PostprocessFilter extends AbstractFilter
      */
     protected function process(Track $track)
     {
-        // TODO change transport modes where they do not make any sense
+
+        // nice to have
         $this->mergeSegments($track);
     }
 
@@ -59,16 +60,18 @@ class PostprocessFilter extends AbstractFilter
         $segments = $track->getSegments();
         $length = count($segments);
         for ($i = 1; $i < $length; $i++) {
-            if ($merged[$cur]->getType() === $segments[$i]->getType()) {
-
-                // TODO
-                $seg = $segments[$i];
-                $seg->getTime();
-                $seg->getDistance();
-                $seg->getEndPoint();
-                $seg->getTrackPoints();
-                $seg->getFeatures();
-                $seg->getFeatures();
+            $seg = $segments[$i];
+            $curSeg = $merged[$cur];
+            if ($curSeg->getType() === $seg->getType()) {
+                $curSeg->setTime($curSeg->getTime() + $seg->getTime());
+                $curSeg->setDistance($curSeg->getDistance() + $seg->getDistance());
+                $curSeg->setEndPoint($seg->getEndPoint());
+                $curSeg->addTrackPoints($seg->getTrackPoints());
+                $this->mergeFeatures($curSeg->getFeatures(), $seg->getFeatures());
+                $this->mergeResults($curSeg->getResult(), $seg->getResult());
+            } else {
+                $merged[] = $seg;
+                $cur++;
             }
         }
     }
@@ -81,6 +84,7 @@ class PostprocessFilter extends AbstractFilter
      */
     protected function mergeFeatures($features1, $features2)
     {
+
     }
 
     /**

@@ -12,7 +12,6 @@ define(['map'], function (Map) {
         tracksUrl: '/api/tracks'
     };
 
-
     return {
 
         $formView: null,
@@ -21,7 +20,6 @@ define(['map'], function (Map) {
         $form: null,
         $submitButton: null,
         $errorForm: null,
-
 
         /**
          * Initialize form
@@ -101,13 +99,13 @@ define(['map'], function (Map) {
                 processData: false,
                 contentType: false
             })
-            .done(function (data) {
-                this.fileUploadedHandler(data); // could be done earlier
-            }.bind(this))
-            .fail(function (jqXHR) {
-                console.error('error during upload or processing of the file!');
-                console.error(jqXHR.responseJSON.error.exception[0].message)
-            });
+                .done(function (data) {
+                    this.fileUploadedHandler(data); // could be done earlier
+                }.bind(this))
+                .fail(function (jqXHR) {
+                    console.error('error during upload or processing of the file!');
+                    console.error(jqXHR.responseJSON.error.exception[0].message)
+                });
         },
 
         /**

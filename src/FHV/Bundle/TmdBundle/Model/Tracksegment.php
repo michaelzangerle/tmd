@@ -227,4 +227,12 @@ class Tracksegment implements TracksegmentInterface
     {
         return $this->features;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addTrackPoints(array $tps)
+    {
+        $this->trackpoints = array_merge($this->trackpoints, $tps);
+    }
 }

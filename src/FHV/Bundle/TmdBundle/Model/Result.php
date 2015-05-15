@@ -21,7 +21,7 @@ class Result implements ResultInterface
     /**
      * @var float
      */
-    private $calcPrecision;
+    private $probability;
 
     /**
      * Set transportType
@@ -74,16 +74,16 @@ class Result implements ResultInterface
     /**
      * @return float
      */
-    public function getCalcPrecision()
+    public function getProbability()
     {
-        return $this->calcPrecision;
+        return $this->probability;
     }
 
     /**
-     * @param float $calcPrecision
+     * @param float $probability
      */
-    public function setCalcPrecision($calcPrecision)
+    public function setProbability($probability)
     {
-        $this->calcPrecision = $calcPrecision;
+        $this->probability = $probability;
     }
 }

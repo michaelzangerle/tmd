@@ -18,6 +18,7 @@
     "bootstrap-material-design": "~0.3.0",
     "bootstrap": "~3.3.4",
     "requirejs": "~2.1.17",
-    "requirejs-plugins": "~1.0.3"
+    "requirejs-plugins": "~1.0.3",
+    "underscore": "~1.8.3"
   }
 }
