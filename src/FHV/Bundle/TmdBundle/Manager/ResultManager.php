@@ -45,8 +45,7 @@ class ResultManager implements ResultManagerInterface
             if (array_key_exists('transport_type', $data)) {
                 // TODO check if given type is valid
                 $type = $data['transport_type'];
-                $result->setTransportType($type);
-                $result->setCorrectedByUser(true);
+                $result->setCorrectedTransportType($type);
                 $this->em->flush();
 
                 return $result;

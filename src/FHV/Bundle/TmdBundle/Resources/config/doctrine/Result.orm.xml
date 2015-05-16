@@ -7,8 +7,8 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="transportType" type="string" nullable="false"/>
-        <field name="correctedByUser" type="boolean" nullable="false"/>
+        <field name="transportType" type="string" length="255" nullable="false"/>
+        <field name="correctedTransportType" type="string" length="255" nullable="true"/>
         <field name="probability" type="float" nullable="true"/>
         <field name="analyseType" type="string" nullable="true"/>
 

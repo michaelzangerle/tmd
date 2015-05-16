@@ -26,9 +26,9 @@ class Result
 
     /**
      * @Expose
-     * @var boolean
+     * @var string
      */
-    private $correctedByUser = false;
+    private $correctedTransportType;
 
     /**
      * @Expose
@@ -75,13 +75,13 @@ class Result
     /**
      * Set correctedByUser
      *
-     * @param boolean $correctedByUser
+     * @param string $correctedTransportType
      *
      * @return Result
      */
-    public function setCorrectedByUser($correctedByUser)
+    public function setCorrectedTransportType($correctedTransportType)
     {
-        $this->correctedByUser = $correctedByUser;
+        $this->correctedTransportType = $correctedTransportType;
 
         return $this;
     }
@@ -89,11 +89,11 @@ class Result
     /**
      * Get correctedByUser
      *
-     * @return boolean
+     * @return string
      */
-    public function getCorrectedByUser()
+    public function getCorrectedTransportType()
     {
-        return $this->correctedByUser;
+        return $this->correctedTransportType;
     }
 
     /**
