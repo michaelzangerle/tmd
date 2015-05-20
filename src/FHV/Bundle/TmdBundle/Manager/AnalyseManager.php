@@ -11,6 +11,13 @@ use Doctrine\ORM\EntityManagerInterface;
 class AnalyseManager implements AnalyseMangerInterface
 {
     /**
+     * Transportation modes
+     * todo make modes configurable
+     * @var array
+     */
+    protected $modes = ['bus', 'bike', 'walk', 'train', 'drive'];
+
+    /**
      * @var EntityManagerInterface
      */
     protected $em;
@@ -67,8 +74,8 @@ class AnalyseManager implements AnalyseMangerInterface
     /**
      * Gets results by criteria
      *
-     * @param string  $analyseType
-     * @param string  $mode
+     * @param string $analyseType
+     * @param string $mode
      *
      * @param boolean $correctedTransportType
      *
@@ -99,12 +106,11 @@ class AnalyseManager implements AnalyseMangerInterface
                 $response[$analyseType] = [];
                 $response[$analyseType]['total'] = $this->getResultsCountByMode($analyseType, $mode);
 
-                // todo make modes configurable?
-                $response[$analyseType]['bus'] = $this->getResultsCountByMode($analyseType, $mode, 'bus');
-                $response[$analyseType]['drive'] = $this->getResultsCountByMode($analyseType, $mode, 'drive');
-                $response[$analyseType]['bike'] = $this->getResultsCountByMode($analyseType, $mode, 'bike');
-                $response[$analyseType]['walk'] = $this->getResultsCountByMode($analyseType, $mode, 'walk');
-                $response[$analyseType]['train'] = $this->getResultsCountByMode($analyseType, $mode, 'train');
+                foreach ($this->modes as $m) {
+                    if ($m !== $mode) {
+                        $response[$analyseType][$m] = $this->getResultsCountByMode($analyseType, $m, $mode);
+                    }
+                }
             }
 
             return $response;
@@ -113,7 +119,6 @@ class AnalyseManager implements AnalyseMangerInterface
 
     /**
      * Gets the per analyse type and per mode the total and correct identified segments
-     *
      *
      * @return array
      */
@@ -124,12 +129,9 @@ class AnalyseManager implements AnalyseMangerInterface
             $response[$analyseType] = [];
             $response[$analyseType]['total'] = $this->getResultsCountBy(['analyseType' => $analyseType]);
 
-            // todo make modes configurable?
-            $response[$analyseType]['bus'] = $this->getResultsCountByMode($analyseType, 'bus', null);
-            $response[$analyseType]['drive'] = $this->getResultsCountByMode($analyseType, 'drive', null);
-            $response[$analyseType]['bike'] = $this->getResultsCountByMode($analyseType, 'bike', null);
-            $response[$analyseType]['walk'] = $this->getResultsCountByMode($analyseType, 'walk', null);
-            $response[$analyseType]['train'] = $this->getResultsCountByMode($analyseType, 'train', null);
+            foreach ($this->modes as $mode) {
+                $response[$analyseType][$mode] = $this->getResultsCountByMode($analyseType, $mode);
+            }
         }
 
         return $response;
