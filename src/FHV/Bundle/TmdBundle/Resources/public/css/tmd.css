@@ -2,6 +2,11 @@ html,body {
     height: 101%;
 }
 
+body{
+    color: #232830;
+    background: #fff;
+}
+
 /*---------------------------------------------------- */
 /*
 /*  map view
@@ -21,6 +26,9 @@ html,body {
     padding: 0;
 }
 
+.chart {
+    max-width: 100%;
+}
 /*---------------------------------------------------- */
 /*
 /*  Util
@@ -45,4 +53,8 @@ html,body {
 
 .m-bottom-30 {
     margin-bottom: 30px !important;
+}
+
+.m-bottom-60 {
+    margin-bottom: 60px !important;
 }

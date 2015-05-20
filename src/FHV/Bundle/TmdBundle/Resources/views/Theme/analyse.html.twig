@@ -1,25 +1,65 @@
 {% extends 'FHVTmdBundle::Theme/base.html.twig' %}
 
 {% block content %}
+
     <div class="container">
-        <h1>Results of the analysed tracks</h1>
-
-        <div class="row">
-            <div class="col-xs-12 col-md-6 col-lg-4">
-                <h4>Total analysed segments vs correct analysed segments</h4>
-                <canvas id="totalChart"></canvas>
-            </div>
-
-            <div class="col-xs-12 col-md-6 col-lg-4">
-                <h4>Correct analysed segments per mode</h4>
-                <canvas id="correctAnalysed"></canvas>
-            </div>
-
-            <div class="col-xs-12 col-md-6 col-lg-4">
-                <h4>False analysed segments for bus mode</h4>
-                <canvas id="falseAnalysed"></canvas>
+        <div class="row m-bottom-60">
+            <div class="col-md-12">
+                <h1>Results of the analysed tracks</h1>
+                <p>The following charts represent the results of all the analysed segments for both analyse methods - basic and with gis data.</p>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6 m-bottom-60">
+                <h4>Total analysed segments vs correct analysed segments</h4>
+                <p>This chart shows the total analysed segments and the correct analysed segments per analyse method.</p>
+                <canvas class="chart" id="totalChart"></canvas>
+            </div>
+
+            <div class="col-xs-12 col-md-6 m-bottom-60">
+                <h4>Correct analysed segments per mode</h4>
+                <p>This chart shows the total and the number of correct analysed segments per mode</p>
+                <canvas class="chart" id="correctAnalysed"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6 m-bottom-60">
+                <h4>False analysed segments for bus mode</h4>
+                <p>This chart shows the total analysed bus segments and the number of false analysed segments per remaining mode.</p>
+                <canvas class="chart" id="falseAnalysedBus"></canvas>
+            </div>
+
+            <div class="col-xs-12 col-md-6 m-bottom-60">
+                <h4>False analysed segments for drive mode</h4>
+                <p>This chart shows the total analysed drive segments and the number of false analysed segments per remaining mode.</p>
+                <canvas class="chart" id="falseAnalysedDrive"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6 m-bottom-60">
+                <h4>False analysed segments for bike mode</h4>
+                <p>This chart shows the total analysed bike segments and the number of false analysed segments per remaining mode.</p>
+                <canvas class="chart" id="falseAnalysedBike"></canvas>
+            </div>
+
+            <div class="col-xs-12 col-md-6 m-bottom-60">
+                <h4>False analysed segments for walk mode</h4>
+                <p>This chart shows the total analysed walk segments and the number of false analysed segments per remaining mode.</p>
+                <canvas class="chart" id="falseAnalysedWalk"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6 m-bottom-60">
+                <h4>False analysed segments for train mode</h4>
+                <p>This chart shows the total analysed train segments and the number of false analysed segments per remaining mode.</p>
+                <canvas class="chart" id="falseAnalysedTrain"></canvas>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
 
