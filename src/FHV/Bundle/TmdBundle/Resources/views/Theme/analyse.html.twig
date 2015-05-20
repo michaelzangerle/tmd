@@ -1,0 +1,28 @@
+{% extends 'FHVTmdBundle::Theme/base.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Results of the analysed tracks</h1>
+
+        <div class="row">
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <h4>Total analysed segments vs correct analysed segments</h4>
+                <canvas id="totalChart"></canvas>
+            </div>
+
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <h4>Correct analysed segments per mode</h4>
+                <canvas id="correctAnalysed"></canvas>
+            </div>
+
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <h4>False analysed segments for bus mode</h4>
+                <canvas id="falseAnalysed"></canvas>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block mainRequire %}
+    <script src="/bundles/fhvtmd/js/analyse.js"></script>
+{% endblock %}

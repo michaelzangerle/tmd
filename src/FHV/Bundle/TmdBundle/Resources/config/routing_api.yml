@@ -5,3 +5,7 @@ fhv_tmd_track:
 fhv_tmd_result:
     type:     rest
     resource: FHV\Bundle\TmdBundle\Controller\ResultController
+
+fhv_tmd_analyse:
+    type:     rest
+    resource: FHV\Bundle\TmdBundle\Controller\AnalyseController

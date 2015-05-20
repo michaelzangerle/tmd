@@ -1,8 +1,13 @@
 {% extends 'FHVTmdBundle::Theme/base.html.twig' %}
 
-    {% block content %}
+{% block content %}
 
-        {% include 'FHVTmdBundle::Theme/partials/formView.html.twig' %}
-        {% include 'FHVTmdBundle::Theme/partials/mapView.html.twig' %}
+    {% include 'FHVTmdBundle::Theme/partials/formView.html.twig' %}
+    {% include 'FHVTmdBundle::Theme/partials/mapView.html.twig' %}
 
-    {% endblock %}
+{% endblock %}
+
+
+{% block mainRequire %}
+    <script src="/bundles/fhvtmd/js/create.js"></script>
+{% endblock %}

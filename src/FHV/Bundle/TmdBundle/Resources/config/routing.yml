@@ -3,10 +3,10 @@ fhv_tmd_index:
     defaults: { _controller: FHVTmdBundle:Template:index }
 
 fhv_tmd_create:
-    path:     /create/{name}
-    defaults: { _controller: FHVTmdBundle:Template:create, name: foo }
+    path:     /create
+    defaults: { _controller: FHVTmdBundle:Template:create }
 
-fhv_tmd_analytics:
-    path:     /analytics/{name}
-    defaults: { _controller: FHVTmdBundle:Template:analytics, name: bar }
+fhv_tmd_results:
+    path:     /analyse
+    defaults: { _controller: FHVTmdBundle:Template:analyse }
 

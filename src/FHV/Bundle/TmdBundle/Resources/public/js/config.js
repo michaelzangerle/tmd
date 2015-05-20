@@ -5,7 +5,8 @@ requirejs.config({
         'bootstrap': '../vendor/bootstrap/dist/js/bootstrap.min',
         'material': '../vendor/bootstrap-material-design/dist/js/material.min',
         'async': '../vendor/requirejs-plugins/src/async',
-        'underscore': '../vendor/underscore/underscore-min'
+        'underscore': '../vendor/underscore/underscore-min',
+        'chart': '../vendor/Chart.js/Chart.min'
     },
 
     shim: {
@@ -23,9 +24,4 @@ requirejs.config({
             exports: '_'
         }
     }
-});
-
-require(['jquery', 'create', 'material'], function ($, create) {
-    $.material.init();
-    create.initialize();
 });

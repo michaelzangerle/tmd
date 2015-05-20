@@ -17,12 +17,9 @@ class TemplateController extends Controller
      */
     public function indexAction()
     {
-        $name = 'default';
-
         return $this->render(
             'FHVTmdBundle:Theme:index.html.twig',
             array(
-                'name' => $name,
                 'currentNavigation' => 'index'
             )
         );
@@ -31,16 +28,13 @@ class TemplateController extends Controller
     /**
      * Returns the template for the create page
      *
-     * @param string $name
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function createAction($name = 'default')
+    public function createAction()
     {
         return $this->render(
             'FHVTmdBundle:Theme:create.html.twig',
             array(
-                'name' => $name,
                 'currentNavigation' => 'create'
             )
         );
@@ -49,17 +43,14 @@ class TemplateController extends Controller
     /**
      * Returns the template for the analytics page
      *
-     * @param string $name
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function analyticsAction($name = 'default')
+    public function analyseAction()
     {
         return $this->render(
-            'FHVTmdBundle:Theme:analytics.html.twig',
+            'FHVTmdBundle:Theme:analyse.html.twig',
             array(
-                'name' => $name,
-                'currentNavigation' => 'analytics'
+                'currentNavigation' => 'analyse'
             )
         );
     }

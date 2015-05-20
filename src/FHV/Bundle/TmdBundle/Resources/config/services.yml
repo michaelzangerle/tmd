@@ -69,7 +69,7 @@ services:
           arguments: []
 
     ##############################
-    # Training manager
+    # Manager
     ##############################
 
     fhv_tmd.trainingDataManager:
@@ -80,26 +80,29 @@ services:
           - @fhv_tmd.fileWriterFilter
           - @fhv_tmd.segmentFilter
 
-    ##############################
-    # Track manager
-    ##############################
-
     fhv_tmd.trackManager:
         class: FHV\Bundle\TmdBundle\Manager\TrackManager
         arguments:
-        - @doctrine.orm.entity_manager
-        - @fhv_tmd.trackPointFilter
-        - @fhv_tmd.fileReaderFilter
-        - @fhv_tmd.segmentationFilter
-        - @fhv_tmd.segmentFilter
-        - @fhv_tmd.travelModeFilter
-        - @fhv_tmd.postProcessFilter
-        - @fhv_tmd.databaseFilter
+          - @doctrine.orm.entity_manager
+          - @fhv_tmd.trackPointFilter
+          - @fhv_tmd.fileReaderFilter
+          - @fhv_tmd.segmentationFilter
+          - @fhv_tmd.segmentFilter
+          - @fhv_tmd.travelModeFilter
+          - @fhv_tmd.postProcessFilter
+          - @fhv_tmd.databaseFilter
 
     fhv_tmd.resultManager:
         class: FHV\Bundle\TmdBundle\Manager\ResultManager
         arguments:
-        - @doctrine.orm.entity_manager
+          - @doctrine.orm.entity_manager
+
+    fhv_tmd.analyseManager:
+        class: FHV\Bundle\TmdBundle\Manager\AnalyseManager
+        arguments:
+          - @doctrine.orm.entity_manager
+          - %tmd.analyse%
+
 
 
 
