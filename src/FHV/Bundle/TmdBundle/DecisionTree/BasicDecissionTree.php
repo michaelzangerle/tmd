@@ -103,7 +103,7 @@ class BasicDecissionTree
         $node15 = new Node();
         $node15->setParent($node14);
         $node14->setLeft($node15);
-        $node14->setDecision(new Decision(Feature::MAX_VELOCITY, Decision::GT_OPERATOR, 14.998));
+        $node15->setDecision(new Decision(Feature::MAX_VELOCITY, Decision::GT_OPERATOR, 14.998));
 
         // Level 9
         $node16 = new Node();
