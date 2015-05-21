@@ -58,7 +58,8 @@ services:
 
     fhv_tmd.travelModeFilter:
           class: FHV\Bundle\TmdBundle\Filter\TravelModeFilter
-          arguments: []
+          arguments:
+            - @fhv_tmd.decisionTreeManager
 
     fhv_tmd.postProcessFilter:
           class: FHV\Bundle\TmdBundle\Filter\PostprocessFilter
@@ -103,6 +104,10 @@ services:
           - @doctrine.orm.entity_manager
           - %tmd.analyse%
 
+    fhv_tmd.decisionTreeManager:
+        class: FHV\Bundle\TmdBundle\DecisionTree\Manager\DecisionTreeManager
+        arguments:
+          - %tmd.analyse%
 
 
 

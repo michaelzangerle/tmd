@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Manager;
 use Doctrine\ORM\EntityManager;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
+use FHV\Bundle\TmdBundle\DecisionTree\Manager\DecisionTreeManager;
 use FHV\Bundle\TmdBundle\Entity\Track;
 use FHV\Bundle\TmdBundle\Filter\DatabaseFilterInterface;
 use Symfony\Component\HttpFoundation\File\File;
@@ -51,7 +52,7 @@ class TrackManager implements TrackManagerInterface
     protected $tmFilter;
 
     /**
-     * @var FilterInterface
+     * @var FilterInterface // TODO remove?
      */
     protected $ppFilter;
 
@@ -62,7 +63,7 @@ class TrackManager implements TrackManagerInterface
         FilterInterface $segmentationFilter,
         FilterInterface $segmentFilter,
         FilterInterface $travelModeFilter,
-    FilterInterface $postProcessFilter,
+        FilterInterface $postProcessFilter,
         DatabaseFilterInterface $databaseFilterInterface
     ) {
         $this->em = $em;

@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\DecisionTree\BasicDecissionTree;
+use FHV\Bundle\TmdBundle\DecisionTree\Manager\DecisionTreeManagerInterface;
 use FHV\Bundle\TmdBundle\DecisionTree\Model\Result as TreeResult;
 use FHV\Bundle\TmdBundle\Model\Track;
 
@@ -19,9 +20,15 @@ class TravelModeFilter extends AbstractFilter
      */
     protected $tree;
 
-    function __construct()
+    /**
+     * @var DecisionTreeManagerInterface
+     */
+    protected $dtManager;
+
+    function __construct(DecisionTreeManagerInterface $dtManager)
     {
         parent::__construct();
+        $this->dtManager = $dtManager;
         $this->tree = new BasicDecissionTree();
     }
 
@@ -35,6 +42,9 @@ class TravelModeFilter extends AbstractFilter
     public function run($data)
     {
         if ($data !== null && $data instanceof Track) {
+
+//            $tree = $this->dtManager->getTree($data->getAnalysisType());
+
             $this->process($data);
             $this->write($data);
         } else {
