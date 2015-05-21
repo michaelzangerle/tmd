@@ -8,11 +8,11 @@ namespace FHV\Bundle\TmdBundle\Model;
  */
 final class Feature
 {
-    const STOP_RATE = 'stopRate';
-    const MEAN_VELOCITY = 'meanVelocity';
-    const MEAN_ACCELERATION = 'meanAcceleration';
-    const MAX_VELOCITY = 'maxVelocity';
-    const MAX_ACCELERATION = 'maxAcceleration';
+    const STOP_RATE = 'stoprate';
+    const MEAN_VELOCITY = 'meanvelocity';
+    const MEAN_ACCELERATION = 'meanacceleration';
+    const MAX_VELOCITY = 'maxvelocity';
+    const MAX_ACCELERATION = 'maxacceleration';
 
     private function __construct()
     {

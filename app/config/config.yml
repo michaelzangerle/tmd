@@ -122,11 +122,12 @@ fhv_tmd:
     basic:
       id: 1
       class: "BasicDecisionTree"
+      cacheDir: "%kernel.root_dir%/../decisionTrees/basic"
       txtFilePath: "%kernel.root_dir%/../decisionTrees/basic"
       txtFileName: "basicDecisionTree.txt"
       csv_fileHeaders:
-        - "stopRate"
-        - "meanVelocity"
-        - "meanAcceleration"
-        - "maxVelocity"
-        - "maxAcceleration"
+        - "stoprate"
+        - "meanvelocity"
+        - "meanacceleration"
+        - "maxvelocity"
+        - "maxacceleration"

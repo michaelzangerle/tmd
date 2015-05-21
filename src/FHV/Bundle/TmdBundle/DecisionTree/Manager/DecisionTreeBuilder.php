@@ -3,6 +3,8 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree\Manager;
 
 use FHV\Bundle\TmdBundle\DecisionTree\Exception\DecisionTreeException;
+use FHV\Bundle\TmdBundle\DecisionTree\Model\Decision;
+use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -51,14 +53,16 @@ class DecisionTreeBuilder
     {
         $finder = new Finder();
         $finder->in($this->txtFilePath)->files()->name($this->txtFileName)->sortByName();
+        $resource = [];
 
         foreach ($finder as $file) {
             /** @var SplFileInfo $file */
             $handle = fopen($file->getRealPath(), 'r');
             $this->processFile($handle);
+            $resource[] = new FileResource($file->getRealPath());
         }
 
-        return $this->tree;
+        return ['tree' => $this->tree, 'resource' => $resource];
     }
 
     /**
@@ -79,8 +83,8 @@ class DecisionTreeBuilder
     protected function processLine($line)
     {
         $tmp = explode('|   ', $line);
-        $level = count($tmp) - 1; // node level
-        $content = $tmp[$level]; // node content
+        $level = count($tmp)-1; // node level
+        $content = $tmp[count($tmp)-1]; // node content
 
         $contentPartials = explode(' ', $content);
         $feature = $contentPartials[0];
@@ -142,7 +146,7 @@ class DecisionTreeBuilder
                     $parent->setLeft($name);
                 }
             }
-        } elseif($result) {
+        } elseif ($result) {
             $this->createResult($this->lastOnLevel[$level], $result);
         }
     }
@@ -207,13 +211,13 @@ class DecisionTreeBuilder
     {
         switch ($comparator) {
             case '<=':
-                return '>';
+                return Decision::GT_OPERATOR;
             case '>':
-                return '<=';
+                return Decision::LTEQ_OPERATOR;
             case '<':
-                return '>=';
+                return Decision::GTEQ_OPERATOR;
             case '>=':
-                return '<';
+                return Decision::LT_OPERATOR;
             default:
                 throw new \InvalidArgumentException('Unknown comparator ' . $comparator . ' found!');
         }
@@ -228,11 +232,19 @@ class DecisionTreeBuilder
     {
         switch ($comp) {
             case '≤':
-                return '<=';
+            case '<=':
+                return Decision::LTEQ_OPERATOR;
             case '≥':
-                return '>=';
+            case '>=':
+                return Decision::GTEQ_OPERATOR;
+            case '&gt;':
+            case '>':
+                return Decision::GT_OPERATOR;
+            case '&lt;':
+            case '<':
+                return Decision::LT_OPERATOR;
             default:
-                return $comp;
+                throw new \InvalidArgumentException('Comparator ('.$comp.') not supportet!');
         }
     }
 }

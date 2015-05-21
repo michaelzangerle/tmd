@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\DecisionTree\BasicDecissionTree;
+use FHV\Bundle\TmdBundle\DecisionTree\DecisionTreeInterface;
 use FHV\Bundle\TmdBundle\DecisionTree\Manager\DecisionTreeManagerInterface;
 use FHV\Bundle\TmdBundle\DecisionTree\Model\Result as TreeResult;
 use FHV\Bundle\TmdBundle\Model\Track;
@@ -16,7 +17,7 @@ use FHV\Bundle\TmdBundle\Model\Track;
 class TravelModeFilter extends AbstractFilter
 {
     /**
-     * @var BasicDecissionTree
+     * @var DecisionTreeInterface
      */
     protected $tree;
 
@@ -29,7 +30,6 @@ class TravelModeFilter extends AbstractFilter
     {
         parent::__construct();
         $this->dtManager = $dtManager;
-        $this->tree = new BasicDecissionTree();
     }
 
     /**
@@ -42,9 +42,7 @@ class TravelModeFilter extends AbstractFilter
     public function run($data)
     {
         if ($data !== null && $data instanceof Track) {
-
-//            $tree = $this->dtManager->getTree($data->getAnalysisType());
-
+            $this->tree = $this->dtManager->getTree($data->getAnalysisType());
             $this->process($data);
             $this->write($data);
         } else {
@@ -60,12 +58,12 @@ class TravelModeFilter extends AbstractFilter
      */
     protected function process(Track $track)
     {
-        foreach($track->getSegments() as $segment){
+        foreach ($track->getSegments() as $segment) {
             /** @var TreeResult $treeResult */
             $treeResult = $this->tree->process($segment->getFeatures());
 
             $result = $segment->getResult();
-            $result->setProbability(round($treeResult->getMaxValue()/$treeResult->getTotal(),2));
+            $result->setProbability(round($treeResult->getMaxValue() / $treeResult->getTotal(), 2));
             $result->setTransportType($treeResult->getMaxName());
             $segment->setType($treeResult->getMaxName());
         }

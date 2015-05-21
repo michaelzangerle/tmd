@@ -152,11 +152,15 @@ class NodeDummy
     }
 
     /**
-     * @return array
+     * Returns results concatenated as string
+     * @return string
      */
     public function getResult()
     {
-        return $this->result;
+        if ($this->result) {
+            return implode(',', $this->result);
+        }
+        return null;
     }
 
     /**

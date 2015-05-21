@@ -43,19 +43,21 @@ class DecisionTreeManager implements DecisionTreeManagerInterface
             }
 
             $config = $this->config[$name];
-            $cache = new ConfigCache($config['class'] . '.php', true);
+            $cache = new ConfigCache($config['cacheDir'] . '/' . $config['class'] . '.php', true);
 
             if (!$cache->isFresh()) {
                 $dtb = new DecisionTreeBuilder($config['txtFilePath'], $config['txtFileName']);
-                $dt = $dtb->build();
-                $dumper = new DecisionTreeDumper($dt);
-//                $cache->write(
-//                    $dumper->dump(
-//                        array(
-//                            'cache_class' => $config['class']
-//                        )
-//                    )
-//                );
+                $result = $dtb->build();
+                $dumper = new DecisionTreeDumper();
+                $cache->write(
+                    $dumper->dump(
+                        array(
+                            'cache_class' => $config['class']
+                        ),
+                        $result['tree']
+                    ),
+                    $result['resource']
+                );
             }
 
             require_once $cache;
