@@ -104,6 +104,11 @@ services:
           - @doctrine.orm.entity_manager
           - %tmd.analyse%
 
+    fhv_tmd.gisDataImportManager:
+        class: FHV\Bundle\TmdBundle\Manager\GISDataImportManager
+        arguments:
+          - @doctrine.orm.entity_manager
+
     fhv_tmd.decisionTreeManager:
         class: FHV\Bundle\TmdBundle\DecisionTree\Manager\DecisionTreeManager
         arguments:
