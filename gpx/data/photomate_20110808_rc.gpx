@@ -4,7 +4,7 @@
     <bounds maxlon="9.744883333" maxlat="47.420083333" minlon="9.576328333" minlat="47.183581667"/>
     <trk>
         <name>photomate#20110808</name>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.741465" lat="47.409428333">
                 <ele>149.204865</ele>
                 <time>2011-08-08T14:37:40.000Z</time>
@@ -13566,7 +13566,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.57652" lat="47.235685">
                 <ele>496.63266</ele>
                 <time>2011-08-08T15:06:28.000Z</time>
@@ -19970,7 +19970,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.70641" lat="47.184036667">
                 <ele>599.506104</ele>
                 <time>2011-08-08T19:17:22.000Z</time>
@@ -21332,7 +21332,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.708746667" lat="47.18582">
                 <ele>565.401794</ele>
                 <time>2011-08-08T19:20:12.000Z</time>
@@ -48520,7 +48520,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.706466667" lat="47.184018333">
                 <ele>591.072571</ele>
                 <time>2011-08-08T20:24:51.000Z</time>
@@ -54834,7 +54834,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.58684" lat="47.256656667">
                 <ele>505.418335</ele>
                 <time>2011-08-08T20:38:38.000Z</time>
@@ -65116,7 +65116,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.576661667" lat="47.2356">
                 <ele>518.563232</ele>
                 <time>2011-08-08T21:15:56.000Z</time>
@@ -65694,7 +65694,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.610735" lat="47.248683333">
                 <ele>497.662048</ele>
                 <time>2011-08-09T07:21:17.000Z</time>

@@ -10,7 +10,7 @@
         <extensions>
             <topografix:color xmlns:topografix="http://www.topografix.com/GPX/Private/TopoGrafix/0/1">c0c0c0</topografix:color>
         </extensions>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lat="47.39756" lon="9.735232">
                 <ele>486.0</ele>
                 <time>2015-02-17T17:55:41.120Z</time>

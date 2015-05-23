@@ -4,7 +4,7 @@
     <bounds maxlon="9.756293333" maxlat="47.557588333" minlon="9.702731667" minlat="47.405806667"/>
     <trk>
         <name>qstarz#20110728</name>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.742865" lat="47.405806667">
                 <ele>150.725845</ele>
                 <time>2011-07-28T14:25:34.000Z</time>
@@ -16640,7 +16640,7 @@
                 <fix>3d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.722338333" lat="47.550616667">
                 <ele>439.643799</ele>
                 <time>2011-07-28T15:11:52.000Z</time>

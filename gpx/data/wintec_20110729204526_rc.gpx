@@ -4,7 +4,7 @@
     <bounds maxlon="9.734946400" maxlat="47.464883200" minlon="9.568367983" minlat="47.224860800"/>
     <trk>
         <name>Wintec#20110729</name>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.641175983" lat="47.463216">
                 <ele>0.0</ele>
                 <time>2011-07-29T20:45:38.000Z</time>
@@ -1870,7 +1870,7 @@
                 <fix>2d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.593395183" lat="47.2366144">
                 <ele>0.0</ele>
                 <time>2011-07-29T21:55:04.000Z</time>

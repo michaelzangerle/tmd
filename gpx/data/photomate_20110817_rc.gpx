@@ -4,7 +4,7 @@
     <bounds maxlon="9.742781667" maxlat="47.420213333" minlon="9.576155000" minlat="47.233425000"/>
     <trk>
         <name>photomate#20110817</name>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.742696667" lat="47.406091667">
                 <ele>520.281006</ele>
                 <time>2011-08-17T15:06:00.000Z</time>

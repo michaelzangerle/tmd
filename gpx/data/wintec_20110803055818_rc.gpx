@@ -4,7 +4,7 @@
     <bounds maxlon="9.742636783" maxlat="47.465513600" minlon="9.631413600" minlat="47.407679983"/>
     <trk>
         <name>Wintec#20110803</name>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.6645768" lat="47.4502272">
                 <ele>0.0</ele>
                 <time>2011-08-03T05:58:25.000Z</time>
@@ -8664,7 +8664,7 @@
                 <fix>2d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.742171183" lat="47.412972783">
                 <ele>0.0</ele>
                 <time>2011-08-03T06:19:54.000Z</time>
@@ -47594,7 +47594,7 @@
                 <fix>2d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.6486952" lat="47.464326383">
                 <ele>0.0</ele>
                 <time>2011-08-03T12:56:45.000Z</time>
@@ -52044,7 +52044,7 @@
                 <fix>2d</fix>
             </trkpt>
         </trkseg>
-        <trkseg type="car">
+        <trkseg type="drive">
             <trkpt lon="9.6314384" lat="47.4625696">
                 <ele>0.0</ele>
                 <time>2011-08-03T13:14:58.000Z</time>
