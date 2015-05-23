@@ -83,8 +83,8 @@ class DecisionTreeBuilder
     protected function processLine($line)
     {
         $tmp = explode('|   ', $line);
-        $level = count($tmp)-1; // node level
-        $content = $tmp[count($tmp)-1]; // node content
+        $level = count($tmp) - 1; // node level
+        $content = $tmp[count($tmp) - 1]; // node content
 
         $contentPartials = explode(' ', $content);
         $feature = $contentPartials[0];
@@ -94,11 +94,20 @@ class DecisionTreeBuilder
 
         if (count($contentPartials) === 9) { // has results
             $result = [];
-            $result['bike'] = explode('=', substr($contentPartials[4], 1, strlen($contentPartials[4]) - 2))[1];
-            $result['walk'] = explode('=', substr($contentPartials[5], 0, strlen($contentPartials[5]) - 1))[1];
-            $result['drive'] = explode('=', substr($contentPartials[6], 0, strlen($contentPartials[6]) - 1))[1];
-            $result['bus'] = explode('=', substr($contentPartials[7], 0, strlen($contentPartials[7]) - 1))[1];
-            $result['train'] = explode('=', substr($contentPartials[8], 0, strlen($contentPartials[8]) - 2))[1];
+            $part = explode('=', substr($contentPartials[4], 1, strlen($contentPartials[4]) - 2));
+            $result[$part[0]] = $part[1];
+
+            $part = explode('=', substr($contentPartials[5], 0, strlen($contentPartials[5]) - 1));
+            $result[$part[0]] = $part[1];
+
+            $part = explode('=', substr($contentPartials[6], 0, strlen($contentPartials[6]) - 1));
+            $result[$part[0]] = $part[1];
+
+            $part = explode('=', substr($contentPartials[7], 0, strlen($contentPartials[7]) - 1));
+            $result[$part[0]] = $part[1];
+
+            $part = explode('=', substr($contentPartials[8], 0, strlen($contentPartials[8]) - 2));
+            $result[$part[0]] = $part[1];
         }
 
         $this->createNode($level, $feature, $comparator, $value, $result);
@@ -188,12 +197,7 @@ class DecisionTreeBuilder
         $this->nodeCounter++;
         $this->tree[$name] = $node;
         $node->setParent($node->getName());
-
-        $r = [];
-        foreach ($result as $value) {
-            $r[] = $value;
-        }
-        $node->setResult($r);
+        $node->setResult($result);
 
         if ($parent->getLeft()) {
             $parent->setRight($name);
@@ -244,7 +248,7 @@ class DecisionTreeBuilder
             case '<':
                 return Decision::LT_OPERATOR;
             default:
-                throw new \InvalidArgumentException('Comparator ('.$comp.') not supportet!');
+                throw new \InvalidArgumentException('Comparator (' . $comp . ') not supportet!');
         }
     }
 }

@@ -48,12 +48,15 @@ class GISDataImportManager implements GISDataImportManagerInterface
                 $this->em->persist($nodeEntity);
                 $output->write($counter . ' ');
 
-                if ($this->batchSize % $counter === 0) {
+                if ($counter % $this->batchSize === 0) {
                     $this->em->flush();
-                    $output->write('Flushed '. $counter*$this->batchSize);
+                    $output->writeln(PHP_EOL.'Flushed '. $counter);
                 }
                 $counter++;
             }
+
+            $this->em->flush();
+            $output->writeln(PHP_EOL.'Flushed rest!');
         } else {
             throw new \InvalidArgumentException(
                 'Invalid arguments passed to the import manager (no nodes found or invalid type)!'
@@ -90,9 +93,9 @@ class GISDataImportManager implements GISDataImportManagerInterface
             case 'highway':
             case 'motorway':
                 return GISCoordinate::HIGHWAY_TYPE;
-            case 'busstops':
-            case 'public_transport_stops':
-            case 'bus_stops':
+            case 'busstop':
+            case 'public_transport_stop':
+            case 'bus_stop':
                 return GISCoordinate::BUSSTOP_TYPE;
             default:
                 return null;

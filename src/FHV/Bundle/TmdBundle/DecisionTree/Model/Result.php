@@ -30,14 +30,14 @@ class Result
      */
     protected $values;
 
-    function __construct($bike, $walk, $car, $bus, $train)
+    function __construct(array $values)
     {
         $this->values = [
-            TracksegmentType::BIKE => $bike,
-            TracksegmentType::WALK => $walk,
-            TracksegmentType::DRIVE => $car,
-            TracksegmentType::BUS => $bus,
-            TracksegmentType::TRAIN => $train
+            TracksegmentType::BIKE => $values[TracksegmentType::BIKE],
+            TracksegmentType::WALK => $values[TracksegmentType::WALK],
+            TracksegmentType::DRIVE => $values[TracksegmentType::DRIVE],
+            TracksegmentType::BUS => $values[TracksegmentType::BUS],
+            TracksegmentType::TRAIN => $values[TracksegmentType::TRAIN]
         ];
 
         foreach ($this->values as $key => $nr) {

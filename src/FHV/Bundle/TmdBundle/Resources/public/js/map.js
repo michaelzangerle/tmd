@@ -203,6 +203,7 @@ define(['underscore', 'async!//maps.googleapis.com/maps/api/js?v=3.exp'], functi
         getColorByType: function (type) {
             switch (type) {
                 case 'drive':
+                case 'car':
                     return 'black';
                 case 'bus':
                     return 'yellow';

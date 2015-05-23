@@ -157,10 +157,7 @@ class NodeDummy
      */
     public function getResult()
     {
-        if ($this->result) {
-            return implode(',', $this->result);
-        }
-        return null;
+        return $this->result;
     }
 
     /**
