@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree\Exception;
 
 /**
+ * Exception will be thrown when a field would be accessed which does not exist in the given data
  * Class InvalidFiedlException
  * @package FHV\Bundle\TmdBundle\DecisionTree\Exception
  */

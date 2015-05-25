@@ -8,7 +8,8 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AnalszeController
+ * Controller which provides a minimal rest api to fetch the results of the analyse methods
+ * Class AnalyseController
  * @package FHV\Bundle\TmdBundle\Controller
  */
 class AnalyseController extends FOSRestController implements ClassResourceInterface

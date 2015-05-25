@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 /**
+ * Repository for results
  * Class ResultRepository
  * @package FHV\Bundle\TmdBundle\Entity
  */

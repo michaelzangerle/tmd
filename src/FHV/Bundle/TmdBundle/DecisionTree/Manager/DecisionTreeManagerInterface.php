@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\DecisionTree\Manager;
 use FHV\Bundle\TmdBundle\DecisionTree\Model\Tree;
 
 /**
+ * Interface for the DecisionTreeManager which manages the cache for the decision tree class files
  * Interface DecisionTreeManagerInterface
  * @package FHV\Bundle\TmdBundle\DecisionTree\Manager
  */

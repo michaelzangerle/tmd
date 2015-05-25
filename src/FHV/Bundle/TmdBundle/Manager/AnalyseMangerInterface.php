@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Manager;
 
 /**
+ * Interface for analyse manager which manages all analyse operations
  * Interface AnalyseMangerInterface
  * @package FHV\Bundle\TmdBundle\Manager
  */

@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree;
 
 /**
+ * Interface for decision trees
  * Interface DecisionTreeInterface
  * @package FHV\Bundle\TmdBundle\DecisionTree
  */

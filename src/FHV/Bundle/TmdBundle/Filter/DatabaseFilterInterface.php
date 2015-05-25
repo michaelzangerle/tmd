@@ -6,6 +6,7 @@ use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
 use FHV\Bundle\TmdBundle\Entity\Track;
 
 /**
+ * Interface for the database sink
  * Interface DatabaseFilterInterface
  * @package FHV\Bundle\TmdBundle\Filter
  */

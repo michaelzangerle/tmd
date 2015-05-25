@@ -11,6 +11,7 @@ use FHV\Bundle\TmdBundle\Filter\DatabaseFilterInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
+ * Manages all operations related to tracks
  * Class TrackManager
  * @package FHV\Bundle\TmdBundle\Manager
  */

@@ -3,12 +3,14 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree\Manager;
 
 use FHV\Bundle\TmdBundle\DecisionTree\Exception\DecisionTreeException;
+use FHV\Bundle\TmdBundle\DecisionTree\Exception\InvalidComparatorException;
 use FHV\Bundle\TmdBundle\DecisionTree\Model\Decision;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
+ * Builds in an array structure from a text file
  * Class DecisionTreeBuilder
  * @package FHV\Bundle\TmdBundle\DecisionTree\Manager
  */
@@ -231,6 +233,7 @@ class DecisionTreeBuilder
      * Converts a comparator
      * @param string $comp
      * @return string
+     * @throws InvalidComparatorException
      */
     protected function convertComparator($comp)
     {
@@ -248,7 +251,7 @@ class DecisionTreeBuilder
             case '<':
                 return Decision::LT_OPERATOR;
             default:
-                throw new \InvalidArgumentException('Comparator (' . $comp . ') not supportet!');
+                throw new InvalidComparatorException($comp);
         }
     }
 }

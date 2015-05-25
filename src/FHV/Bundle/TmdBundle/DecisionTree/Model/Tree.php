@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree\Model;
 
 /**
+ * Represents a tree and hold a reference to the root node
  * Class Tree
  * @package FHV\Bundle\TmdBundle\DecisionTree\Model
  */

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Provides a minimal REST api to update results
  * Class ResultController
  * @package FHV\Bundle\TmdBundle\Controller
  */

@@ -7,7 +7,7 @@ use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 
 /**
- * Writes segments as csv into a file
+ * Writes segments as csv into a file  // TODO sink?
  * Class FileWriterFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */

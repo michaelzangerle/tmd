@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree\Manager;
 
 /**
+ * A dummy class to stash the information parsed from the decision tree text file
  * Class NodeDummy
  * @package FHV\Bundle\TmdBundle\DecisionTree\Manager
  */

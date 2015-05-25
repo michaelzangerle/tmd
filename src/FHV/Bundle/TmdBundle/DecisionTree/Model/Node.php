@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\DecisionTree\Model;
 use FHV\Bundle\TmdBundle\DecisionTree\Exception\InvalidNodeException;
 
 /**
+ * A node of a decision tree
  * Class Node
  * @package FHV\Bundle\TmdBundle\DecisionTree\Model
  */

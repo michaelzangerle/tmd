@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Imports gis data from a xml file and puts it into the giscoordinate table with the specified type
  * Class GISDataImporterCommand
  * @package FHV\Bundle\TmdBundle\Command
  */

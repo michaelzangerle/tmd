@@ -18,6 +18,7 @@ use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
 
 /**
+ * Segments a given track into parts with only one transport mode
  * Class SegmentationFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */

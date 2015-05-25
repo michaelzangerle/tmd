@@ -7,6 +7,7 @@ use FHV\Bundle\TmdBundle\Entity\Result;
 use FHV\Bundle\TmdBundle\Exception\ResultNotFoundException;
 
 /**
+ * Manages all operations for results
  * Class ResultManager
  * @package FHV\Bundle\TmdBundle\Manager
  */

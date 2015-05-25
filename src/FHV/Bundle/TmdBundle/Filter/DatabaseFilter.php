@@ -18,6 +18,7 @@ use FHV\Bundle\TmdBundle\Model\Trackpoint as TrackpointModel;
 use FHV\Bundle\TmdBundle\Model\Result as ResultModel;
 
 /**
+ * A sink which persists the given track data to the database // TODO sink?
  * Class DatabaseFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */

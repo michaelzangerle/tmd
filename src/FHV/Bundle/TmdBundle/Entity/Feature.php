@@ -7,6 +7,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 
 /**
+ * Represents a feature of a segment (velocity, acceleration, ...)
  * Feature
  * @ExclusionPolicy("all")
  */

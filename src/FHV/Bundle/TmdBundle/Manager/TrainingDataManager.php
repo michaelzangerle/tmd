@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
+ * Manages all operations for training data
  * Class GPXTrainingDataManager
  * @package FHV\Bundle\TmdBundle\Manager
  */

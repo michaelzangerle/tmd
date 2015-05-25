@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 
 /**
+ * Represents a segment of a track and contains features, trackpoints and a result
  * Tracksegment
  * @ExclusionPolicy("all")
  */

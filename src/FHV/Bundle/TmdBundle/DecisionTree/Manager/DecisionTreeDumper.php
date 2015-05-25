@@ -3,7 +3,8 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree\Manager;
 
 /**
- * Class DecissionTreeDumper
+ * Creates a decision tree class file for the given data
+ * Class DecisionTreeDumper
  * @package FHV\Bundle\TmdBundle\DecisionTree\Manager
  */
 class DecisionTreeDumper

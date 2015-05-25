@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Represents a coordinate which is needed for the analyse method with gis data
  * GISCoordinate
  */
 class GISCoordinate

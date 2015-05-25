@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\DecisionTree\Model;
 use FHV\Bundle\TmdBundle\Model\TracksegmentType;
 
 /**
+ * A leaf of a decision tree which represents a result
  * Class Result
  * @package FHV\Bundle\TmdBundle\DecisionTree\Model
  */

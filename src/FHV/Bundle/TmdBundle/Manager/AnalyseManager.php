@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
+ * Manages all operations for analyses
  * Class AnalyseManager
  * @package FHV\Bundle\TmdBundle\Manager
  */

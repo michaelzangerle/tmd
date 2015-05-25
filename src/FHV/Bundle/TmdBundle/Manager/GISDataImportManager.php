@@ -7,6 +7,7 @@ use FHV\Bundle\TmdBundle\Entity\GISCoordinate;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Imports gis data to the database
  * Class GISDataImportManager
  * @package FHV\Bundle\TmdBundle\Manager
  */

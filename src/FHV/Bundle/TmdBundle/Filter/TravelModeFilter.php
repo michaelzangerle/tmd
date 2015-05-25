@@ -11,6 +11,7 @@ use FHV\Bundle\TmdBundle\DecisionTree\Model\Result as TreeResult;
 use FHV\Bundle\TmdBundle\Model\Track;
 
 /**
+ * Applies a decision tree to each given segment and sets given result for each segment
  * Class TravelModeFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */

@@ -9,7 +9,7 @@ use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
 
 /**
- * Filter and removes single trackpoints from an array of trackpoints
+ * Filters and removes single trackpoints from an array of trackpoints
  * Class TrackPointFilter
  */
 class TrackpointFilter extends AbstractFilter

@@ -6,6 +6,7 @@ use FHV\Bundle\TmdBundle\DecisionTree\Model\Tree;
 use Symfony\Component\Config\ConfigCache;
 
 /**
+ * Triggers the generation of a new decision tree file if its out of date or does not exist
  * Class DecisionTreeManager
  * @package FHV\Bundle\TmdBundle\DecisionTree\Manager
  */

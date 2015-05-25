@@ -8,6 +8,7 @@ use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 
 /**
+ * Represents a result of the analyse process for one segment
  * Result
  * @ExclusionPolicy("all")
  */

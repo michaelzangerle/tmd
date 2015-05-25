@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Manager;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * Interface for the gis data import manager which imports gis data to the database
  * Interface GISDataImportManagerInterface
  * @package FHV\Bundle\TmdBundle\Manager
  */

@@ -3,9 +3,10 @@
 namespace FHV\Bundle\TmdBundle\DecisionTree\Model;
 
 use FHV\Bundle\TmdBundle\DecisionTree\Exception\InvalidFieldException;
-use FHV\Bundle\TmdBundle\DecisionTree\Exception\InvalidOperatorException;
+use FHV\Bundle\TmdBundle\DecisionTree\Exception\InvalidComparatorException;
 
 /**
+ * A decision of a decision tree
  * Class Decision
  * @package FHV\Bundle\TmdBundle\DecisionTree\Model
  */
@@ -74,7 +75,7 @@ class Decision
      * @param $operator
      *
      * @return mixed
-     * @throws InvalidOperatorException
+     * @throws InvalidComparatorException
      */
     protected function validateOperator($operator)
     {
@@ -86,7 +87,7 @@ class Decision
             case Decision::EQ_OPERATOR:
                 return $operator;
             default:
-                throw new InvalidOperatorException($operator);
+                throw new InvalidComparatorException($operator);
         }
     }
 }
