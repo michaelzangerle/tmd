@@ -80,6 +80,7 @@ services:
           - @fhv_tmd.fileReaderFilter
           - @fhv_tmd.fileWriterFilter
           - @fhv_tmd.segmentFilter
+          - %tmd.analyse%
 
     fhv_tmd.trackManager:
         class: FHV\Bundle\TmdBundle\Manager\TrackManager

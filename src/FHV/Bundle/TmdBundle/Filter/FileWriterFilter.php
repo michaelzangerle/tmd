@@ -136,7 +136,7 @@ class FileWriterFilter extends AbstractFilter
      */
     public function getCSVFeatureKeys($analyseType = 'basic')
     {
-        return $this->config[$analyseType]['csv_fileHeaders'];
+        return $this->config[$analyseType]['csv_columns'];
     }
 
     /**
@@ -148,7 +148,7 @@ class FileWriterFilter extends AbstractFilter
      */
     public function getCSVFeatureValues(TracksegmentInterface $seg, $analyseType = 'basic')
     {
-        $fields = $this->config[$analyseType]['csv_fileHeaders'];
+        $fields = $this->config[$analyseType]['csv_columns'];
         $result = [];
         foreach ($fields as $field) {
             $result[$field] = $seg->getFeature($field);

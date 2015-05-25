@@ -32,6 +32,12 @@ class GenerateTrainingFileCommand extends ContainerAwareCommand
                 InputArgument::OPTIONAL,
                 'Define the filename for the results.',
                 'result.csv'
+            )
+            ->addArgument(
+                'analyseType',
+                InputArgument::OPTIONAL,
+                'Define the type of analyze.',
+                'basic'
             );
     }
     
@@ -42,7 +48,9 @@ class GenerateTrainingFileCommand extends ContainerAwareCommand
     {
         $dir = $input->getArgument('dir');
         $fileName = $input->getArgument('fileName');
-        $this->getContainer()->get('fhv_tmd.trainingDataManager')->process($output, $dir, $fileName);
+        $analyseType = $input->getArgument('analyseType');
+        $this->getContainer()->get('fhv_tmd.trainingDataManager')->process($output, $dir, $fileName, $analyseType);
+
         $output->write('Finished.', true);
     }
 }

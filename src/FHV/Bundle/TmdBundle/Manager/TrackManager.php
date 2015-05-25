@@ -75,6 +75,8 @@ class TrackManager implements TrackManagerInterface
         $this->ppFilter = $postProcessFilter;
         $this->dbFilter = $databaseFilterInterface;
         $this->track = new Track();
+
+        // TODO add gis filter
     }
 
     /**
@@ -89,7 +91,7 @@ class TrackManager implements TrackManagerInterface
     {
         // TODO inject analyse config and check if given mode exists
         $this->track->setAnalyseType($method);
-        $this->initBasicFilters();
+        $this->initBasicFilters(); // TODO add analyze type argument
         $this->frFilter->run(['fileName' => $file, 'analyseType' => $method]);
         $this->frFilter->parentHasFinished();
         $this->em->persist($this->track);
