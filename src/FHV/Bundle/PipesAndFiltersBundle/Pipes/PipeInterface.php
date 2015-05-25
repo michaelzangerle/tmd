@@ -3,6 +3,7 @@
 namespace FHV\Bundle\PipesAndFiltersBundle\Pipes;
 
 /**
+ * Interface for pipes which connect filters
  * Interface PipeInterface
  * @package FHV\Bundle\PipesAndFiltersBundle\Pipes
  */

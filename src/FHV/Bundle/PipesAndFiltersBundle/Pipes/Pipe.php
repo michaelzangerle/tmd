@@ -5,7 +5,7 @@ namespace FHV\Bundle\PipesAndFiltersBundle\Pipes;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
 
 /**
- * Connects to filters and writes data from one to another
+ * Connects two filters and writes data from one to another
  * Class Pipe
  * @package FHV\Bundle\PipesAndFiltersBundle\Pipes
  */

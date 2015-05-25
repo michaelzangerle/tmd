@@ -6,6 +6,7 @@ use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\PipeInterface;
 
 /**
+ * Interface for filters
  * Interface FilterInterface
  * @package FHV\Bundle\PipesAndFiltersBundle\Filter
  */
@@ -21,7 +22,7 @@ interface FilterInterface
     public function run($data);
 
     /**
-     * Registers a pipe
+     * Registers a pipe at a filter
      *
      * @param PipeInterface $pipe
      *

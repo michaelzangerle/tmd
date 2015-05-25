@@ -57,7 +57,7 @@ abstract class AbstractFilter implements FilterInterface
     }
 
     /**
-     * Will be called when the parent filter has finished work
+     * @inheritdoc
      */
     public function parentHasFinished()
     {
