@@ -43,6 +43,12 @@ class PostprocessFilter extends AbstractFilter
     protected function process(Track $track)
     {
 
+        // TODO biljecki stops at traffic lights could cause errors in connection with busstops
+        // TODO therefore it will be checked if previous was care - then car is set for this
+        // TODO segment as well
+
+
+
         // nice to have
         $this->mergeSegments($track);
     }

@@ -10,6 +10,17 @@ services:
           - %tmd.planet_circumference%
 
     ##############################
+    # Repository
+    ##############################
+
+    fhv_tmd.gisCoordinateRepo:
+        class: FHV\Bundle\TmdBundle\Entity\GISCoordinateRepository
+        arguments:
+          - FHV\Bundle\TmdBundle\Entity\GISCoordinate
+        factory_service: doctrine.orm.default_entity_manager
+        factory_method: getRepository
+
+    ##############################
     # Filter
     ##############################
 
@@ -38,6 +49,16 @@ services:
             - %tmd.filter.min_trackpoints_per_segment%
             - %tmd.filter.max_velocity_for_nearly_stoppoints%
             - %tmd.filter.max_time_without_movement%
+
+    fhv_tmd.gisSegmentFilter:
+          class: FHV\Bundle\TmdBundle\Filter\GISTracksegmentFilter
+          arguments:
+            - @fhv_tmd.trackPointUtil
+            - %tmd.filter.min_trackpoints_per_segment%
+            - %tmd.filter.max_velocity_for_nearly_stoppoints%
+            - %tmd.filter.max_time_without_movement%
+            - @fhv_tmd.gisCoordinateRepo
+            - %tmd.analyse%
 
     fhv_tmd.fileWriterFilter:
           class: FHV\Bundle\TmdBundle\Filter\FileWriterFilter
@@ -80,6 +101,7 @@ services:
           - @fhv_tmd.fileReaderFilter
           - @fhv_tmd.fileWriterFilter
           - @fhv_tmd.segmentFilter
+          - @fhv_tmd.gisSegmentFilter
           - %tmd.analyse%
 
     fhv_tmd.trackManager:

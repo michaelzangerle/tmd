@@ -29,17 +29,55 @@ class Trackpoint implements TrackpointInterface
      */
     protected $time;
 
-    function __construct(\SimpleXMLElement $xml)
+    /**
+     * @param float $lat
+     * @param float $long
+     * @param \DateTime $time
+     * @param float $ele
+     */
+    function __construct($lat, $long, $ele = 0.0, $time = null)
     {
-        if ($this->isValidPointXML($xml)) {
+        $this->lat = $lat;
+        $this->long = $long;
+        $this->ele = $ele;
+        $this->time = $time;
+    }
+
+    /**
+     * TODO move into factory?
+     * Creates a trackpoint from an xml element
+     * @param \SimpleXMLElement $xml
+     * @return Trackpoint
+     */
+    public static function fromXML(\SimpleXMLElement $xml)
+    {
+        if (self::isValidPointXML($xml)) {
             $xml = (array)$xml;
-            $this->ele = floatval($xml['ele']);
-            $this->time = new \DateTime($xml['time']);
-            $this->lat = floatval($xml['@attributes']['lat']);
-            $this->long = floatval($xml['@attributes']['lon']);
+            $ele = floatval($xml['ele']);
+            $time = new \DateTime($xml['time']);
+            $lat = floatval($xml['@attributes']['lat']);
+            $long = floatval($xml['@attributes']['lon']);
+
+            return new Trackpoint($lat, $long, $ele, $time);
         } else {
             throw new \InvalidArgumentException('The provided xml for a trackpoint (' . $xml->time . ') is invalid!');
         }
+    }
+
+    /**
+     * Validates the xml data to create a new trackpoint obj
+     * TODO move into factory?
+     * @param $xml
+     *
+     * @return bool
+     */
+    protected static function isValidPointXML($xml)
+    {
+        if ($xml->ele && $xml->time && $xml->attributes()->lat && $xml->attributes()->lon) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -104,21 +142,5 @@ class Trackpoint implements TrackpointInterface
     public function setTime($time)
     {
         $this->time = $time;
-    }
-
-    /**
-     * Validates the xml data received via the constructor
-     *
-     * @param $xml
-     *
-     * @return bool
-     */
-    protected function isValidPointXML($xml)
-    {
-        if ($xml->ele && $xml->time && $xml->attributes()->lat && $xml->attributes()->lon) {
-            return true;
-        }
-
-        return false;
     }
 }

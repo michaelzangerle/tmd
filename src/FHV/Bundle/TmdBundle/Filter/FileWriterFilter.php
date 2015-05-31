@@ -112,6 +112,7 @@ class FileWriterFilter extends AbstractFilter
             array_key_exists('analyseType', $data) && $data['analyseType'] !== null
         ) {
             $this->data[] = $data['segment'];
+            $this->analyseType = $data['analyseType']; // todo set when connecting and remove from other filters
         }
     }
 

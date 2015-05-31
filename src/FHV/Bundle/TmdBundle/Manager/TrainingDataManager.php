@@ -4,10 +4,6 @@ namespace FHV\Bundle\TmdBundle\Manager;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
-use FHV\Bundle\TmdBundle\Filter\FileReaderFilter;
-use FHV\Bundle\TmdBundle\Filter\FileWriterFilter;
-use FHV\Bundle\TmdBundle\Filter\TracksegmentFilter;
-use FHV\Bundle\TmdBundle\Filter\TrackpointFilter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -31,7 +27,7 @@ class TrainingDataManager
     /**
      * @var FilterInterface
      */
-    protected $fwFilter;
+    protected $fileWriter;
 
     /**
      * @var FilterInterface
@@ -44,10 +40,16 @@ class TrainingDataManager
     protected $analyseConfig;
 
     /**
+     * @var FilterInterface
+     */
+    protected $gisSegmentFilter;
+
+    /**
      * @param FilterInterface $tpFilter
      * @param FilterInterface $fileReaderFilter
      * @param FilterInterface $fileWriterFilter
      * @param FilterInterface $segmentFilter
+     * @param FilterInterface $gisSegmentFilter
      * @param array $analyseConfig
      */
     function __construct(
@@ -55,15 +57,16 @@ class TrainingDataManager
         FilterInterface $fileReaderFilter,
         FilterInterface $fileWriterFilter,
         FilterInterface $segmentFilter,
+        FilterInterface $gisSegmentFilter,
         array $analyseConfig
     )
     {
         $this->tpFilter = $tpFilter;
         $this->frFilter = $fileReaderFilter;
-        $this->fwFilter = $fileWriterFilter;
+        $this->fileWriter = $fileWriterFilter;
         $this->smFilter = $segmentFilter;
         $this->analyseConfig = $analyseConfig;
-        // TODO add filter for gis
+        $this->gisSegmentFilter = $gisSegmentFilter;
     }
 
     /**
@@ -81,13 +84,13 @@ class TrainingDataManager
         }
 
         if (!$this->isAnalyzeTypeValid($analyseType)) {
-            throw new \InvalidArgumentException('The given analyse type ('.$analyseType.') seems to be unknown!');
+            throw new \InvalidArgumentException('The given analyse type (' . $analyseType . ') seems to be unknown!');
         }
 
         $files = glob($dir . '/*.gpx');
         if (count($files) > 0) {
-            $this->connectFilters();
-            $this->fwFilter->setFilePath($dir . $resultFileName);
+            $this->connectFilters($analyseType);
+            $this->fileWriter->setFilePath($dir . $resultFileName);
 
             foreach ($files as $fileName) {
                 $output->write('<info>Processing "' . $fileName . '"</info>', true);
@@ -106,15 +109,20 @@ class TrainingDataManager
     }
 
     /**
-     * Connect filters with pipes
+     * Connect filters with pipes depending on the analyse type
+     * @param string $analyseType
      */
-    protected function connectFilters()
+    protected function connectFilters($analyseType)
     {
-        // TODO add analyze type argument and connect differently
-
-        new Pipe($this->frFilter, $this->tpFilter);
-        new Pipe($this->tpFilter, $this->smFilter);
-        new Pipe($this->smFilter, $this->fwFilter);
+        if ($analyseType === 'gis') {
+            new Pipe($this->frFilter, $this->tpFilter);
+            new Pipe($this->tpFilter, $this->gisSegmentFilter);
+            new Pipe($this->gisSegmentFilter, $this->fileWriter);
+        } else {
+            new Pipe($this->frFilter, $this->tpFilter);
+            new Pipe($this->tpFilter, $this->smFilter);
+            new Pipe($this->smFilter, $this->fileWriter);
+        }
     }
 
     /**
@@ -124,11 +132,11 @@ class TrainingDataManager
      */
     protected function isAnalyzeTypeValid($analyzeType)
     {
-        foreach ($this->analyseConfig as $key => $type) {
-            if ($key === $analyzeType) {
-                return true;
-            }
+        if (array_key_exists($analyzeType, $this->analyseConfig)) {
+
+            return true;
         }
+
         return false;
     }
 }

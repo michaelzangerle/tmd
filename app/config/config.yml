@@ -130,3 +130,20 @@ fhv_tmd:
         - "meanacceleration"
         - "maxvelocity"
         - "maxacceleration"
+    gis:
+      config:
+        boundingBoxDistance: 20
+        infrastructureTimeThreshold: 30
+      class: "GISDecisionTree"
+      cacheDir: "%kernel.root_dir%/../decisionTrees/gis"
+      txtFilePath: "%kernel.root_dir%/../decisionTrees/gis"
+      txtFileName: "gisDecisionTree.txt"
+      csv_columns:
+        - "stoprate"
+        - "meanvelocity"
+        - "meanacceleration"
+        - "maxvelocity"
+        - "maxacceleration"
+        - "ptscloseness"
+#        - "railcloseness"
+#        - "highwaycloseness"

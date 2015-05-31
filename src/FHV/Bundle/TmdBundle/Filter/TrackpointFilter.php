@@ -157,8 +157,8 @@ class TrackpointFilter extends AbstractFilter
             $this->validPointCounter++; // first point
 
             while ($next < $length) {
-                $tp1 = new Trackpoint($trackPoints[$i]);
-                $tp2 = new Trackpoint($trackPoints[$next]);
+                $tp1 = Trackpoint::fromXML($trackPoints[$i]);
+                $tp2 = Trackpoint::fromXML($trackPoints[$next]);
 
                 if ($this->areTrackpointsValid($tp1, $tp2)) {
                     $this->validPointCounter++;

@@ -52,15 +52,14 @@ class TracksegmentFilter extends AbstractFilter
             array_key_exists('track', $data) && $data['track'] !== null &&
             array_key_exists('analyseType', $data) && $data['analyseType'] !== null
         ) {
-
             /** @var TracksegmentInterface $segment */
             foreach ($data['track']->getSegments() as $segment) {
                 $features = $this->getSegmentFeatures($segment->getTrackPoints(), $segment->getType());
-                $this->setFeaturesForSegment($segment, $features);
+                $segment->setFeatures($features);
             }
             $this->write($data['track']);
         } else {
-            if (isset($data['trackPoints'])) {
+            if (array_key_exists('trackPoints', $data) && array_key_exists('analyseType', $data)) {
                 $features = $this->getSegmentFeatures($data['trackPoints'], $data['type']);
                 $segment = $this->createSegment($features);
                 $this->write(
@@ -164,12 +163,12 @@ class TracksegmentFilter extends AbstractFilter
                 Feature::MEAN_VELOCITY => $totalVelocity / $amountOfTrackPoints,
                 Feature::MAX_ACCELERATION => $maxAcceleration,
                 Feature::MAX_VELOCITY => $maxVelocity,
+                Feature::STOP_RATE => $stopCounter / $distance,
                 'time' => $time,
                 'distance' => $distance,
                 'startPoint' => $gpsTrackPoints[0],
                 'endPoint' => $gpsTrackPoints[$amountOfTrackPoints],
                 'trackPoints' => $gpsTrackPoints,
-                Feature::STOP_RATE => $stopCounter / $distance,
                 'type' => $type
             ];
         }
@@ -188,56 +187,8 @@ class TracksegmentFilter extends AbstractFilter
      */
     protected function createSegment($features)
     {
-        $seg = new Tracksegment(
-            $features['time'],
-            $features['distance'],
-            $features['startPoint'],
-            $features['endPoint'],
-            $features['trackPoints'],
-            $features['type']
-        );
-
-        $seg->setFeature(Feature::MEAN_VELOCITY, $features[Feature::MEAN_VELOCITY]);
-        $seg->setFeature(Feature::MEAN_ACCELERATION, $features[Feature::MEAN_ACCELERATION]);
-        $seg->setFeature(Feature::MAX_ACCELERATION, $features[Feature::MAX_ACCELERATION]);
-        $seg->setFeature(Feature::MAX_VELOCITY, $features[Feature::MAX_VELOCITY]);
-        $seg->setFeature(Feature::STOP_RATE, $features[Feature::STOP_RATE]);
-
+        $seg = new Tracksegment();
+        $seg->setFeatures($features);
         return $seg;
-    }
-
-    /**
-     * Sets features for a existing segment
-     *
-     * @param TracksegmentInterface $segment
-     * @param array                 $features
-     */
-    protected function setFeaturesForSegment(TracksegmentInterface $segment, $features)
-    {
-        foreach ($features as $key => $feature) {
-            switch ($key) {
-                case 'time':
-                    $segment->setTime($feature);
-                    break;
-                case 'distance':
-                    $segment->setDistance($feature);
-                    break;
-                case 'trackPoints':
-                    $segment->setTrackPoints($feature);
-                    break;
-                case 'startPoint':
-                    $segment->setStartPoint($feature);
-                    break;
-                case 'endPoint':
-                    $segment->setEndPoint($feature);
-                    break;
-                case 'type':
-                    $segment->setType($feature);
-                    break;
-                default:
-                    $segment->setFeature($key, $feature);
-                    break;
-            }
-        }
     }
 }

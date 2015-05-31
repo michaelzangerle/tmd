@@ -235,4 +235,38 @@ class Tracksegment implements TracksegmentInterface
     {
         $this->trackpoints = array_merge($this->trackpoints, $tps);
     }
+
+    /**
+     * Sets features for a segment but takes also care of basic features like
+     * distance, time, start, end, type and trackpoints which will set separately
+     * @param array $features
+     */
+    public function setFeatures(array $features)
+    {
+        foreach ($features as $key => $feature) {
+            switch ($key) {
+                case 'time':
+                    $this->setTime($feature);
+                    break;
+                case 'distance':
+                    $this->setDistance($feature);
+                    break;
+                case 'trackPoints':
+                    $this->setTrackPoints($feature);
+                    break;
+                case 'startPoint':
+                    $this->setStartPoint($feature);
+                    break;
+                case 'endPoint':
+                    $this->setEndPoint($feature);
+                    break;
+                case 'type':
+                    $this->setType($feature);
+                    break;
+                default:
+                    $this->setFeature($key, $feature);
+                    break;
+            }
+        }
+    }
 }

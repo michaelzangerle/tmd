@@ -96,6 +96,13 @@ interface TracksegmentInterface
     public function setFeature($key, $value);
 
     /**
+     * Sets features for a segment but takes also care of basic features like
+     * distance, time, start, end, type and trackpoints which will set separately
+     * @param array $features
+     */
+    public function setFeatures(array $features);
+
+    /**
      * Adds a trackpoint
      * @param TrackpointInterface $trackpoint
      */
