@@ -115,6 +115,7 @@ services:
           - @fhv_tmd.travelModeFilter
           - @fhv_tmd.postProcessFilter
           - @fhv_tmd.databaseFilter
+          - @fhv_tmd.gisSegmentFilter
 
     fhv_tmd.resultManager:
         class: FHV\Bundle\TmdBundle\Manager\ResultManager

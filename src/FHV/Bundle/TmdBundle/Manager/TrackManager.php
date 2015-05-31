@@ -65,7 +65,8 @@ class TrackManager implements TrackManagerInterface
         FilterInterface $segmentFilter,
         FilterInterface $travelModeFilter,
         FilterInterface $postProcessFilter,
-        DatabaseFilterInterface $databaseFilterInterface
+        DatabaseFilterInterface $databaseFilterInterface,
+        FilterInterface $gisSegmentFilter
     ) {
         $this->em = $em;
         $this->tpFilter = $tpFilter;
@@ -75,16 +76,15 @@ class TrackManager implements TrackManagerInterface
         $this->tmFilter = $travelModeFilter;
         $this->ppFilter = $postProcessFilter;
         $this->dbFilter = $databaseFilterInterface;
+        $this->gisSegementFilter = $gisSegmentFilter;
         $this->track = new Track();
-
-        // TODO add gis filter
     }
 
     /**
      * Creates a track from a gxp file and a for a selected process method
      *
      * @param File    $file
-     * @param integer $method
+     * @param string $method
      *
      * @return mixed
      */
@@ -92,13 +92,31 @@ class TrackManager implements TrackManagerInterface
     {
         // TODO inject analyse config and check if given mode exists
         $this->track->setAnalyseType($method);
-        $this->initBasicFilters(); // TODO add analyze type argument
+        $this->initFilters($method);
         $this->frFilter->run(['fileName' => $file, 'analyseType' => $method]);
         $this->frFilter->parentHasFinished();
         $this->em->persist($this->track);
         $this->em->flush();
 
         return $this->track;
+    }
+
+    /**
+     * Triggers initialisation of filters
+     * @param $method
+     * @throws \Exception
+     */
+    protected function initFilters($method){
+        switch($method){
+            case 'basic':
+                $this->initBasicFilters();
+                break;
+            case 'gis':
+                $this->initGisFilters();
+                break;
+            default:
+                throw new \Exception('Invalid method');
+        }
     }
 
     /**
@@ -110,6 +128,21 @@ class TrackManager implements TrackManagerInterface
         new Pipe($this->tpFilter, $this->segmentationFilter);
         new Pipe($this->segmentationFilter, $this->segmentFilter);
         new Pipe($this->segmentFilter, $this->tmFilter);
+        new Pipe($this->tmFilter, $this->ppFilter);
+        new Pipe($this->ppFilter, $this->dbFilter);
+
+        $this->dbFilter->provideTrack($this->track);
+    }
+
+    /**
+     * Initializes and connects filters for gis analyse method
+     */
+    protected function initGisFilters()
+    {
+        new Pipe($this->frFilter, $this->tpFilter);
+        new Pipe($this->tpFilter, $this->segmentationFilter);
+        new Pipe($this->segmentationFilter, $this->gisSegementFilter);
+        new Pipe($this->gisSegementFilter, $this->tmFilter);
         new Pipe($this->tmFilter, $this->ppFilter);
         new Pipe($this->ppFilter, $this->dbFilter);
 

@@ -15,17 +15,18 @@ use FHV\Bundle\TmdBundle\Model\BoundingBox;
 class GISCoordinateRepository extends EntityRepository
 {
     /**
-     * Returns coordinates for stations within a bounding box
+     * Returns coordinates for a type within a bounding box
      * @param BoundingBox $boundingBox
+     * @param string $type
      * @return mixed
      */
-    public function getStationsForBoundingBox(BoundingBox $boundingBox)
+    public function getCoordinatesForBoundingBox(BoundingBox $boundingBox, $type = 'busstop')
     {
         $qb = $this->createQueryBuilder('coordinate')
             ->andWhere('coordinate.type = :type');
 
         $this->addWhereForBoundingBox($qb, $boundingBox);
-        $qb->setParameter('type', 'busstop');
+        $qb->setParameter('type', $type);
 
         return $qb->getQuery()->getArrayResult();
     }

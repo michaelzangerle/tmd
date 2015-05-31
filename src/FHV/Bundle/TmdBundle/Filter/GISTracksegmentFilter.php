@@ -4,8 +4,9 @@ namespace FHV\Bundle\TmdBundle\Filter;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
+use FHV\Bundle\TmdBundle\Entity\GISCoordinate;
 use FHV\Bundle\TmdBundle\Entity\GISCoordinateRepository;
-use FHV\Bundle\TmdBundle\Model\BoundingBox;
+use FHV\Bundle\TmdBundle\Entity\Track;
 use FHV\Bundle\TmdBundle\Model\Feature;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
@@ -43,6 +44,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
 
     /**
      * Returns a segment for the given trackpoints
+     * TODO refactor this function
      *
      * @param TrackpointInterface[] $trackPoints
      * @param string|null $type
@@ -66,6 +68,9 @@ class GISTracksegmentFilter extends TracksegmentFilter
         $stopCounter = 0;
         $publicTransportStationCounter = 0;
         $lowSpeedTrackPoints = [];
+        $infrastructureTimer = 0;
+        $railCounter = 0;
+        $highwayCounter = 0;
 
         if ($amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
             for ($i = 0; $i < $amountOfTrackPoints; $i++) {
@@ -82,6 +87,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
 
                 $distance += $currentDistance;
                 $time += $currentTime;
+                $infrastructureTimer += $currentTime;
                 $totalVelocity += $currentVelocity;
 
                 if ($currentVelocity > $maxVelocity) {
@@ -95,6 +101,17 @@ class GISTracksegmentFilter extends TracksegmentFilter
                 if ($currentAcceleration > 0) {
                     $totalAcceleration += $currentAcceleration;
                     $accTrackPoints++;
+                }
+
+                // on rails or highway
+                if($infrastructureTimer >= $this->gisAnalyseConfig['infrastructureTimeThreshold']){
+                    $infrastructureTimer = 0;
+                    if($this->tpOnInfrastructure($tp2, GISCoordinate::RAILWAY_TYPE)){
+                        $railCounter++;
+                    }
+                    if($this->tpOnInfrastructure($tp2, GISCoordinate::HIGHWAY_TYPE)){
+                        $highwayCounter++;
+                    }
                 }
 
                 // bilijecki counts the points with speed below a certain value
@@ -136,7 +153,9 @@ class GISTracksegmentFilter extends TracksegmentFilter
                 'endPoint' => $gpsTrackPoints[$amountOfTrackPoints],
                 'trackPoints' => $gpsTrackPoints,
                 'type' => $type,
-                FEATURE::PUBLIC_TRANSPORT_STATION_CLOSENESS => $pts
+                FEATURE::PUBLIC_TRANSPORT_STATION_CLOSENESS => $pts,
+                FEATURE::HIGHWAY_CLOSENESS => $highwayCounter / $time,
+                FEATURE::RAIL_CLOSENESS => $railCounter / $time
             ];
         }
 
@@ -154,7 +173,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     {
         $trackPoint = $this->getElementInMid($trackPoints);
         $boundingBox = $this->util->getBoundingBox($trackPoint, $this->gisAnalyseConfig['boundingBoxDistance']); // TODO add to config
-        $coordinates = $this->gisCoordinateRepository->getStationsForBoundingBox($boundingBox);
+        $coordinates = $this->gisCoordinateRepository->getCoordinatesForBoundingBox($boundingBox, GISCoordinate::BUSSTOP_TYPE);
         if ($coordinates) {
             return true;
         }
@@ -184,5 +203,21 @@ class GISTracksegmentFilter extends TracksegmentFilter
         }
 
         throw new FilterException('The parameters provided to get trackpoint in mid!');
+    }
+
+    /**
+     * Checks if the given track point could be on rails
+     * @param TrackpointInterface $tp
+     * @param string $type
+     * @return bool
+     */
+    protected function tpOnInfrastructure(TrackpointInterface $tp, $type)
+    {
+        $boundingBox = $this->util->getBoundingBox($tp, $this->gisAnalyseConfig['infrastructureDistanceThreshold']);
+        $result = $this->gisCoordinateRepository->getCoordinatesForBoundingBox($boundingBox, $type);
+        if($result){
+            return true;
+        }
+        return false;
     }
 }
