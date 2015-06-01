@@ -118,28 +118,30 @@ require(['jquery', 'chart', 'material'], function ($, Chart) {
              */
             getDataForChart: function (data) {
 
-                var key, analyseType, values, ds,
+                var key, analyseType, values, ds, labels,
                     i = 0,
-                    result = {labels: [], datasets: []},
-                    dataset = this.getDataSetDummy(constants.blue),
-                    dataset2 = this.getDataSetDummy(constants.green);
+                    result = {labels: [], datasets: []};
 
                 for (key in data) {
                     analyseType = data[key];
                     values = [];
+                    labels = [];
+
                     for (type in analyseType) {
                         values.push(analyseType[type])
-                        result.labels.push(type);
+                        labels.push(type);
                     }
 
                     if (i % 2) {
-                        ds = $.extend({}, dataset);
+                        ds = $.extend({}, this.getDataSetDummy(constants.blue));
                     } else {
-                        ds = $.extend({}, dataset2);
+                        ds = $.extend({}, this.getDataSetDummy(constants.green));
                     }
                     ds.data = values;
                     ds.label = key;
                     result.datasets.push(ds);
+                    result.labels = labels;
+                    i++;
                 }
 
                 return result;
@@ -151,12 +153,7 @@ require(['jquery', 'chart', 'material'], function ($, Chart) {
              * @returns {{label: string, fillColor: string, strokeColor: string, highlightFill: string, highlightStroke: string, data: Array}}
              */
             getDataSetDummy: function (color) {
-                var tmp = null;
-                if (color === constants.blue) {
-                    tmp = 'rgba(' + constants.blue;
-                } else {
-                    tmp = 'rgba(' + constants.green;
-                }
+                var tmp = 'rgba(' + color;
 
                 return {
                     label: '',
