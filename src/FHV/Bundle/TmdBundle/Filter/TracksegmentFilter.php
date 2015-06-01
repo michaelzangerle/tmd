@@ -19,6 +19,23 @@ use FHV\Bundle\TmdBundle\Model\Feature;
 class TracksegmentFilter extends AbstractFilter
 {
     /**
+     * Variables used to determine the features of a segment
+     */
+    protected $currentTp;
+    protected $totalAcceleration;
+    protected $amountOfTrackPoints;
+    protected $totalVelocity;
+    protected $maxAcceleration;
+    protected $maxVelocity;
+    protected $distance;
+    protected $time;
+    protected $prevAcceleration;
+    protected $accTrackPoints;
+    protected $gpsTrackPoints;
+    protected $lowSpeedTimeCounter;
+    protected $stopCounter;
+
+    /**
      * @var int
      */
     protected $minTrackPointsPerSegment;
@@ -69,7 +86,9 @@ class TracksegmentFilter extends AbstractFilter
                     ]
                 );
             } else {
-                throw new InvalidArgumentException('SegmentFilter: Data param should contain trackpoints or a track with the analyse type!');
+                throw new InvalidArgumentException(
+                    'SegmentFilter: Data param should contain trackpoints or a track with the analyse type!'
+                );
             }
         }
     }
@@ -79,7 +98,8 @@ class TracksegmentFilter extends AbstractFilter
         $minTrackPointsPerSegment,
         $maxVelocityForNearlyStopPoints,
         $maxTimeWithoutMovement
-    ) {
+    )
+    {
         parent::__construct();
         $this->util = $util;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
@@ -88,94 +108,174 @@ class TracksegmentFilter extends AbstractFilter
     }
 
     /**
+     * Resets all the variables needed for segment features
+     */
+    protected function resetSegmentValues()
+    {
+        $this->currentTp = null;
+        $this->totalAcceleration = 0;
+        $this->amountOfTrackPoints = 0;
+        $this->totalVelocity = 0;
+        $this->maxAcceleration = 0;
+        $this->maxVelocity = 0;
+        $this->distance = 0;
+        $this->time = 0;
+        $this->prevAcceleration = 0;
+        $this->accTrackPoints = 0;
+        $this->gpsTrackPoints = [];
+        $this->lowSpeedTimeCounter = 0;
+        $this->stopCounter = 0;
+    }
+
+    /**
      * Returns a segment for the given trackpoints
      *
      * @param TrackpointInterface[] $trackPoints
-     * @param string|null           $type
+     * @param string|null $type
      *
      * @return array with calculated features
      * @throws InvalidArgumentException
      */
     public function getSegmentFeatures(array $trackPoints, $type = null)
     {
-        $totalAcceleration = 0;
-        $amountOfTrackPoints = count($trackPoints) - 1;
-        $totalVelocity = 0;
-        $maxAcceleration = 0;
-        $maxVelocity = 0;
-        $distance = 0;
-        $time = 0;
-        $prevVelocity = 0;
-        $accTrackPoints = 0;
-        $gpsTrackPoints[] = $trackPoints[0];
-        $lowSpeedTimeCounter = 0;
-        $stopCounter = 0;
+        $this->resetSegmentValues();
+        $this->amountOfTrackPoints = count($trackPoints) - 1;
 
-        if ($amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
-            for ($i = 0; $i < $amountOfTrackPoints; $i++) {
+        if ($this->amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
+
+            $this->firstTrackpointHandling($trackPoints[0]);
+
+            for ($i = 0; $i < $this->amountOfTrackPoints; $i++) {
                 $tp1 = $trackPoints[$i];
                 $tp2 = $trackPoints[$i + 1];
-
-                $gpsTrackPoints[] = $tp2;
+                $this->gpsTrackPoints[] = $tp2;
+                $this->currentTp = $tp2;
 
                 $currentDistance = $this->util->calcDistance($tp1, $tp2);
                 $currentTime = $this->util->calcTime($tp2, $tp1);
-
                 $currentVelocity = $this->util->calcVelocity($currentDistance, $currentTime);
-                $currentAcceleration = $this->util->calcAcceleration($currentVelocity, $currentTime, $prevVelocity);
+                $currentAcceleration = $this->util->calcAcceleration(
+                    $currentVelocity,
+                    $currentTime,
+                    $this->prevAcceleration
+                );
 
-                $distance += $currentDistance;
-                $time += $currentTime;
-                $totalVelocity += $currentVelocity;
-
-                if ($currentVelocity > $maxVelocity) {
-                    $maxVelocity = $currentVelocity;
-                }
-
-                if ($currentAcceleration > $maxAcceleration) {
-                    $maxAcceleration = $currentAcceleration;
-                }
-
-                if ($currentAcceleration > 0) {
-                    $totalAcceleration += $currentAcceleration;
-                    $accTrackPoints++;
-                }
-
-                // bilijecki counts the points with speed below a certain value
-                // when a certain amount is below a the velocity threshold it
-                // counts as a stop
-                if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
-                    $lowSpeedTimeCounter += $currentTime;
-
-                    if ($lowSpeedTimeCounter >= $this->maxTimeWithoutMovement) {
-                        $stopCounter++;
-                        $lowSpeedTimeCounter = 0;
-                    }
-                } else {
-                    $lowSpeedTimeCounter = 0;
-                }
-
-                $prevVelocity = $currentAcceleration;
+                $this->distance += $currentDistance;
+                $this->time += $currentTime;
+                $this->handleFeatures($currentVelocity, $currentAcceleration, $currentTime);
             }
 
-            return [
-                Feature::MEAN_ACCELERATION => $totalAcceleration / $accTrackPoints,
-                Feature::MEAN_VELOCITY => $totalVelocity / $amountOfTrackPoints,
-                Feature::MAX_ACCELERATION => $maxAcceleration,
-                Feature::MAX_VELOCITY => $maxVelocity,
-                Feature::STOP_RATE => $stopCounter / $distance,
-                'time' => $time,
-                'distance' => $distance,
-                'startPoint' => $gpsTrackPoints[0],
-                'endPoint' => $gpsTrackPoints[$amountOfTrackPoints],
-                'trackPoints' => $gpsTrackPoints,
-                'type' => $type
-            ];
+            $this->lastTrackpointHandling($trackPoints[0]);
+
+            return $this->getResultForCurrentSegment($type);
         }
 
         throw new InvalidArgumentException(
             'SegmentFilter: There should at least be ' . $this->minTrackPointsPerSegment . ' trackpoints present!'
         );
+    }
+
+    /**
+     * Handle values for different features
+     * @param $currentVelocity
+     * @param $currentAcceleration
+     * @param $currentTime
+     */
+    protected function handleFeatures($currentVelocity, $currentAcceleration, $currentTime)
+    {
+        $this->handleVelocity($currentVelocity);
+        $this->handleAcceleration($currentAcceleration);
+        $this->handlePossibleStop($currentVelocity, $currentTime);
+    }
+
+    /**
+     * Special handling for the first trackpoint of a segment
+     * @param TrackpointInterface $tp
+     */
+    protected function firstTrackpointHandling(TrackpointInterface $tp)
+    {
+        $this->gpsTrackPoints[] = $tp;
+    }
+
+    /**
+     * Special handling for the last trackpoint of segment
+     * @param TrackpointInterface $tp
+     */
+    protected function lastTrackpointHandling(TrackpointInterface $tp)
+    {
+        $this->gpsTrackPoints[] = $tp;
+    }
+
+    /**
+     * Returns the result for the current segment
+     * @param $type
+     * @return array
+     */
+    protected function getResultForCurrentSegment($type)
+    {
+        return [
+            Feature::MEAN_ACCELERATION => $this->totalAcceleration / $this->accTrackPoints,
+            Feature::MEAN_VELOCITY => $this->totalVelocity / $this->amountOfTrackPoints,
+            Feature::MAX_ACCELERATION => $this->maxAcceleration,
+            Feature::MAX_VELOCITY => $this->maxVelocity,
+            Feature::STOP_RATE => $this->stopCounter / $this->distance,
+            'time' => $this->time,
+            'distance' => $this->distance,
+            'startPoint' => $this->gpsTrackPoints[0],
+            'endPoint' => $this->gpsTrackPoints[$this->amountOfTrackPoints],
+            'trackPoints' => $this->gpsTrackPoints,
+            'type' => $type
+        ];
+    }
+
+    /**
+     * Handle velocity
+     * @param $currentVelocity
+     */
+    protected function handleVelocity($currentVelocity)
+    {
+        $this->totalVelocity += $currentVelocity;
+        if ($currentVelocity > $this->maxVelocity) {
+            $this->maxVelocity = $currentVelocity;
+        }
+    }
+
+    /**
+     * Handle acceleration
+     * @param $currentAcceleration
+     */
+    protected function handleAcceleration($currentAcceleration)
+    {
+        if ($currentAcceleration > $this->maxAcceleration) {
+            $this->maxAcceleration = $currentAcceleration;
+        }
+        if ($currentAcceleration > 0) {
+            $this->totalAcceleration += $currentAcceleration;
+            $this->accTrackPoints++;
+        }
+        $this->prevAcceleration = $currentAcceleration;
+    }
+
+    /**
+     * Determines and handles possible stops
+     * @param $currentVelocity
+     * @param $currentTime
+     */
+    protected function handlePossibleStop($currentVelocity, $currentTime)
+    {
+        // bilijecki counts the points with speed below a certain value
+        // when a certain amount is below a the velocity threshold it
+        // counts as a stop
+        if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
+            $this->lowSpeedTimeCounter += $currentTime;
+
+            if ($this->lowSpeedTimeCounter >= $this->maxTimeWithoutMovement) {
+                $this->stopCounter++;
+                $this->lowSpeedTimeCounter = 0;
+            }
+        } else {
+            $this->lowSpeedTimeCounter = 0;
+        }
     }
 
     /**

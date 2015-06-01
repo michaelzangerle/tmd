@@ -3,10 +3,8 @@
 namespace FHV\Bundle\TmdBundle\Filter;
 
 use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\Entity\GISCoordinate;
 use FHV\Bundle\TmdBundle\Entity\GISCoordinateRepository;
-use FHV\Bundle\TmdBundle\Entity\Track;
 use FHV\Bundle\TmdBundle\Model\Feature;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
@@ -18,6 +16,16 @@ use FHV\Bundle\TmdBundle\Util\TrackpointUtil;
  */
 class GISTracksegmentFilter extends TracksegmentFilter
 {
+    /**
+     * Variables needed for the gis features
+     */
+    protected $publicTransportStationCounter;
+    protected $lowSpeedTrackPoints;
+    protected $infrastructureTimer;
+    protected $railCounter;
+    protected $highwayCounter;
+    protected $pts;
+
     /**
      * @var GISCoordinateRepository
      */
@@ -43,125 +51,116 @@ class GISTracksegmentFilter extends TracksegmentFilter
     }
 
     /**
-     * Returns a segment for the given trackpoints
-     * TODO refactor this function
-     *
-     * @param TrackpointInterface[] $trackPoints
-     * @param string|null $type
-     *
-     * @return array with calculated features
-     * @throws InvalidArgumentException
+     * Resets all the variables needed for segment features
      */
-    public function getSegmentFeatures(array $trackPoints, $type = null)
+    protected function resetSegmentValues()
     {
-        $totalAcceleration = 0;
-        $amountOfTrackPoints = count($trackPoints) - 1;
-        $totalVelocity = 0;
-        $maxAcceleration = 0;
-        $maxVelocity = 0;
-        $distance = 0;
-        $time = 0;
-        $prevVelocity = 0;
-        $accTrackPoints = 0;
-        $gpsTrackPoints[] = $trackPoints[0];
-        $lowSpeedTimeCounter = 0;
-        $stopCounter = 0;
-        $publicTransportStationCounter = 0;
-        $lowSpeedTrackPoints = [];
-        $infrastructureTimer = 0;
-        $railCounter = 0;
-        $highwayCounter = 0;
+        parent::resetSegmentValues();
+        $this->publicTransportStationCounter = 0;
+        $this->lowSpeedTrackPoints = [];
+        $this->infrastructureTimer = 0;
+        $this->railCounter = 0;
+        $this->highwayCounter = 0;
+        $this->pts = 0;
+    }
 
-        if ($amountOfTrackPoints + 1 >= $this->minTrackPointsPerSegment) {
-            for ($i = 0; $i < $amountOfTrackPoints; $i++) {
-                $tp1 = $trackPoints[$i];
-                $tp2 = $trackPoints[$i + 1];
+    /**
+     * Returns the result for the current segment
+     * @param $type
+     * @return array
+     */
+    protected function getResultForCurrentSegment($type)
+    {
+        $result = parent::getResultForCurrentSegment($type);
+        $result[FEATURE::PUBLIC_TRANSPORT_STATION_CLOSENESS] = $this->pts;
+        $result[FEATURE::HIGHWAY_CLOSENESS] = $this->highwayCounter / $this->time;
+        $result[FEATURE::RAIL_CLOSENESS] = $this->railCounter / $this->time;
+        
+        return $result;
+    }
 
-                $gpsTrackPoints[] = $tp2;
+    /**
+     * Special handling for the first trackpoint of a segment
+     * @param TrackpointInterface $tp
+     */
+    protected function firstTrackpointHandling(TrackpointInterface $tp)
+    {
+        parent::firstTrackpointHandling($tp);
+        // TODO check infrastructure for first point
+    }
 
-                $currentDistance = $this->util->calcDistance($tp1, $tp2);
-                $currentTime = $this->util->calcTime($tp2, $tp1);
+    /**
+     * Special handling for the last trackpoint of segment
+     * @param TrackpointInterface $tp
+     */
+    protected function lastTrackpointHandling(TrackpointInterface $tp)
+    {
+        parent::lastTrackpointHandling($tp);
+        // TODO check infrastructure for last point
 
-                $currentVelocity = $this->util->calcVelocity($currentDistance, $currentTime);
-                $currentAcceleration = $this->util->calcAcceleration($currentVelocity, $currentTime, $prevVelocity);
+        $this->pts = $this->stopCounter > 0 ? $this->publicTransportStationCounter / $this->stopCounter : 0;
+    }
 
-                $distance += $currentDistance;
-                $time += $currentTime;
-                $infrastructureTimer += $currentTime;
-                $totalVelocity += $currentVelocity;
+    /**
+     * Handle values for different features
+     * @param $currentVelocity
+     * @param $currentAcceleration
+     * @param $currentTime
+     */
+    protected function handleFeatures($currentVelocity, $currentAcceleration, $currentTime)
+    {
+        $this->handleVelocity($currentVelocity);
+        $this->handleAcceleration($currentAcceleration);
+        $this->handlePossibleStop($currentVelocity, $currentTime);
+        $this->handleInfrastructure($this->currentTp);
+    }
 
-                if ($currentVelocity > $maxVelocity) {
-                    $maxVelocity = $currentVelocity;
-                }
-
-                if ($currentAcceleration > $maxAcceleration) {
-                    $maxAcceleration = $currentAcceleration;
-                }
-
-                if ($currentAcceleration > 0) {
-                    $totalAcceleration += $currentAcceleration;
-                    $accTrackPoints++;
-                }
-
-                // on rails or highway
-                if($infrastructureTimer >= $this->gisAnalyseConfig['infrastructureTimeThreshold']){
-                    $infrastructureTimer = 0;
-                    if($this->tpOnInfrastructure($tp2, GISCoordinate::RAILWAY_TYPE)){
-                        $railCounter++;
-                    }
-                    if($this->tpOnInfrastructure($tp2, GISCoordinate::HIGHWAY_TYPE)){
-                        $highwayCounter++;
-                    }
-                }
-
-                // bilijecki counts the points with speed below a certain value
-                // when a certain amount is below a the velocity threshold it
-                // counts as a stop
-                if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
-                    $lowSpeedTimeCounter += $currentTime;
-                    $lowSpeedTrackPoints[] = $tp2;
-
-                    if ($lowSpeedTimeCounter >= $this->maxTimeWithoutMovement) {
-                        $stopCounter++;
-                        $lowSpeedTimeCounter = 0;
-
-                        // is a busstop/trainstation nearby the last x tps
-                        if ($this->isPublicTransportStationNearby($lowSpeedTrackPoints)) {
-                            $publicTransportStationCounter++;
-                            $lowSpeedTrackPoints = [];
-                        }
-                    }
-                } else {
-                    $lowSpeedTimeCounter = 0;
-                    $lowSpeedTrackPoints = [];
-                }
-
-                $prevVelocity = $currentAcceleration;
+    /**
+     * Handle infrastructure features
+     * @param TrackpointInterface $tp
+     */
+    protected function handleInfrastructure(TrackpointInterface $tp)
+    {
+        // on rails or highway
+        if ($this->infrastructureTimer >= $this->gisAnalyseConfig['infrastructureTimeThreshold']) {
+            $this->infrastructureTimer = 0;
+            if ($this->tpOnInfrastructure($tp, GISCoordinate::RAILWAY_TYPE)) {
+                $this->railCounter++;
             }
-
-            $pts = $stopCounter > 0 ? $publicTransportStationCounter / $stopCounter : 0;
-
-            return [
-                Feature::MEAN_ACCELERATION => $totalAcceleration / $accTrackPoints,
-                Feature::MEAN_VELOCITY => $totalVelocity / $amountOfTrackPoints,
-                Feature::MAX_ACCELERATION => $maxAcceleration,
-                Feature::MAX_VELOCITY => $maxVelocity,
-                Feature::STOP_RATE => $stopCounter / $distance,
-                'time' => $time,
-                'distance' => $distance,
-                'startPoint' => $gpsTrackPoints[0],
-                'endPoint' => $gpsTrackPoints[$amountOfTrackPoints],
-                'trackPoints' => $gpsTrackPoints,
-                'type' => $type,
-                FEATURE::PUBLIC_TRANSPORT_STATION_CLOSENESS => $pts,
-                FEATURE::HIGHWAY_CLOSENESS => $highwayCounter / $time,
-                FEATURE::RAIL_CLOSENESS => $railCounter / $time
-            ];
+            if ($this->tpOnInfrastructure($tp, GISCoordinate::HIGHWAY_TYPE)) {
+                $this->highwayCounter++;
+            }
         }
+    }
 
-        throw new InvalidArgumentException(
-            'SegmentFilter: There should at least be ' . $this->minTrackPointsPerSegment . ' trackpoints present!'
-        );
+    /**
+     * Determines and handles possible stops
+     * @param $currentVelocity
+     * @param $currentTime
+     */
+    protected function handlePossibleStop($currentVelocity, $currentTime)
+    {
+        // bilijecki counts the points with speed below a certain value
+        // when a certain amount is below a the velocity threshold it
+        // counts as a stop
+        if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
+            $this->lowSpeedTimeCounter += $currentTime;
+            $this->lowSpeedTrackPoints[] = $this->currentTp;
+
+            if ($this->lowSpeedTimeCounter >= $this->maxTimeWithoutMovement) {
+                $this->stopCounter++;
+                $this->lowSpeedTimeCounter = 0;
+
+                // is a busstop/trainstation nearby the last x tps
+                if ($this->isPublicTransportStationNearby($this->lowSpeedTrackPoints)) {
+                    $this->publicTransportStationCounter++;
+                    $this->lowSpeedTrackPoints = [];
+                }
+            }
+        } else {
+            $this->lowSpeedTimeCounter = 0;
+            $this->lowSpeedTrackPoints = [];
+        }
     }
 
     /**
@@ -172,8 +171,12 @@ class GISTracksegmentFilter extends TracksegmentFilter
     protected function isPublicTransportStationNearby(array $trackPoints)
     {
         $trackPoint = $this->getElementInMid($trackPoints);
-        $boundingBox = $this->util->getBoundingBox($trackPoint, $this->gisAnalyseConfig['boundingBoxDistance']); // TODO add to config
-        $coordinates = $this->gisCoordinateRepository->getCoordinatesForBoundingBox($boundingBox, GISCoordinate::BUSSTOP_TYPE);
+        $boundingBox = $this->util->getBoundingBox($trackPoint, $this->gisAnalyseConfig['boundingBoxDistance']);
+        $coordinates = $this->gisCoordinateRepository->getCoordinatesForBoundingBox(
+            $boundingBox,
+            GISCoordinate::BUSSTOP_TYPE
+        );
+
         if ($coordinates) {
             return true;
         }
@@ -202,7 +205,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
             }
         }
 
-        throw new FilterException('The parameters provided to get trackpoint in mid!');
+        throw new FilterException('The parameters provided to get trackpoint in mid are invalid!');
     }
 
     /**
@@ -215,7 +218,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     {
         $boundingBox = $this->util->getBoundingBox($tp, $this->gisAnalyseConfig['infrastructureDistanceThreshold']);
         $result = $this->gisCoordinateRepository->getCoordinatesForBoundingBox($boundingBox, $type);
-        if($result){
+        if ($result) {
             return true;
         }
         return false;
