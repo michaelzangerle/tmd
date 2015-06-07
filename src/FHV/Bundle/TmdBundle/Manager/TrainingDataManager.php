@@ -2,7 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Manager;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
+use FHV\Bundle\PipesAndFiltersBundle\Component\ComponentInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
@@ -15,22 +15,22 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 class TrainingDataManager
 {
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $tpFilter;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $frFilter;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $fileWriter;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $smFilter;
 
@@ -40,27 +40,26 @@ class TrainingDataManager
     protected $analyseConfig;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $gisSegmentFilter;
 
     /**
-     * @param FilterInterface $tpFilter
-     * @param FilterInterface $fileReaderFilter
-     * @param FilterInterface $fileWriterFilter
-     * @param FilterInterface $segmentFilter
-     * @param FilterInterface $gisSegmentFilter
+     * @param ComponentInterface $tpFilter
+     * @param ComponentInterface $fileReaderFilter
+     * @param ComponentInterface $fileWriterFilter
+     * @param ComponentInterface $segmentFilter
+     * @param ComponentInterface $gisSegmentFilter
      * @param array $analyseConfig
      */
     function __construct(
-        FilterInterface $tpFilter,
-        FilterInterface $fileReaderFilter,
-        FilterInterface $fileWriterFilter,
-        FilterInterface $segmentFilter,
-        FilterInterface $gisSegmentFilter,
+        ComponentInterface $tpFilter,
+        ComponentInterface $fileReaderFilter,
+        ComponentInterface $fileWriterFilter,
+        ComponentInterface $segmentFilter,
+        ComponentInterface $gisSegmentFilter,
         array $analyseConfig
-    )
-    {
+    ) {
         $this->tpFilter = $tpFilter;
         $this->frFilter = $fileReaderFilter;
         $this->fileWriter = $fileWriterFilter;
@@ -80,36 +79,37 @@ class TrainingDataManager
     public function process($output, $dir = '.', $resultFileName = 'results.csv', $analyseType = 'basic')
     {
         if (!is_dir($dir)) {
-            throw new FileNotFoundException('The directory ' . $dir . ' does not exist!');
+            throw new FileNotFoundException('The directory '.$dir.' does not exist!');
         }
 
         if (!$this->isAnalyzeTypeValid($analyseType)) {
-            throw new \InvalidArgumentException('The given analyse type (' . $analyseType . ') seems to be unknown!');
+            throw new \InvalidArgumentException('The given analyse type ('.$analyseType.') seems to be unknown!');
         }
 
-        $files = glob($dir . '/*.gpx');
+        $files = glob($dir.'/*.gpx');
         if (count($files) > 0) {
             $this->connectFilters($analyseType);
-            $this->fileWriter->setFilePath($dir . $resultFileName);
+            $this->fileWriter->setFilePath($dir.$resultFileName);
 
             foreach ($files as $fileName) {
-                $output->write('<info>Processing "' . $fileName . '"</info>', true);
+                $output->write('<info>Processing "'.$fileName.'"</info>', true);
                 $this->frFilter->run(
                     [
                         'fileName' => $fileName,
-                        'analyseType' => $analyseType
+                        'analyseType' => $analyseType,
                     ]
                 );
             }
-            $this->frFilter->parentHasFinished();
-            $output->write(PHP_EOL . '<info>' . count($files) . ' gpx files found and processed!</info>' . PHP_EOL);
+            $this->frFilter->finished();
+            $output->write(PHP_EOL.'<info>'.count($files).' gpx files found and processed!</info>'.PHP_EOL);
         } else {
-            $output->write('<info>No gpx files found!</info>' . PHP_EOL);
+            $output->write('<info>No gpx files found!</info>'.PHP_EOL);
         }
     }
 
     /**
      * Connect filters with pipes depending on the analyse type
+     *
      * @param string $analyseType
      */
     protected function connectFilters($analyseType)
@@ -127,7 +127,9 @@ class TrainingDataManager
 
     /**
      * Validates the given analyze type
+     *
      * @param string $analyzeType
+     *
      * @return boolean
      */
     protected function isAnalyzeTypeValid($analyzeType)

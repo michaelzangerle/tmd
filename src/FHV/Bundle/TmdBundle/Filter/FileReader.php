@@ -2,18 +2,18 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 use SimpleXMLElement;
 
 /**
- * Reads a file and passes its contents on
- * Class FileReaderFilter
+ * Reads a file and passes its contents on to the connected filters
+ * Class FileReader
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class FileReaderFilter extends AbstractFilter
+class FileReader extends AbstractComponent
 {
     /**
      * @var int
@@ -42,7 +42,7 @@ class FileReaderFilter extends AbstractFilter
      *
      * @param $data
      *
-     * @throws FilterException
+     * @throws ComponentException
      */
     public function run($data)
     {
@@ -73,7 +73,7 @@ class FileReaderFilter extends AbstractFilter
         $doc->registerXPathNamespace('gpx', $ns);
         $segments = $doc->xpath('//gpx:trkseg');
 
-        if(count($segments) === 0) {
+        if (count($segments) === 0) {
             throw new InvalidArgumentException('FileReaderFilter: No segments found!');
         }
 
@@ -100,7 +100,7 @@ class FileReaderFilter extends AbstractFilter
                 array(
                     'analyseType' => $this->analyseType,
                     'type' => $type,
-                    'trackPoints' => $trackPoints
+                    'trackPoints' => $trackPoints,
                 )
             );
         }
@@ -116,13 +116,14 @@ class FileReaderFilter extends AbstractFilter
     protected function getNamespace(array $nspaces)
     {
         $ns = $this->gpxNameSpace;
-        foreach($nspaces as $nspace){
+        foreach ($nspaces as $nspace) {
             $tmpNs = strtolower($nspace);
-            if(strpos($tmpNs, 'gpx') !== false){
+            if (strpos($tmpNs, 'gpx') !== false) {
                 $ns = $nspace;
                 break;
             }
         }
+
         return $ns;
     }
 }

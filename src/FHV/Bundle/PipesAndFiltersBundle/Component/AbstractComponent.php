@@ -1,15 +1,15 @@
 <?php
 
-namespace FHV\Bundle\PipesAndFiltersBundle\Filter;
+namespace FHV\Bundle\PipesAndFiltersBundle\Component;
 
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\PipeInterface;
 
 /**
- * Abstract implementation of a filter
- * Class AbstractFilter
- * @package FHV\Bundle\PipesAndFiltersBundle\Filter
+ * Abstract implementation of a pipes and filter component (filter, sink)
+ * Class AbstractComponent
+ * @package FHV\Bundle\PipesAndFiltersBundle\Component
  */
-abstract class AbstractFilter implements FilterInterface
+abstract class AbstractComponent implements ComponentInterface
 {
     /**
      * Pipes to write the output to

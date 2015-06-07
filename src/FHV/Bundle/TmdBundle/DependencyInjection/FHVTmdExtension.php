@@ -29,7 +29,7 @@ class FHVTmdExtension extends Extension
         $this->setAnalyseParameters($container, $config);
         $this->setSegmentationParameters($container, $config);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
 
@@ -49,19 +49,34 @@ class FHVTmdExtension extends Extension
      */
     protected function setFilterParameters($container, $config)
     {
-        $container->setParameter('tmd.filter.max_distance', $config['filter']['max_distance']);
-        $container->setParameter('tmd.filter.min_distance', $config['filter']['min_distance']);
-        $container->setParameter('tmd.filter.max_altitude_change', $config['filter']['max_altitude_change']);
+        $container->setParameter(
+            'tmd.filter.max_distance',
+            $config['filter']['max_distance']
+        );
+        $container->setParameter(
+            'tmd.filter.min_distance',
+            $config['filter']['min_distance']
+        );
+        $container->setParameter(
+            'tmd.filter.max_altitude_change',
+            $config['filter']['max_altitude_change']
+        );
         $container->setParameter(
             'tmd.filter.min_trackpoints_per_segment',
             $config['filter']['min_trackpoints_per_segment']
         );
-        $container->setParameter('tmd.filter.min_time_difference', $config['filter']['min_time_difference']);
+        $container->setParameter(
+            'tmd.filter.min_time_difference',
+            $config['filter']['min_time_difference']
+        );
         $container->setParameter(
             'tmd.filter.points_to_skip_from_start',
             $config['filter']['points_to_skip_from_start']
         );
-        $container->setParameter('tmd.filter.min_valid_points', $config['filter']['min_valid_points_ratio']);
+        $container->setParameter(
+            'tmd.filter.min_valid_points',
+            $config['filter']['min_valid_points_ratio']
+        );
         $container->setParameter(
             'tmd.filter.max_velocity_for_nearly_stoppoints',
             $config['filter']['max_velocity_for_nearly_stoppoints']
@@ -91,7 +106,10 @@ class FHVTmdExtension extends Extension
      */
     protected function setSegmentationParameters($container, $config)
     {
-        $container->setParameter('tmd.segmentation.max_walk_velocity', $config['segmentation']['max_walk_velocity']);
+        $container->setParameter(
+            'tmd.segmentation.max_walk_velocity',
+            $config['segmentation']['max_walk_velocity']
+        );
         $container->setParameter(
             'tmd.segmentation.max_walk_acceleration',
             $config['segmentation']['max_walk_acceleration']
@@ -100,7 +118,15 @@ class FHVTmdExtension extends Extension
             'tmd.segmentation.min_segment_distance',
             $config['segmentation']['min_segment_distance']
         );
-        $container->setParameter('tmd.segmentation.min_segment_time', $config['segmentation']['min_segment_time']);
+        $container->setParameter(
+            'tmd.segmentation.min_segment_time',
+            $config['segmentation']['min_segment_time']
+        );
+        $container->setParameter(
+            'tmd.segmentation.max_segment_time',
+            $config['segmentation']['max_segment_time']
+        );
+
         $container->setParameter(
             'tmd.segmentation.max_time_difference',
             $config['segmentation']['max_time_difference']

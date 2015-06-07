@@ -2,8 +2,8 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
 
 use FHV\Bundle\TmdBundle\Model\Result;
 use FHV\Bundle\TmdBundle\Model\ResultInterface;
@@ -22,7 +22,7 @@ use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
  * Class SegmentationFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class SegmentationFilter extends AbstractFilter
+class SegmentationFilter extends AbstractComponent
 {
     /**
      * @var TrackpointUtil
@@ -74,6 +74,11 @@ class SegmentationFilter extends AbstractFilter
      */
     protected $analyseType;
 
+    /**
+     * @var int
+     */
+    protected $maxSegmentTime;
+
     function __construct(
         TrackpointUtilInterface $util,
         $maxWalkVelocity,
@@ -82,7 +87,8 @@ class SegmentationFilter extends AbstractFilter
         $minSegmentDistance,
         $maxTimeDifference,
         $maxTimeWithoutMovement,
-        $maxVelocityForNearlyStopPoints
+        $maxVelocityForNearlyStopPoints,
+        $maxSegmentTime
     ) {
         parent::__construct();
 
@@ -95,6 +101,7 @@ class SegmentationFilter extends AbstractFilter
         $this->maxTimeDifference = $maxTimeDifference;
         $this->maxTimeWithoutMovement = $maxTimeWithoutMovement;
         $this->maxVelocityForNearlyStopPoints = $maxVelocityForNearlyStopPoints;
+        $this->maxSegmentTime = $maxSegmentTime;
     }
 
     /**
@@ -102,7 +109,7 @@ class SegmentationFilter extends AbstractFilter
      *
      * @param $data
      *
-     * @throws FilterException
+     * @throws ComponentException
      */
     public function run($data)
     {
@@ -113,7 +120,7 @@ class SegmentationFilter extends AbstractFilter
             $this->analyseType = $data['analyseType'];
             $this->process($data['trackPoints']);
         } else {
-            throw new FilterException('Invalid data. Data must contain trackpoints and analyse type!');
+            throw new ComponentException('Invalid data. Data must contain trackpoints and analyse type!');
         }
     }
 
@@ -175,7 +182,7 @@ class SegmentationFilter extends AbstractFilter
             // segment with one element und undefined type
             if (count($curSegment->getTrackpoints()) === 1) {
                 $this->createNewResultEntity($this->analyseType, $isWalkPoint, $curSegment);
-            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime, $lowSpeedTimeCounter)) {
+            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime, $time, $lowSpeedTimeCounter)) {
                 // more than 1 element in segment and different type
                 $segments[] = $this->setValuesForSegment(
                     $curSegment,
@@ -207,8 +214,8 @@ class SegmentationFilter extends AbstractFilter
      * Sets all needed values for a segment
      *
      * @param TracksegmentInterface $segment
-     * @param integer               $time
-     * @param float                 $distance
+     * @param integer $time
+     * @param float $distance
      *
      * @return TracksegmentInterface
      */
@@ -217,7 +224,7 @@ class SegmentationFilter extends AbstractFilter
         $segment->setTime($time);
         $segment->setDistance($distance);
         $length = count($segment->getTrackPoints());
-        $segment->setEndPoint($segment->getTrackpoints()[$length-1]);
+        $segment->setEndPoint($segment->getTrackpoints()[$length - 1]);
         $segment->setStartPoint($segment->getTrackpoints()[0]);
 
         return $segment;
@@ -238,8 +245,8 @@ class SegmentationFilter extends AbstractFilter
     /**
      * Creates a new result entity and sets the relation to the segment and persists it
      *
-     * @param integer               $getAnalyseType
-     * @param boolean               $isWalkPoint
+     * @param integer $getAnalyseType
+     * @param boolean $isWalkPoint
      * @param TracksegmentInterface $curSegment
      *
      * @return ResultInterface
@@ -253,10 +260,11 @@ class SegmentationFilter extends AbstractFilter
         if ($isWalkPoint) {
             $result->setTransportType(TracksegmentType::WALK);
         } else {
-            $result->setTransportType(TracksegmentType::UNDEFINIED);
+            $result->setTransportType(TracksegmentType::UNDEFINED);
         }
 
         $curSegment->setType($result->getTransportType());
+
         return $result;
     }
 
@@ -289,19 +297,27 @@ class SegmentationFilter extends AbstractFilter
      * time difference between the current track points or because a lot of
      * segments without or with little movement were discovered
      *
-     * @param boolean               $isWalkPoint
+     * @param boolean $isWalkPoint
      * @param TracksegmentInterface $curSegment
-     * @param integer               $time
-     * @param integer               $lowSpeedCounter
+     * @param integer $trackPointTime
+     * @param integer $segmentTime
+     * @param integer $lowSpeedCounter
      *
      * @return bool
      */
-    protected function newSegmentNeeded($isWalkPoint, TracksegmentInterface $curSegment, $time, $lowSpeedCounter)
-    {
-        if (count($curSegment->getTrackpoints()) >= 2 && (($isWalkPoint && $curSegment->getResult()->getTransportType(
-                    ) === TracksegmentType::UNDEFINIED) ||
+    protected function newSegmentNeeded(
+        $isWalkPoint,
+        TracksegmentInterface $curSegment,
+        $trackPointTime,
+        $segmentTime,
+        $lowSpeedCounter
+    ) {
+        $segmentTime += $trackPointTime;
+        if (count($curSegment->getTrackpoints()) >= 2 && (
+                ($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINED) ||
                 (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
-                ($time > $this->maxTimeDifference) ||
+                ($segmentTime > $this->maxSegmentTime) ||
+                ($trackPointTime > $this->maxTimeDifference) ||
                 ($lowSpeedCounter >= $this->maxTimeWithoutMovement))
         ) {
             return true;
@@ -372,7 +388,7 @@ class SegmentationFilter extends AbstractFilter
         $seg1->setTime($seg1->getTime() + $seg2->getTime());
         $seg1->setDistance(($seg1->getDistance() + $seg2->getDistance()));
         $length = count($seg2->getTrackpoints());
-        $seg1->setEndPoint($seg2->getTrackpoints()[$length-1]);
+        $seg1->setEndPoint($seg2->getTrackpoints()[$length - 1]);
 
         /** @var TrackpointInterface $tp */
         foreach ($seg2->getTrackpoints() as $tp) {
@@ -385,7 +401,7 @@ class SegmentationFilter extends AbstractFilter
         $this->write(
             [
                 'track' => $this->track,
-                'analyseType' => $this->analyseType
+                'analyseType' => $this->analyseType,
             ]
         );
         parent::parentHasFinished();

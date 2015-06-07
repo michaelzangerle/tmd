@@ -2,7 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
 use FHV\Bundle\TmdBundle\Exception\TrackException;
 use FHV\Bundle\TmdBundle\Model\Trackpoint;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
@@ -12,7 +12,7 @@ use FHV\Bundle\TmdBundle\Util\TrackpointUtilInterface;
  * Filters and removes single trackpoints from an array of trackpoints
  * Class TrackPointFilter
  */
-class TrackpointFilter extends AbstractFilter
+class TrackpointFilter extends AbstractComponent
 {
     /**
      * @var int

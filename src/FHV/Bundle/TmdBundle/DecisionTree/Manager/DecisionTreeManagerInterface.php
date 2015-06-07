@@ -13,7 +13,9 @@ interface DecisionTreeManagerInterface
 {
     /**
      * Returns a tree and writes cache file if it does not exist
+     *
      * @param $name
+     *
      * @return Tree
      */
     public function getTree($name);

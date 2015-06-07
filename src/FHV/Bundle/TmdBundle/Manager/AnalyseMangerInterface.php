@@ -12,7 +12,6 @@ interface AnalyseMangerInterface
     /**
      * Returns an overview of the analysed results per analyse mode
      *
-     *
      * @return array
      */
     public function getOverview();

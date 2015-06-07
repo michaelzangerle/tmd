@@ -2,9 +2,9 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Model\Tracksegment;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
@@ -16,7 +16,7 @@ use FHV\Bundle\TmdBundle\Model\Feature;
  * Class SegmentFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class TracksegmentFilter extends AbstractFilter
+class TracksegmentFilter extends AbstractComponent
 {
     /**
      * Variables used to determine the features of a segment
@@ -61,7 +61,7 @@ class TracksegmentFilter extends AbstractFilter
      *
      * @param $data
      *
-     * @throws FilterException
+     * @throws ComponentException
      */
     public function run($data)
     {
@@ -82,7 +82,7 @@ class TracksegmentFilter extends AbstractFilter
                 $this->write(
                     [
                         'segment' => $segment,
-                        'analyseType' => $data['analyseType']
+                        'analyseType' => $data['analyseType'],
                     ]
                 );
             } else {
@@ -98,8 +98,7 @@ class TracksegmentFilter extends AbstractFilter
         $minTrackPointsPerSegment,
         $maxVelocityForNearlyStopPoints,
         $maxTimeWithoutMovement
-    )
-    {
+    ) {
         parent::__construct();
         $this->util = $util;
         $this->minTrackPointsPerSegment = $minTrackPointsPerSegment;
@@ -171,12 +170,13 @@ class TracksegmentFilter extends AbstractFilter
         }
 
         throw new InvalidArgumentException(
-            'SegmentFilter: There should at least be ' . $this->minTrackPointsPerSegment . ' trackpoints present!'
+            'SegmentFilter: There should at least be '.$this->minTrackPointsPerSegment.' trackpoints present!'
         );
     }
 
     /**
      * Handle values for different features
+     *
      * @param $currentVelocity
      * @param $currentAcceleration
      * @param $currentTime
@@ -190,25 +190,39 @@ class TracksegmentFilter extends AbstractFilter
 
     /**
      * Special handling for the first trackpoint of a segment
+     *
      * @param TrackpointInterface $tp
      */
     protected function firstTrackpointHandling(TrackpointInterface $tp)
     {
-        $this->gpsTrackPoints[] = $tp;
+        $this->addTrackpoint($tp);
     }
 
     /**
      * Special handling for the last trackpoint of segment
+     *
      * @param TrackpointInterface $tp
      */
     protected function lastTrackpointHandling(TrackpointInterface $tp)
+    {
+        $this->addTrackpoint($tp);
+    }
+
+    /**
+     * Adds a trackpoint to the current gps trackpoint array
+     *
+     * @param TrackpointInterface $tp
+     */
+    protected function addTrackpoint(TrackpointInterface $tp)
     {
         $this->gpsTrackPoints[] = $tp;
     }
 
     /**
      * Returns the result for the current segment
+     *
      * @param $type
+     *
      * @return array
      */
     protected function getResultForCurrentSegment($type)
@@ -224,12 +238,13 @@ class TracksegmentFilter extends AbstractFilter
             'startPoint' => $this->gpsTrackPoints[0],
             'endPoint' => $this->gpsTrackPoints[$this->amountOfTrackPoints],
             'trackPoints' => $this->gpsTrackPoints,
-            'type' => $type
+            'type' => $type,
         ];
     }
 
     /**
      * Handle velocity
+     *
      * @param $currentVelocity
      */
     protected function handleVelocity($currentVelocity)
@@ -242,6 +257,7 @@ class TracksegmentFilter extends AbstractFilter
 
     /**
      * Handle acceleration
+     *
      * @param $currentAcceleration
      */
     protected function handleAcceleration($currentAcceleration)
@@ -258,6 +274,7 @@ class TracksegmentFilter extends AbstractFilter
 
     /**
      * Determines and handles possible stops
+     *
      * @param $currentVelocity
      * @param $currentTime
      */
@@ -289,6 +306,7 @@ class TracksegmentFilter extends AbstractFilter
     {
         $seg = new Tracksegment();
         $seg->setFeatures($features);
+
         return $seg;
     }
 }

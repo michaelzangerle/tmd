@@ -2,7 +2,7 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
 use FHV\Bundle\TmdBundle\Entity\GISCoordinate;
 use FHV\Bundle\TmdBundle\Entity\GISCoordinateRepository;
 use FHV\Bundle\TmdBundle\Model\Feature;
@@ -43,11 +43,10 @@ class GISTracksegmentFilter extends TracksegmentFilter
         $maxTimeWithoutMovement,
         GISCoordinateRepository $gisCoordinateRepo,
         array $gisAnalyseConfig
-    )
-    {
+    ) {
         parent::__construct($util, $minTrackPointsPerSegment, $maxVelocityForNearlyStopPoints, $maxTimeWithoutMovement);
         $this->gisCoordinateRepository = $gisCoordinateRepo;
-        $this->gisAnalyseConfig = $gisAnalyseConfig['gis']['config']; // todo better way?
+        $this->gisAnalyseConfig = $gisAnalyseConfig['gis']['config']; // todo
     }
 
     /**
@@ -66,7 +65,9 @@ class GISTracksegmentFilter extends TracksegmentFilter
 
     /**
      * Returns the result for the current segment
+     *
      * @param $type
+     *
      * @return array
      */
     protected function getResultForCurrentSegment($type)
@@ -75,34 +76,57 @@ class GISTracksegmentFilter extends TracksegmentFilter
         $result[FEATURE::PUBLIC_TRANSPORT_STATION_CLOSENESS] = $this->pts;
         $result[FEATURE::HIGHWAY_CLOSENESS] = $this->highwayCounter / $this->time;
         $result[FEATURE::RAIL_CLOSENESS] = $this->railCounter / $this->time;
-        
+
         return $result;
     }
 
     /**
      * Special handling for the first trackpoint of a segment
+     *
      * @param TrackpointInterface $tp
      */
     protected function firstTrackpointHandling(TrackpointInterface $tp)
     {
         parent::firstTrackpointHandling($tp);
-        // TODO check infrastructure for first point
+        if ($this->tpOnInfrastructure($tp, GISCoordinate::RAILWAY_TYPE)) {
+            $this->railCounter += 10;
+        }
+        if ($this->tpOnInfrastructure($tp, GISCoordinate::HIGHWAY_TYPE)) {
+            $this->highwayCounter += 10;
+        }
+        // is a busstop/trainstation nearby the last x tps
+        if ($this->isPublicTransportStationNearby([$tp])) {
+            $this->publicTransportStationCounter += 10;
+            $this->lowSpeedTrackPoints = [];
+        }
     }
 
     /**
      * Special handling for the last trackpoint of segment
+     *
      * @param TrackpointInterface $tp
      */
     protected function lastTrackpointHandling(TrackpointInterface $tp)
     {
         parent::lastTrackpointHandling($tp);
-        // TODO check infrastructure for last point
+        if ($this->tpOnInfrastructure($tp, GISCoordinate::RAILWAY_TYPE)) {
+            $this->railCounter += 10;
+        }
+        if ($this->tpOnInfrastructure($tp, GISCoordinate::HIGHWAY_TYPE)) {
+            $this->highwayCounter += 10;
+        }
+        // is a busstop/trainstation nearby the last x tps
+        if ($this->isPublicTransportStationNearby([$tp])) {
+            $this->publicTransportStationCounter += 10;
+            $this->lowSpeedTrackPoints = [];
+        }
 
         $this->pts = $this->stopCounter > 0 ? $this->publicTransportStationCounter / $this->stopCounter : 0;
     }
 
     /**
      * Handle values for different features
+     *
      * @param $currentVelocity
      * @param $currentAcceleration
      * @param $currentTime
@@ -112,15 +136,19 @@ class GISTracksegmentFilter extends TracksegmentFilter
         $this->handleVelocity($currentVelocity);
         $this->handleAcceleration($currentAcceleration);
         $this->handlePossibleStop($currentVelocity, $currentTime);
-        $this->handleInfrastructure($this->currentTp);
+        $this->handleInfrastructure($this->currentTp, $currentTime);
     }
 
     /**
      * Handle infrastructure features
+     *
      * @param TrackpointInterface $tp
+     * @param int $currentTime
      */
-    protected function handleInfrastructure(TrackpointInterface $tp)
+    protected function handleInfrastructure(TrackpointInterface $tp, $currentTime)
     {
+        $this->infrastructureTimer += $currentTime;
+
         // on rails or highway
         if ($this->infrastructureTimer >= $this->gisAnalyseConfig['infrastructureTimeThreshold']) {
             $this->infrastructureTimer = 0;
@@ -135,6 +163,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
 
     /**
      * Determines and handles possible stops
+     *
      * @param $currentVelocity
      * @param $currentTime
      */
@@ -165,7 +194,9 @@ class GISTracksegmentFilter extends TracksegmentFilter
 
     /**
      * Checks if a public transport station was nearby during the last x trackpoints
+     *
      * @param TrackpointInterface[] $trackPoints
+     *
      * @return bool
      */
     protected function isPublicTransportStationNearby(array $trackPoints)
@@ -186,9 +217,11 @@ class GISTracksegmentFilter extends TracksegmentFilter
 
     /**
      * Returns the
+     *
      * @param TrackpointInterface[] $trackPoints
+     *
      * @return TrackpointInterface
-     * @throws FilterException
+     * @throws ComponentException
      */
     protected function getElementInMid(array $trackPoints)
     {
@@ -201,17 +234,20 @@ class GISTracksegmentFilter extends TracksegmentFilter
                     return $trackPoints[1];
                 default:
                     $idx = ceil($length / 2);
+
                     return $trackPoints[$idx];
             }
         }
 
-        throw new FilterException('The parameters provided to get trackpoint in mid are invalid!');
+        throw new ComponentException('The parameters provided to get trackpoint in mid are invalid!');
     }
 
     /**
      * Checks if the given track point could be on rails
+     *
      * @param TrackpointInterface $tp
      * @param string $type
+     *
      * @return bool
      */
     protected function tpOnInfrastructure(TrackpointInterface $tp, $type)
@@ -219,8 +255,10 @@ class GISTracksegmentFilter extends TracksegmentFilter
         $boundingBox = $this->util->getBoundingBox($tp, $this->gisAnalyseConfig['infrastructureDistanceThreshold']);
         $result = $this->gisCoordinateRepository->getCoordinatesForBoundingBox($boundingBox, $type);
         if ($result) {
+
             return true;
         }
+
         return false;
     }
 }

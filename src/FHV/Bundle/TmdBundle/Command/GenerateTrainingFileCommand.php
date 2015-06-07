@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generates the training data file needed to build a decision tree
  * Needs at least one gpx file to generate the training data file from it
- * Class GenerateDecissionTreeFileCommand
+ * Class GenerateTrainingFileCommand
  */
 class GenerateTrainingFileCommand extends ContainerAwareCommand
 {
@@ -40,7 +40,7 @@ class GenerateTrainingFileCommand extends ContainerAwareCommand
                 'basic'
             );
     }
-    
+
     /**
      * {@inheritdoc}
      */

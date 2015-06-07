@@ -23,7 +23,7 @@ class Result
      * @Expose
      * @var string
      */
-    private $transportType = TracksegmentType::UNDEFINIED;
+    private $transportType = TracksegmentType::UNDEFINED;
 
     /**
      * @Expose

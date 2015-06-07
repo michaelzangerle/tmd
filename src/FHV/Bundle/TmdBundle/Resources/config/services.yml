@@ -24,8 +24,8 @@ services:
     # Filter
     ##############################
 
-    fhv_tmd.fileReaderFilter:
-          class: FHV\Bundle\TmdBundle\Filter\FileReaderFilter
+    fhv_tmd.fileReader:
+          class: FHV\Bundle\TmdBundle\Filter\FileReader
           arguments:
             - %tmd.filter.min_trackpoints_per_segment%
             - %tmd.gpx_namespace%
@@ -60,8 +60,8 @@ services:
             - @fhv_tmd.gisCoordinateRepo
             - %tmd.analyse%
 
-    fhv_tmd.fileWriterFilter:
-          class: FHV\Bundle\TmdBundle\Filter\FileWriterFilter
+    fhv_tmd.fileWriter:
+          class: FHV\Bundle\TmdBundle\Filter\FileWriter
           arguments:
             - %tmd.analyse%
 
@@ -76,6 +76,7 @@ services:
             - %tmd.segmentation.max_time_difference%
             - %tmd.segmentation.max_time_without_movement%
             - %tmd.segmentation.max_velocity_for_nearly_stoppoints%
+            - %tmd.segmentation.max_segment_time%
 
     fhv_tmd.travelModeFilter:
           class: FHV\Bundle\TmdBundle\Filter\TravelModeFilter
@@ -86,8 +87,8 @@ services:
           class: FHV\Bundle\TmdBundle\Filter\PostprocessFilter
           arguments: []
 
-    fhv_tmd.databaseFilter:
-          class: FHV\Bundle\TmdBundle\Filter\DatabaseFilter
+    fhv_tmd.databaseWriter:
+          class: FHV\Bundle\TmdBundle\Filter\DatabaseWriter
           arguments: []
 
     ##############################
@@ -98,8 +99,8 @@ services:
         class: FHV\Bundle\TmdBundle\Manager\TrainingDataManager
         arguments:
           - @fhv_tmd.trackPointFilter
-          - @fhv_tmd.fileReaderFilter
-          - @fhv_tmd.fileWriterFilter
+          - @fhv_tmd.fileReader
+          - @fhv_tmd.fileWriter
           - @fhv_tmd.segmentFilter
           - @fhv_tmd.gisSegmentFilter
           - %tmd.analyse%
@@ -109,12 +110,12 @@ services:
         arguments:
           - @doctrine.orm.entity_manager
           - @fhv_tmd.trackPointFilter
-          - @fhv_tmd.fileReaderFilter
+          - @fhv_tmd.fileReader
           - @fhv_tmd.segmentationFilter
           - @fhv_tmd.segmentFilter
           - @fhv_tmd.travelModeFilter
           - @fhv_tmd.postProcessFilter
-          - @fhv_tmd.databaseFilter
+          - @fhv_tmd.databaseWriter
           - @fhv_tmd.gisSegmentFilter
 
     fhv_tmd.resultManager:

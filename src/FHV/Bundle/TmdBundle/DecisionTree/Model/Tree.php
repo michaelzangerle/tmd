@@ -7,8 +7,8 @@ namespace FHV\Bundle\TmdBundle\DecisionTree\Model;
  * Class Tree
  * @package FHV\Bundle\TmdBundle\DecisionTree\Model
  */
-class Tree {
-
+class Tree
+{
     /**
      * @var Node
      */
@@ -42,11 +42,13 @@ class Tree {
      *
      * @return array
      */
-    public function process(array $values) {
+    public function process(array $values)
+    {
         $node = $this->root->process($values);
-        while($node !== null && $node instanceof Node) {
+        while ($node !== null && $node instanceof Node) {
             $node = $node->process($values);
         }
+
         return $node;
     }
 }

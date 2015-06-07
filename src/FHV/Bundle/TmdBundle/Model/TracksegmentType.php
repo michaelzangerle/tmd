@@ -8,7 +8,7 @@ namespace FHV\Bundle\TmdBundle\Model;
  */
 final class TracksegmentType
 {
-    const UNDEFINIED = 'unknown';
+    const UNDEFINED = 'unknown';
     const DRIVE = 'drive';
     const BUS = 'bus';
     const TRAIN = 'train';

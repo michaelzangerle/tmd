@@ -15,7 +15,7 @@ interface TrackManagerInterface
     /**
      * Creates a track from a gxp file and a for a selected process method
      *
-     * @param File   $file
+     * @param File $file
      * @param string $method
      *
      * @return Track

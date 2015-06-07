@@ -42,6 +42,7 @@ class DecisionTreeBuilder
 
     /**
      * DecisionTreeBuilder constructor.
+     *
      * @param $txtFilePath
      * @param $txtFileName
      */
@@ -69,6 +70,7 @@ class DecisionTreeBuilder
 
     /**
      * Processes a file with a decision tree description
+     *
      * @param $handle
      */
     protected function processFile($handle)
@@ -80,6 +82,7 @@ class DecisionTreeBuilder
 
     /**
      * Processes a line of a decision tree description
+     *
      * @param string $line
      */
     protected function processLine($line)
@@ -117,18 +120,20 @@ class DecisionTreeBuilder
 
     /**
      * Creates a tree node
+     *
      * @param int $level
      * @param string $feature
      * @param string $comparator
      * @param float $value
      * @param array $result
+     *
      * @throws DecisionTreeException
      */
     protected function createNode($level, $feature, $comparator, $value, $result)
     {
         if (!$this->nodeWithInvertedConditionExists($level, $feature, $comparator, $value)) {
             $node = new NodeDummy();
-            $name = '$node' . $this->nodeCounter;
+            $name = '$node'.$this->nodeCounter;
             $node->setName($name);
             $this->nodeCounter++;
             $this->lastOnLevel[$level] = $node;
@@ -164,10 +169,12 @@ class DecisionTreeBuilder
 
     /**
      * Checks the last node on this level is the same but with an inverted comparator
+     *
      * @param int $level
      * @param string $feature
      * @param string $comparator
      * @param float $value
+     *
      * @return bool
      */
     protected function nodeWithInvertedConditionExists($level, $feature, $comparator, $value)
@@ -183,18 +190,20 @@ class DecisionTreeBuilder
 
             return false;
         }
+
         return false;
     }
 
     /**
      * Creates a result node
+     *
      * @param NodeDummy $parent
      * @param array $result
      */
     protected function createResult(NodeDummy $parent, $result)
     {
         $node = new NodeDummy();
-        $name = '$node' . $this->nodeCounter;
+        $name = '$node'.$this->nodeCounter;
         $node->setName($name);
         $this->nodeCounter++;
         $this->tree[$name] = $node;
@@ -210,7 +219,9 @@ class DecisionTreeBuilder
 
     /**
      * Returns the opposite comparator
+     *
      * @param $comparator
+     *
      * @return string
      */
     protected function getOppositeComparator($comparator)
@@ -225,13 +236,15 @@ class DecisionTreeBuilder
             case '>=':
                 return Decision::LT_OPERATOR;
             default:
-                throw new \InvalidArgumentException('Unknown comparator ' . $comparator . ' found!');
+                throw new \InvalidArgumentException('Unknown comparator '.$comparator.' found!');
         }
     }
 
     /**
      * Converts a comparator
+     *
      * @param string $comp
+     *
      * @return string
      * @throws InvalidComparatorException
      */

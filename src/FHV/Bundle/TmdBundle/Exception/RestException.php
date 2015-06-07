@@ -15,7 +15,7 @@ class RestException extends Exception
     {
         return array(
             'code' => $this->code,
-            'message' => $this->message
+            'message' => $this->message,
         );
     }
 }

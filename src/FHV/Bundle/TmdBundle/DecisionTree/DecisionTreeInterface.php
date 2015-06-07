@@ -7,8 +7,8 @@ namespace FHV\Bundle\TmdBundle\DecisionTree;
  * Interface DecisionTreeInterface
  * @package FHV\Bundle\TmdBundle\DecisionTree
  */
-interface DecisionTreeInterface {
-
+interface DecisionTreeInterface
+{
     /**
      * Process values by tree
      *

@@ -46,7 +46,9 @@ class Trackpoint implements TrackpointInterface
     /**
      * TODO move into factory?
      * Creates a trackpoint from an xml element
+     *
      * @param \SimpleXMLElement $xml
+     *
      * @return Trackpoint
      */
     public static function fromXML(\SimpleXMLElement $xml)
@@ -60,13 +62,14 @@ class Trackpoint implements TrackpointInterface
 
             return new Trackpoint($lat, $long, $ele, $time);
         } else {
-            throw new \InvalidArgumentException('The provided xml for a trackpoint (' . $xml->time . ') is invalid!');
+            throw new \InvalidArgumentException('The provided xml for a trackpoint ('.$xml->time.') is invalid!');
         }
     }
 
     /**
      * Validates the xml data to create a new trackpoint obj
      * TODO move into factory?
+     *
      * @param $xml
      *
      * @return bool

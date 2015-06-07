@@ -214,7 +214,7 @@ define(['underscore', 'async!//maps.googleapis.com/maps/api/js?v=3.exp'], functi
                 case 'walk':
                     return 'brown';
                 default:
-                    return 'pink';
+                    return 'cyan';
             }
         },
 

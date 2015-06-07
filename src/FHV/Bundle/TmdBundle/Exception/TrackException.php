@@ -2,13 +2,13 @@
 
 namespace FHV\Bundle\TmdBundle\Exception;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
 
 /**
  * General track exception
  * Class TrackException
  * @package FHV\Bundle\TmdBundle\Exception
  */
-class TrackException extends FilterException
+class TrackException extends ComponentException
 {
 }

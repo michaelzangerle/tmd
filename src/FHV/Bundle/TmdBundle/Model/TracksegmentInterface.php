@@ -16,6 +16,7 @@ interface TracksegmentInterface
 
     /**
      * Sets the start ponit
+     *
      * @param Trackpoint $startPoint
      */
     public function setStartPoint($startPoint);
@@ -28,6 +29,7 @@ interface TracksegmentInterface
 
     /**
      * Sets the entpoint
+     *
      * @param Trackpoint $endPoint
      */
     public function setEndPoint($endPoint);
@@ -40,6 +42,7 @@ interface TracksegmentInterface
 
     /**
      * Sets the type
+     *
      * @param string $type
      */
     public function setType($type);
@@ -52,6 +55,7 @@ interface TracksegmentInterface
 
     /**
      * Sets the distance
+     *
      * @param float $distance
      */
     public function setDistance($distance);
@@ -64,6 +68,7 @@ interface TracksegmentInterface
 
     /**
      * Sets the time
+     *
      * @param float $time of segment in seconds
      */
     public function setTime($time);
@@ -76,12 +81,14 @@ interface TracksegmentInterface
 
     /**
      * Sets multiple trackpoints
+     *
      * @param TrackpointInterface[] $trackPoints
      */
     public function setTrackPoints($trackPoints);
 
     /**
      * Returns a feature by key
+     *
      * @param $key
      *
      * @return mixed
@@ -90,6 +97,7 @@ interface TracksegmentInterface
 
     /**
      * Sets a feature
+     *
      * @param $key
      * @param $value
      */
@@ -98,12 +106,14 @@ interface TracksegmentInterface
     /**
      * Sets features for a segment but takes also care of basic features like
      * distance, time, start, end, type and trackpoints which will set separately
+     *
      * @param array $features
      */
     public function setFeatures(array $features);
 
     /**
      * Adds a trackpoint
+     *
      * @param TrackpointInterface $trackpoint
      */
     public function addTrackpoint(TrackpointInterface $trackpoint);
@@ -116,6 +126,7 @@ interface TracksegmentInterface
 
     /**
      * Sets a result
+     *
      * @param Result $result
      */
     public function setResult($result);
@@ -128,6 +139,7 @@ interface TracksegmentInterface
 
     /**
      * Append trackpoints to the existing ones
+     *
      * @param TrackpointInterface[] $trackPoints
      *
      * @return mixed

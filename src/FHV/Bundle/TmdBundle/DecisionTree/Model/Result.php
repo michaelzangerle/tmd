@@ -38,7 +38,7 @@ class Result
             TracksegmentType::WALK => $values[TracksegmentType::WALK],
             TracksegmentType::DRIVE => $values[TracksegmentType::DRIVE],
             TracksegmentType::BUS => $values[TracksegmentType::BUS],
-            TracksegmentType::TRAIN => $values[TracksegmentType::TRAIN]
+            TracksegmentType::TRAIN => $values[TracksegmentType::TRAIN],
         ];
 
         foreach ($this->values as $key => $nr) {

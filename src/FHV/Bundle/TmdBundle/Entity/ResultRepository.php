@@ -32,11 +32,12 @@ class ResultRepository extends EntityRepository
      * Adds where statements according to criteria
      *
      * @param QueryBuilder $qb
-     * @param array        $criteria
+     * @param array $criteria
      */
-    protected function addSimpleWhereStatements(QueryBuilder $qb, array $criteria){
-        foreach($criteria as $key => $value){
-            if($value === null) {
+    protected function addSimpleWhereStatements(QueryBuilder $qb, array $criteria)
+    {
+        foreach ($criteria as $key => $value) {
+            if ($value === null) {
                 $qb->andWhere('results.'.$key.' IS NULL');
             } else {
                 $qb->andWhere('results.'.$key.' = :'.$key);

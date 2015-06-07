@@ -2,9 +2,8 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
-use FHV\Bundle\TmdBundle\DecisionTree\BasicDecissionTree;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\DecisionTree\DecisionTreeInterface;
 use FHV\Bundle\TmdBundle\DecisionTree\Manager\DecisionTreeManagerInterface;
 use FHV\Bundle\TmdBundle\DecisionTree\Model\Result as TreeResult;
@@ -15,7 +14,7 @@ use FHV\Bundle\TmdBundle\Model\Track;
  * Class TravelModeFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class TravelModeFilter extends AbstractFilter
+class TravelModeFilter extends AbstractComponent
 {
     /**
      * @var DecisionTreeInterface
@@ -55,6 +54,7 @@ class TravelModeFilter extends AbstractFilter
 
     /**
      * Processes all segments through the decision tree and sets the result
+     *
      * @param Track $track
      */
     protected function process(Track $track)

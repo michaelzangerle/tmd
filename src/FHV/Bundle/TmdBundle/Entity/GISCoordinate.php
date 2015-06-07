@@ -36,6 +36,7 @@ class GISCoordinate
 
     /**
      * GISCoordinate constructor.
+     *
      * @param float $latitude
      * @param float $longitude
      * @param string $type
@@ -51,6 +52,7 @@ class GISCoordinate
      * Set latitude
      *
      * @param float $latitude
+     *
      * @return GISCoordinate
      */
     public function setLatitude($latitude)
@@ -74,6 +76,7 @@ class GISCoordinate
      * Set longitude
      *
      * @param float $longitude
+     *
      * @return GISCoordinate
      */
     public function setLongitude($longitude)
@@ -97,6 +100,7 @@ class GISCoordinate
      * Set type
      *
      * @param string $type
+     *
      * @return GISCoordinate
      */
     public function setType($type)

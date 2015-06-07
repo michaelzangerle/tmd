@@ -2,18 +2,19 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
 use FHV\Bundle\TmdBundle\Entity\Track;
+use FHV\Bundle\PipesAndFiltersBundle\Component\ComponentInterface;
 
 /**
  * Interface for the database sink
- * Interface DatabaseFilterInterface
+ * Interface DatabaseWriterInterface
  * @package FHV\Bundle\TmdBundle\Filter
  */
-interface DatabaseFilterInterface extends FilterInterface {
-
+interface DatabaseWriterInterface extends ComponentInterface
+{
     /**
      * Provide a track object
+     *
      * @param Track $track
      */
     public function provideTrack(Track $track);

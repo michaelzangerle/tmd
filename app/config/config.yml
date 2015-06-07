@@ -113,8 +113,9 @@ fhv_tmd:
     # zheng 1.5
     max_walk_acceleration: 1.5
     min_segment_time: 20
+    max_segment_time: 30
     min_segment_distance: 50
-    max_time_without_movement: 12
+    max_time_without_movement: 10
     max_velocity_for_nearly_stoppoints: 0.55
     max_time_difference: 30
 
@@ -132,9 +133,9 @@ fhv_tmd:
         - "maxacceleration"
     gis:
       config:
-        boundingBoxDistance: 15
+        boundingBoxDistance: 20
         infrastructureTimeThreshold: 20
-        infrastructureDistanceThreshold: 10
+        infrastructureDistanceThreshold: 20
       class: "GISDecisionTree"
       cacheDir: "%kernel.root_dir%/../decisionTrees/gis"
       txtFilePath: "%kernel.root_dir%/../decisionTrees/gis"

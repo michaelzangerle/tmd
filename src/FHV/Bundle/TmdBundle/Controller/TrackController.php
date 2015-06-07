@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Controller which provides a minimal REST api to create tracks
+ * Track controller which provides a minimal REST api to create tracks
  * Class TrackController
  * @package FHV\Bundle\TmdBundle\Controller
  */

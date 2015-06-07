@@ -16,8 +16,10 @@ class GISCoordinateRepository extends EntityRepository
 {
     /**
      * Returns coordinates for a type within a bounding box
+     *
      * @param BoundingBox $boundingBox
      * @param string $type
+     *
      * @return mixed
      */
     public function getCoordinatesForBoundingBox(BoundingBox $boundingBox, $type = 'busstop')
@@ -33,6 +35,7 @@ class GISCoordinateRepository extends EntityRepository
 
     /**
      * Adds where statements to a query builder for a bounding box
+     *
      * @param QueryBuilder $qb
      * @param BoundingBox $bb
      */

@@ -8,12 +8,12 @@ use FHV\Bundle\TmdBundle\Exception\ResultNotFoundException;
  * Interface ResultManagerInterface
  * @package FHV\Bundle\TmdBundle\Manager
  */
-interface ResultManagerInterface {
-
+interface ResultManagerInterface
+{
     /**
      * Updates an existing result entity
      *
-     * @param       $id
+     * @param int $id
      * @param array $data
      *
      * @return mixed

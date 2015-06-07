@@ -5,7 +5,7 @@ namespace FHV\Bundle\TmdBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
- * Controller which provides templates
+ * Template controller which provides templates for the app
  * Class TemplateController
  * @package FHV\Bundle\TmdBundle\Controller
  */

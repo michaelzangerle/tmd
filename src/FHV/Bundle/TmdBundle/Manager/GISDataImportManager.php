@@ -26,6 +26,7 @@ class GISDataImportManager implements GISDataImportManagerInterface
 
     /**
      * GISDataImportManager constructor.
+     *
      * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
@@ -47,11 +48,11 @@ class GISDataImportManager implements GISDataImportManagerInterface
             foreach ($nodes as $node) {
                 $nodeEntity = $this->createGISCoordinate($node, $typeName);
                 $this->em->persist($nodeEntity);
-                $output->write($counter . ' ');
+                $output->write($counter.' ');
 
                 if ($counter % $this->batchSize === 0) {
                     $this->em->flush();
-                    $output->writeln(PHP_EOL.'Flushed '. $counter);
+                    $output->writeln(PHP_EOL.'Flushed '.$counter);
                 }
                 $counter++;
             }
@@ -67,8 +68,10 @@ class GISDataImportManager implements GISDataImportManagerInterface
 
     /**
      * Creates a node entity from an xml node
+     *
      * @param $node
      * @param $type
+     *
      * @return GISCoordinate
      */
     protected function createGISCoordinate($node, $type)
@@ -81,7 +84,9 @@ class GISDataImportManager implements GISDataImportManagerInterface
 
     /**
      * Returns an entity name for the passed type
+     *
      * @param string $type
+     *
      * @return string
      */
     protected function getValidType($type)

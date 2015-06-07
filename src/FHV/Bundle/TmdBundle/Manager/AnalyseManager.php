@@ -49,7 +49,7 @@ class AnalyseManager implements AnalyseMangerInterface
             $response[$analyseType] = [];
             $response[$analyseType]['total'] = $this->getResultsCountBy(
                 [
-                    'analyseType' => $analyseType
+                    'analyseType' => $analyseType,
                 ]
             );
             $response[$analyseType]['correctIdentified'] = $this->getResultsCountBy(
@@ -87,7 +87,7 @@ class AnalyseManager implements AnalyseMangerInterface
         $criteria = [
             'analyseType' => $analyseType,
             'transportType' => $mode,
-            'correctedTransportType' => $correctedTransportType
+            'correctedTransportType' => $correctedTransportType,
         ];
 
         return $this->getResultsCountBy($criteria);

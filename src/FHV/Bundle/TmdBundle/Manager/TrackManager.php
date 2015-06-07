@@ -3,11 +3,10 @@
 namespace FHV\Bundle\TmdBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\FilterInterface;
+use FHV\Bundle\PipesAndFiltersBundle\Component\ComponentInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
-use FHV\Bundle\TmdBundle\DecisionTree\Manager\DecisionTreeManager;
 use FHV\Bundle\TmdBundle\Entity\Track;
-use FHV\Bundle\TmdBundle\Filter\DatabaseFilterInterface;
+use FHV\Bundle\TmdBundle\Filter\DatabaseWriterInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -23,22 +22,22 @@ class TrackManager implements TrackManagerInterface
     protected $em;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $tpFilter;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $frFilter;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $segmentationFilter;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $segmentFilter;
 
@@ -48,25 +47,25 @@ class TrackManager implements TrackManagerInterface
     protected $track;
 
     /**
-     * @var FilterInterface
+     * @var ComponentInterface
      */
     protected $tmFilter;
 
     /**
-     * @var FilterInterface // TODO remove?
+     * @var ComponentInterface // TODO remove?
      */
     protected $ppFilter;
 
     function __construct(
         EntityManager $em,
-        FilterInterface $tpFilter,
-        FilterInterface $fileReaderFilter,
-        FilterInterface $segmentationFilter,
-        FilterInterface $segmentFilter,
-        FilterInterface $travelModeFilter,
-        FilterInterface $postProcessFilter,
-        DatabaseFilterInterface $databaseFilterInterface,
-        FilterInterface $gisSegmentFilter
+        ComponentInterface $tpFilter,
+        ComponentInterface $fileReaderFilter,
+        ComponentInterface $segmentationFilter,
+        ComponentInterface $segmentFilter,
+        ComponentInterface $travelModeFilter,
+        ComponentInterface $postProcessFilter,
+        DatabaseWriterInterface $databaseFilterInterface,
+        ComponentInterface $gisSegmentFilter
     ) {
         $this->em = $em;
         $this->tpFilter = $tpFilter;
@@ -94,7 +93,7 @@ class TrackManager implements TrackManagerInterface
         $this->track->setAnalyseType($method);
         $this->initFilters($method);
         $this->frFilter->run(['fileName' => $file, 'analyseType' => $method]);
-        $this->frFilter->parentHasFinished();
+        $this->frFilter->finished();
         $this->em->persist($this->track);
         $this->em->flush();
 
@@ -130,6 +129,8 @@ class TrackManager implements TrackManagerInterface
         new Pipe($this->segmentFilter, $this->tmFilter);
         new Pipe($this->tmFilter, $this->ppFilter);
         new Pipe($this->ppFilter, $this->dbFilter);
+
+//        new Pipe($this->segmentFilter, $this->dbFilter);
 
         $this->dbFilter->provideTrack($this->track);
     }

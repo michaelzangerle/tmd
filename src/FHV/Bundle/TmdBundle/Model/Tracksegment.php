@@ -55,11 +55,11 @@ class Tracksegment implements TracksegmentInterface
 
     /**
      * @param                       $time
-     * @param float                 $distance in meters
-     * @param TrackpointInterface   $startPoint
-     * @param TrackpointInterface   $endPoint
+     * @param float $distance in meters
+     * @param TrackpointInterface $startPoint
+     * @param TrackpointInterface $endPoint
      * @param TrackpointInterface[] $trackPoints
-     * @param string                $type of segment
+     * @param string $type of segment
      */
     function __construct(
         $time = 0,
@@ -82,7 +82,7 @@ class Tracksegment implements TracksegmentInterface
      */
     public function setFeature($key, $value)
     {
-        if(is_float($value)){
+        if (is_float($value)) {
             $value = round($value, 16);
         }
         $this->features[$key] = $value;
@@ -239,6 +239,7 @@ class Tracksegment implements TracksegmentInterface
     /**
      * Sets features for a segment but takes also care of basic features like
      * distance, time, start, end, type and trackpoints which will set separately
+     *
      * @param array $features
      */
     public function setFeatures(array $features)

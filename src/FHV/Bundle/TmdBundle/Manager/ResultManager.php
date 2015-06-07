@@ -13,7 +13,6 @@ use FHV\Bundle\TmdBundle\Exception\ResultNotFoundException;
  */
 class ResultManager implements ResultManagerInterface
 {
-
     /**
      * @var EntityManagerInterface
      */

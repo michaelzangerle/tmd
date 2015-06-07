@@ -4,14 +4,14 @@ namespace FHV\Bundle\TmdBundle\Model;
 
 /**
  * Result
- *
+ * @package FHV\Bundle\TmdBundle\Model
  */
 class Result implements ResultInterface
 {
     /**
      * @var string
      */
-    private $transportType = TracksegmentType::UNDEFINIED;
+    private $transportType = TracksegmentType::UNDEFINED;
 
     /**
      * @var integer

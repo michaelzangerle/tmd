@@ -2,16 +2,16 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 
 /**
- * Writes segments as csv into a file  // TODO sink?
- * Class FileWriterFilter
+ * Writes segments as csv into a file
+ * Class FileWriter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class FileWriterFilter extends AbstractFilter
+class FileWriter extends AbstractComponent
 {
     /**
      * @var string
@@ -103,7 +103,7 @@ class FileWriterFilter extends AbstractFilter
      *
      * @param $data
      *
-     * @throws FilterException
+     * @throws ComponentException
      */
     public function run($data)
     {
@@ -120,8 +120,8 @@ class FileWriterFilter extends AbstractFilter
      * Writes the csv result file for all analyzed segments
      *
      * @param                       $fp
-     * @param array                 $values
-     * @param string                $delimiter
+     * @param array $values
+     * @param string $delimiter
      */
     protected function writeData($fp, array $values, $delimiter)
     {
@@ -143,7 +143,7 @@ class FileWriterFilter extends AbstractFilter
     /**
      * @param TracksegmentInterface $seg
      *
-     * @param string                $analyseType
+     * @param string $analyseType
      *
      * @return array
      */
@@ -156,6 +156,7 @@ class FileWriterFilter extends AbstractFilter
         }
 
         $result[] = $seg->getType();
+
         return $result;
     }
 

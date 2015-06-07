@@ -30,6 +30,7 @@ class BoundingBox
 
     /**
      * BoundingBox constructor.
+     *
      * @param float $top
      * @param float $bottom
      * @param float $left

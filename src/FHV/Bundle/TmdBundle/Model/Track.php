@@ -4,6 +4,7 @@ namespace FHV\Bundle\TmdBundle\Model;
 
 /**
  * Class Track
+ * @package FHV\Bundle\TmdBundle\Model
  */
 class Track implements TrackInterface
 {

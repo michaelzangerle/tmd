@@ -2,10 +2,10 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\Entity\Track as TrackEntity;
 use FHV\Bundle\TmdBundle\Entity\Tracksegment as TracksegmentEntity;
 use FHV\Bundle\TmdBundle\Entity\Trackpoint as TrackpointEntity;
@@ -18,11 +18,11 @@ use FHV\Bundle\TmdBundle\Model\Trackpoint as TrackpointModel;
 use FHV\Bundle\TmdBundle\Model\Result as ResultModel;
 
 /**
- * A sink which persists the given track data to the database // TODO sink?
- * Class DatabaseFilter
+ * A sink which persists the given track data to the database
+ * Class DatabaseWriter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
+class DatabaseWriter extends AbstractComponent implements DatabaseWriterInterface
 {
     /**
      * @var TrackEntity
@@ -40,7 +40,7 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
      *
      * @param $data
      *
-     * @throws FilterException
+     * @throws ComponentException
      */
     public function run($data)
     {
@@ -107,7 +107,7 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
     /**
      * Creates a track pont entity
      *
-     * @param TrackpointModel    $tpm
+     * @param TrackpointModel $tpm
      * @param TracksegmentEntity $segment
      *
      * @return TrackpointEntity
@@ -125,7 +125,7 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
     }
 
     /**
-     * @param string             $key
+     * @param string $key
      * @param                    $value
      * @param TracksegmentEntity $segment
      *
@@ -143,7 +143,7 @@ class DatabaseFilter extends AbstractFilter implements DatabaseFilterInterface
     }
 
     /**
-     * @param ResultModel        $rm
+     * @param ResultModel $rm
      * @param TracksegmentEntity $segment
      *
      * @return ResultEntity

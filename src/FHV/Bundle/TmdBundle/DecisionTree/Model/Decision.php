@@ -72,6 +72,7 @@ class Decision
     /**
      * Validates an operator
      * Returns it if its valid or throws an expection
+     *
      * @param $operator
      *
      * @return mixed

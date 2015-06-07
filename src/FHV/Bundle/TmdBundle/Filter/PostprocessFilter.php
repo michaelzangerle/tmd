@@ -2,9 +2,9 @@
 
 namespace FHV\Bundle\TmdBundle\Filter;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\AbstractFilter;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\InvalidArgumentException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\InvalidArgumentException;
 use FHV\Bundle\TmdBundle\Model\Result;
 use FHV\Bundle\TmdBundle\Model\Track;
 use FHV\Bundle\TmdBundle\Model\Tracksegment;
@@ -13,7 +13,7 @@ use FHV\Bundle\TmdBundle\Model\Tracksegment;
  * Class PostprocessFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class PostprocessFilter extends AbstractFilter
+class PostprocessFilter extends AbstractComponent
 {
 
     /**
@@ -21,7 +21,7 @@ class PostprocessFilter extends AbstractFilter
      *
      * @param $data
      *
-     * @throws FilterException
+     * @throws ComponentException
      */
     public function run($data)
     {
@@ -46,8 +46,6 @@ class PostprocessFilter extends AbstractFilter
         // TODO biljecki stops at traffic lights could cause errors in connection with busstops
         // TODO therefore it will be checked if previous was care - then car is set for this
         // TODO segment as well
-
-
 
         // nice to have
         $this->mergeSegments($track);
@@ -90,7 +88,6 @@ class PostprocessFilter extends AbstractFilter
      */
     protected function mergeFeatures($features1, $features2)
     {
-
     }
 
     /**
@@ -99,7 +96,7 @@ class PostprocessFilter extends AbstractFilter
      * @param Result $result1
      * @param Result $result2
      */
-    protected function mergeResults(Result $result1, Result$result2)
+    protected function mergeResults(Result $result1, Result $result2)
     {
     }
 }

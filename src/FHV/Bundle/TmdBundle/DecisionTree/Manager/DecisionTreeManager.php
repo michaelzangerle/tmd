@@ -30,7 +30,9 @@ class DecisionTreeManager implements DecisionTreeManagerInterface
 
     /**
      * Returns a tree and writes cache file if it does not exist
+     *
      * @param $name
+     *
      * @return Tree
      */
     public function getTree($name)
@@ -40,11 +42,11 @@ class DecisionTreeManager implements DecisionTreeManagerInterface
         } else {
 
             if (!array_key_exists($name, $this->config)) {
-                throw new \InvalidArgumentException('No config for the key ' . $name . ' found!');
+                throw new \InvalidArgumentException('No config for the key '.$name.' found!');
             }
 
             $config = $this->config[$name];
-            $cache = new ConfigCache($config['cacheDir'] . '/' . $config['class'] . '.php', true);
+            $cache = new ConfigCache($config['cacheDir'].'/'.$config['class'].'.php', true);
 
             if (!$cache->isFresh()) {
                 $dtb = new DecisionTreeBuilder($config['txtFilePath'], $config['txtFileName']);
@@ -53,7 +55,7 @@ class DecisionTreeManager implements DecisionTreeManagerInterface
                 $cache->write(
                     $dumper->dump(
                         array(
-                            'cache_class' => $config['class']
+                            'cache_class' => $config['class'],
                         ),
                         $result['tree']
                     ),
@@ -63,6 +65,7 @@ class DecisionTreeManager implements DecisionTreeManagerInterface
 
             require_once $cache;
             $this->trees[$name] = new $config['class']();
+
             return $this->trees[$name];
         }
     }

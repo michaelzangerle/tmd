@@ -1,23 +1,23 @@
 <?php
 
-namespace FHV\Bundle\PipesAndFiltersBundle\Filter;
+namespace FHV\Bundle\PipesAndFiltersBundle\Component;
 
-use FHV\Bundle\PipesAndFiltersBundle\Filter\Exception\FilterException;
+use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\PipeInterface;
 
 /**
- * Interface for filters
- * Interface FilterInterface
- * @package FHV\Bundle\PipesAndFiltersBundle\Filter
+ * Interface for pipes and filter component (filter, sink)
+ * Interface ComponentInterface
+ * @package FHV\Bundle\PipesAndFiltersBundle\Component
  */
-interface FilterInterface
+interface ComponentInterface
 {
     /**
      * Starts a filter and processes the given data
      *
      * @param $data
      *
-     * @throws FilterException
+     * @throws ComponentException
      */
     public function run($data);
 
