@@ -43,7 +43,7 @@ class BasicDecisionTree implements DecisionTreeInterface
                                     $node8 = new Node();
                             $node8->setResult(new Result([
                             'bus' => 0,
-                            'drive' => 19,
+                            'drive' => 20,
                             'walk' => 0,
                             'bike' => 0,
                             'train' => 1,

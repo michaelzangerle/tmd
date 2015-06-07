@@ -5,7 +5,7 @@ meanvelocity > 2.041
 |   |   |   meanvelocity > 8.600
 |   |   |   |   maxacceleration > 9.254
 |   |   |   |   |   maxvelocity > 25.330
-|   |   |   |   |   |   maxvelocity > 27.466: drive {bus=0, drive=19, walk=0, bike=0, train=1}
+|   |   |   |   |   |   maxvelocity > 27.466: drive {bus=0, drive=20, walk=0, bike=0, train=1}
 |   |   |   |   |   |   maxvelocity ≤ 27.466: train {bike=0, drive=0, walk=0, bus=0, train=2}
 |   |   |   |   |   maxvelocity ≤ 25.330
 |   |   |   |   |   |   meanvelocity > 10.521: bus {bike=0, drive=0, walk=0, bus=2, train=0}

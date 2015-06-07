@@ -97,7 +97,7 @@ class DecisionTreeBuilder
         $value = floatval(substr($contentPartials[2], 0, strlen($contentPartials[2]) - 1));
         $result = null;
 
-        if (count($contentPartials) === 9) { // has results
+        if (count($contentPartials) >= 9) { // has results
             $result = [];
             $part = explode('=', substr($contentPartials[4], 1, strlen($contentPartials[4]) - 2));
             $result[$part[0]] = $part[1];
