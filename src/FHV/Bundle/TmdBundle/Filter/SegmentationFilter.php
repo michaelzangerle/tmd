@@ -342,7 +342,7 @@ class SegmentationFilter extends AbstractComponent
 
         // merge first segment with second when too small
         // to prevent starting signal issue
-        if (count($segments) > 1 && $this->shouldSegementBeMerged($segments[0])) {
+        if (count($segments) > 1 && $this->shouldSegmentBeMerged($segments[0])) {
             $this->merge($segments[0], $segments[1]);
             $i = 2;
         }
@@ -350,7 +350,7 @@ class SegmentationFilter extends AbstractComponent
         $result[] = $curSegment;
 
         while ($i < $amount) {
-            if ($this->shouldSegementBeMerged($segments[$i])) {
+            if ($this->shouldSegmentBeMerged($segments[$i])) {
                 $this->merge($curSegment, $segments[$i]);
             } else {
                 // add segment only when it should not be merged
@@ -371,10 +371,10 @@ class SegmentationFilter extends AbstractComponent
      *
      * @return bool
      */
-    protected function shouldSegementBeMerged(TracksegmentInterface $segment)
+    protected function shouldSegmentBeMerged(TracksegmentInterface $segment)
     {
-        return $segment->getDistance() < $this->minSegmentDistance ||
-        $segment->getTime() < $this->minSegmentTime;
+        return ($segment->getDistance() < $this->minSegmentDistance ||
+        $segment->getTime() < $this->minSegmentTime);
     }
 
     /**

@@ -10,27 +10,27 @@ interface TracksegmentInterface
 {
     /**
      * Gets the start point
-     * @return Trackpoint
+     * @return TrackpointInterface
      */
     public function getStartPoint();
 
     /**
      * Sets the start ponit
      *
-     * @param Trackpoint $startPoint
+     * @param TrackpointInterface $startPoint
      */
     public function setStartPoint($startPoint);
 
     /**
      * Gets the endpoint
-     * @return Trackpoint
+     * @return TrackpointInterface
      */
     public function getEndPoint();
 
     /**
-     * Sets the entpoint
+     * Sets the endpoint
      *
-     * @param Trackpoint $endPoint
+     * @param TrackpointInterface $endPoint
      */
     public function setEndPoint($endPoint);
 

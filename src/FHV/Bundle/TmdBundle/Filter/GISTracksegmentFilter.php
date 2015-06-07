@@ -88,6 +88,16 @@ class GISTracksegmentFilter extends TracksegmentFilter
     protected function firstTrackpointHandling(TrackpointInterface $tp)
     {
         parent::firstTrackpointHandling($tp);
+        $this->checkInfrastructureForTrackpoint($tp);
+    }
+
+    /**
+     * Checks infrastructure surroundings for a specific point
+     * @param TrackpointInterface $tp
+     */
+    protected function checkInfrastructureForTrackpoint(TrackpointInterface $tp)
+    {
+        // TODO put constant into config
         if ($this->tpOnInfrastructure($tp, GISCoordinate::RAILWAY_TYPE)) {
             $this->railCounter += 10;
         }
@@ -109,18 +119,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     protected function lastTrackpointHandling(TrackpointInterface $tp)
     {
         parent::lastTrackpointHandling($tp);
-        if ($this->tpOnInfrastructure($tp, GISCoordinate::RAILWAY_TYPE)) {
-            $this->railCounter += 10;
-        }
-        if ($this->tpOnInfrastructure($tp, GISCoordinate::HIGHWAY_TYPE)) {
-            $this->highwayCounter += 10;
-        }
-        // is a busstop/trainstation nearby the last x tps
-        if ($this->isPublicTransportStationNearby([$tp])) {
-            $this->publicTransportStationCounter += 10;
-            $this->lowSpeedTrackPoints = [];
-        }
-
+        $this->checkInfrastructureForTrackpoint($tp);
         $this->pts = $this->stopCounter > 0 ? $this->publicTransportStationCounter / $this->stopCounter : 0;
     }
 
