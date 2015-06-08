@@ -109,17 +109,17 @@ class FileReader extends AbstractComponent
     /**
      * Returns first namespace with containing gpx or default
      *
-     * @param array $nspaces
+     * @param array $namespaces
      *
      * @return string
      */
-    protected function getNamespace(array $nspaces)
+    protected function getNamespace(array $namespaces)
     {
         $ns = $this->gpxNameSpace;
-        foreach ($nspaces as $nspace) {
-            $tmpNs = strtolower($nspace);
+        foreach ($namespaces as $namespace) {
+            $tmpNs = strtolower($namespace);
             if (strpos($tmpNs, 'gpx') !== false) {
-                $ns = $nspace;
+                $ns = $namespace;
                 break;
             }
         }

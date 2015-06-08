@@ -54,7 +54,7 @@ class Tracksegment implements TracksegmentInterface
     protected $distance;
 
     /**
-     * @param                       $time
+     * @param int $time
      * @param float $distance in meters
      * @param TrackpointInterface $startPoint
      * @param TrackpointInterface $endPoint

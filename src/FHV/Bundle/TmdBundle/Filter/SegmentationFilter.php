@@ -374,7 +374,7 @@ class SegmentationFilter extends AbstractComponent
     protected function shouldSegmentBeMerged(TracksegmentInterface $segment)
     {
         return ($segment->getDistance() < $this->minSegmentDistance ||
-        $segment->getTime() < $this->minSegmentTime);
+            $segment->getTime() < $this->minSegmentTime);
     }
 
     /**

@@ -72,7 +72,7 @@ class Result
 
     /**
      * Returns the value of the maximum type
-     * 
+     *
      * @return float
      */
     public function getMaxValue()

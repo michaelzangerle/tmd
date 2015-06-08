@@ -46,7 +46,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     ) {
         parent::__construct($util, $minTrackPointsPerSegment, $maxVelocityForNearlyStopPoints, $maxTimeWithoutMovement);
         $this->gisCoordinateRepository = $gisCoordinateRepo;
-        $this->gisAnalyseConfig = $gisAnalyseConfig['gis']['config']; // todo
+        $this->gisAnalyseConfig = $gisAnalyseConfig['gis']['config'];
     }
 
     /**
@@ -93,20 +93,20 @@ class GISTracksegmentFilter extends TracksegmentFilter
 
     /**
      * Checks infrastructure surroundings for a specific point
+     *
      * @param TrackpointInterface $tp
      */
     protected function checkInfrastructureForTrackpoint(TrackpointInterface $tp)
     {
-        // TODO put constant into config
         if ($this->tpOnInfrastructure($tp, GISCoordinate::RAILWAY_TYPE)) {
-            $this->railCounter += 10;
+            $this->railCounter += $this->gisAnalyseConfig['weightThreshold'];
         }
         if ($this->tpOnInfrastructure($tp, GISCoordinate::HIGHWAY_TYPE)) {
-            $this->highwayCounter += 10;
+            $this->highwayCounter += $this->gisAnalyseConfig['weightThreshold'];
         }
-        // is a busstop/trainstation nearby the last x tps
+        // is a bus stop/train station nearby the last x tps
         if ($this->isPublicTransportStationNearby([$tp])) {
-            $this->publicTransportStationCounter += 10;
+            $this->publicTransportStationCounter += $this->gisAnalyseConfig['weightThreshold'];
             $this->lowSpeedTrackPoints = [];
         }
     }
@@ -179,7 +179,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
                 $this->stopCounter++;
                 $this->lowSpeedTimeCounter = 0;
 
-                // is a busstop/trainstation nearby the last x tps
+                // is a bus stop/train station nearby the last x tps
                 if ($this->isPublicTransportStationNearby($this->lowSpeedTrackPoints)) {
                     $this->publicTransportStationCounter++;
                     $this->lowSpeedTrackPoints = [];
@@ -232,7 +232,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
                 case 2:
                     return $trackPoints[1];
                 default:
-                    $idx = ceil($length / 2);
+                    $idx = intval(ceil($length / 2));
 
                     return $trackPoints[$idx];
             }

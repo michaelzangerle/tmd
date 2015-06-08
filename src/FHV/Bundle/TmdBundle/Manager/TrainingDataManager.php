@@ -4,6 +4,7 @@ namespace FHV\Bundle\TmdBundle\Manager;
 
 use FHV\Bundle\PipesAndFiltersBundle\Component\ComponentInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
+use FHV\Bundle\TmdBundle\Filter\FileWriterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
@@ -25,7 +26,7 @@ class TrainingDataManager
     protected $frFilter;
 
     /**
-     * @var ComponentInterface
+     * @var FileWriterInterface
      */
     protected $fileWriter;
 
@@ -47,7 +48,7 @@ class TrainingDataManager
     /**
      * @param ComponentInterface $tpFilter
      * @param ComponentInterface $fileReaderFilter
-     * @param ComponentInterface $fileWriterFilter
+     * @param FileWriterInterface $fileWriterFilter
      * @param ComponentInterface $segmentFilter
      * @param ComponentInterface $gisSegmentFilter
      * @param array $analyseConfig
@@ -55,7 +56,7 @@ class TrainingDataManager
     function __construct(
         ComponentInterface $tpFilter,
         ComponentInterface $fileReaderFilter,
-        ComponentInterface $fileWriterFilter,
+        FileWriterInterface $fileWriterFilter,
         ComponentInterface $segmentFilter,
         ComponentInterface $gisSegmentFilter,
         array $analyseConfig

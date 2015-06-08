@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Filter;
 use FHV\Bundle\PipesAndFiltersBundle\Component\AbstractComponent;
 use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\ComponentException;
 use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\InvalidArgumentException;
+use FHV\Bundle\TmdBundle\Model\TrackInterface;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 use FHV\Bundle\TmdBundle\Model\Tracksegment;
 use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
@@ -69,27 +70,9 @@ class TracksegmentFilter extends AbstractComponent
             array_key_exists('track', $data) && $data['track'] !== null &&
             array_key_exists('analyseType', $data) && $data['analyseType'] !== null
         ) {
-            /** @var TracksegmentInterface $segment */
-            foreach ($data['track']->getSegments() as $segment) {
-                $features = $this->getSegmentFeatures($segment->getTrackPoints(), $segment->getType());
-                $segment->setFeatures($features);
-            }
-            $this->write($data['track']);
+            $this->handleTrackData($data);
         } else {
-            if (array_key_exists('trackPoints', $data) && array_key_exists('analyseType', $data)) {
-                $features = $this->getSegmentFeatures($data['trackPoints'], $data['type']);
-                $segment = $this->createSegment($features);
-                $this->write(
-                    [
-                        'segment' => $segment,
-                        'analyseType' => $data['analyseType'],
-                    ]
-                );
-            } else {
-                throw new InvalidArgumentException(
-                    'SegmentFilter: Data param should contain trackpoints or a track with the analyse type!'
-                );
-            }
+            $this->handleTrackpointsData($data);
         }
     }
 
@@ -274,15 +257,16 @@ class TracksegmentFilter extends AbstractComponent
 
     /**
      * Determines and handles possible stops
+     * Bilijecki counts the points with speed below a certain value
+     * when a certain amount of points is below a velocity threshold it
+     * counts as a stop
      *
      * @param $currentVelocity
      * @param $currentTime
      */
     protected function handlePossibleStop($currentVelocity, $currentTime)
     {
-        // bilijecki counts the points with speed below a certain value
-        // when a certain amount is below a the velocity threshold it
-        // counts as a stop
+
         if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
             $this->lowSpeedTimeCounter += $currentTime;
 
@@ -308,5 +292,48 @@ class TracksegmentFilter extends AbstractComponent
         $seg->setFeatures($features);
 
         return $seg;
+    }
+
+    /**
+     * Handles data in case it contains a track model
+     *
+     * @param $data
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function handleTrackData($data)
+    {
+        /** @var TrackInterface $track */
+        $track = $data['track'];
+        foreach ($track->getSegments() as $segment) {
+            $features = $this->getSegmentFeatures($segment->getTrackPoints(), $segment->getType());
+            $segment->setFeatures($features);
+        }
+        $this->write($data['track']);
+    }
+
+    /**
+     * Handles data in case it contains only trackpoints (e.g. training data)
+     *
+     * @param $data
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function handleTrackpointsData($data)
+    {
+        if (!array_key_exists('trackPoints', $data) || !array_key_exists('analyseType', $data)) {
+            throw new InvalidArgumentException(
+                'SegmentFilter: Data param should contain trackpoints or a track with the analyse type!'
+            );
+        }
+
+        $features = $this->getSegmentFeatures($data['trackPoints'], $data['type']);
+        $segment = $this->createSegment($features);
+        $this->write(
+            [
+                'segment' => $segment,
+                'analyseType' => $data['analyseType'],
+            ]
+        );
     }
 }

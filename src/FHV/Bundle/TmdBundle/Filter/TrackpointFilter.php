@@ -190,17 +190,7 @@ class TrackpointFilter extends AbstractComponent
     public function run($data)
     {
         if (isset($data['trackPoints'])) {
-            // before being processed
-            $totalAmountOfTrackPoints = count($data['trackPoints']);
-            $data['trackPoints'] = $this->filter($data['trackPoints']);
-            $validPointThreshold = $this->validPointCounter / $totalAmountOfTrackPoints;
-
-            if (count($data['trackPoints']) >= $this->minTrackPointsPerSegment &&
-                $validPointThreshold >= $this->minValidPointsRatio
-            ) {
-                $this->write($data);
-            }
-            // else just skip this segment
+            $this->handleTrackpointData($data);
         } else {
             throw new TrackException('TrackPointFilter: Data param should contain trackpoints!');
         }
@@ -220,5 +210,24 @@ class TrackpointFilter extends AbstractComponent
         return $this->isValidTime($tp2, $tp1) &&
         $this->isValidDistance($tp2, $tp1) &&
         $this->isValidAltitudeChange($tp1, $tp2);
+    }
+
+    /**
+     * Handles data when data contains trackpoints
+     * @param $data
+     *
+     * @throws TrackException
+     */
+    protected function handleTrackpointData($data)
+    {
+        $totalAmountOfTrackPoints = count($data['trackPoints']);
+        $data['trackPoints'] = $this->filter($data['trackPoints']);
+        $validPointThreshold = $this->validPointCounter / $totalAmountOfTrackPoints;
+
+        if (count($data['trackPoints']) >= $this->minTrackPointsPerSegment &&
+            $validPointThreshold >= $this->minValidPointsRatio
+        ) {
+            $this->write($data);
+        }
     }
 }

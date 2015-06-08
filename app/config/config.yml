@@ -137,6 +137,7 @@ fhv_tmd:
         boundingBoxDistance: 20
         infrastructureTimeThreshold: 20
         infrastructureDistanceThreshold: 20
+        weightThreshold: 10
       class: "GISDecisionTree"
       cacheDir: "%kernel.root_dir%/../decisionTrees/gis"
       txtFilePath: "%kernel.root_dir%/../decisionTrees/gis"

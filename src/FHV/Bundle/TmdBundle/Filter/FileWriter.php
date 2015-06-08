@@ -11,7 +11,7 @@ use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
  * Class FileWriter
  * @package FHV\Bundle\TmdBundle\Filter
  */
-class FileWriter extends AbstractComponent
+class FileWriter extends AbstractComponent implements FileWriterInterface
 {
     /**
      * @var string
@@ -83,22 +83,6 @@ class FileWriter extends AbstractComponent
     }
 
     /**
-     * @return string
-     */
-    public function getAnalyseType()
-    {
-        return $this->analyseType;
-    }
-
-    /**
-     * @param string $analyseType
-     */
-    public function setAnalyseType($analyseType)
-    {
-        $this->analyseType = $analyseType;
-    }
-
-    /**
      * Starts a filter and processes the given data
      *
      * @param $data
@@ -112,14 +96,14 @@ class FileWriter extends AbstractComponent
             array_key_exists('analyseType', $data) && $data['analyseType'] !== null
         ) {
             $this->data[] = $data['segment'];
-            $this->analyseType = $data['analyseType']; // todo set when connecting and remove from other filters
+            $this->analyseType = $data['analyseType'];
         }
     }
 
     /**
      * Writes the csv result file for all analyzed segments
      *
-     * @param                       $fp
+     * @param $fp
      * @param array $values
      * @param string $delimiter
      */
@@ -135,7 +119,7 @@ class FileWriter extends AbstractComponent
      *
      * @return array
      */
-    public function getCSVFeatureKeys($analyseType = 'basic')
+    protected function getCSVFeatureKeys($analyseType = 'basic')
     {
         return $this->config[$analyseType]['csv_columns'];
     }
@@ -147,7 +131,7 @@ class FileWriter extends AbstractComponent
      *
      * @return array
      */
-    public function getCSVFeatureValues(TracksegmentInterface $seg, $analyseType = 'basic')
+    protected function getCSVFeatureValues(TracksegmentInterface $seg, $analyseType = 'basic')
     {
         $fields = $this->config[$analyseType]['csv_columns'];
         $result = [];
@@ -174,7 +158,7 @@ class FileWriter extends AbstractComponent
     }
 
     /**
-     * Will be called when the parent filter has finished work
+     * {@inheritdoc}
      */
     public function parentHasFinished()
     {
