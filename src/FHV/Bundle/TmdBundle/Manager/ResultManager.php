@@ -5,6 +5,7 @@ namespace FHV\Bundle\TmdBundle\Manager;
 use Doctrine\ORM\EntityManagerInterface;
 use FHV\Bundle\TmdBundle\Entity\Result;
 use FHV\Bundle\TmdBundle\Exception\ResultNotFoundException;
+use InvalidArgumentException;
 
 /**
  * Manages all operations for results
@@ -23,9 +24,17 @@ class ResultManager implements ResultManagerInterface
      */
     protected $entityName = 'FHVTmdBundle:Result';
 
-    function __construct($em)
+    /**
+     * Array of configured transportation modes
+     *
+     * @var array
+     */
+    protected $transportationModes;
+
+    function __construct($em, $transportationModes)
     {
         $this->em = $em;
+        $this->transportationModes = $transportationModes;
     }
 
     /**
@@ -35,23 +44,37 @@ class ResultManager implements ResultManagerInterface
      * @param array $data
      *
      * @return mixed
+     *
      * @throws ResultNotFoundException
      */
     public function update($id, array $data)
     {
         /** @var Result $result */
         $result = $this->em->find($this->entityName, $id);
-        if ($result) {
-            if (array_key_exists('transport_type', $data)) {
-                // TODO check if given type is valid
-                $type = $data['transport_type'];
-                $result->setCorrectedTransportType($type);
-                $this->em->flush();
+        if ($result && array_key_exists('transport_type', $data)) {
 
-                return $result;
-            }
+            $this->validationTransportationType($data['transport_type']);
+            $type = $data['transport_type'];
+            $result->setCorrectedTransportType($type);
+            $this->em->flush();
+
+            return $result;
         }
 
         throw new ResultNotFoundException($id);
+    }
+
+    /**
+     * Validates the given transport type against the configured
+     *
+     * @param string $transportType
+     *
+     * @throws InvalidArgumentException
+     */
+    protected function validationTransportationType($transportType)
+    {
+        if (array_search($transportType, $this->transportationModes) === false) {
+            throw new InvalidArgumentException('The provided transportation type '.$transportType.' is invalid!');
+        }
     }
 }

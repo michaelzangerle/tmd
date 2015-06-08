@@ -76,30 +76,20 @@ class TrainingDataManager
      * @param string $resultFileName
      * @param string $analyseType
      */
-    public function process($output, $dir = '.', $resultFileName = 'results.csv', $analyseType = 'basic')
-    {
-        if (!is_dir($dir)) {
-            throw new FileNotFoundException('The directory '.$dir.' does not exist!');
-        }
-
-        if (!$this->isAnalyzeTypeValid($analyseType)) {
-            throw new \InvalidArgumentException('The given analyse type ('.$analyseType.') seems to be unknown!');
-        }
+    public function process(
+        OutputInterface $output,
+        $dir = '.',
+        $resultFileName = 'results.csv',
+        $analyseType = 'basic'
+    ) {
+        $this->validateDirectory($dir);
+        $this->validateAnalyzeType($analyseType);
 
         $files = glob($dir.'/*.gpx');
         if (count($files) > 0) {
             $this->connectFilters($analyseType);
             $this->fileWriter->setFilePath($dir.$resultFileName);
-
-            foreach ($files as $fileName) {
-                $output->write('<info>Processing "'.$fileName.'"</info>', true);
-                $this->frFilter->run(
-                    [
-                        'fileName' => $fileName,
-                        'analyseType' => $analyseType,
-                    ]
-                );
-            }
+            $this->processFiles($output, $analyseType, $files);
             $this->frFilter->finished();
             $output->write(PHP_EOL.'<info>'.count($files).' gpx files found and processed!</info>'.PHP_EOL);
         } else {
@@ -126,19 +116,46 @@ class TrainingDataManager
     }
 
     /**
-     * Validates the given analyze type
+     * Processes each file found in the given directory and hands it over to the file reader
      *
-     * @param string $analyzeType
-     *
-     * @return boolean
+     * @param OutputInterface $output
+     * @param string $analyseType
+     * @param array $files
      */
-    protected function isAnalyzeTypeValid($analyzeType)
+    protected function processFiles(OutputInterface $output, $analyseType, array $files)
     {
-        if (array_key_exists($analyzeType, $this->analyseConfig)) {
-
-            return true;
+        foreach ($files as $fileName) {
+            $output->write('<info>Processing "'.$fileName.'"</info>', true);
+            $this->frFilter->run(
+                [
+                    'fileName' => $fileName,
+                    'analyseType' => $analyseType,
+                ]
+            );
         }
+    }
 
-        return false;
+    /**
+     * Validates the given directory path
+     *
+     * @param string $dir
+     */
+    protected function validateDirectory($dir)
+    {
+        if (!is_dir($dir)) {
+            throw new FileNotFoundException('The directory '.$dir.' does not exist!');
+        }
+    }
+
+    /**
+     * Validates the analyse type against the configuration
+     *
+     * @param string $analyseType
+     */
+    protected function validateAnalyzeType($analyseType)
+    {
+        if (!array_key_exists($analyseType, $this->analyseConfig)) {
+            throw new \InvalidArgumentException('The given analyse type ('.$analyseType.') seems to be unknown!');
+        }
     }
 }

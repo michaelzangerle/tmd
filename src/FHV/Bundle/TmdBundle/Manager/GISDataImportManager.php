@@ -13,7 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class GISDataImportManager implements GISDataImportManagerInterface
 {
-
     /**
      * @var EntityManagerInterface
      */
@@ -46,14 +45,10 @@ class GISDataImportManager implements GISDataImportManagerInterface
 
         if (count($nodes) > 0 && $typeName) {
             foreach ($nodes as $node) {
-                $nodeEntity = $this->createGISCoordinate($node, $typeName);
-                $this->em->persist($nodeEntity);
+                $this->createAndPersistGISCoordinate($node, $typeName);
                 $output->write($counter.' ');
 
-                if ($counter % $this->batchSize === 0) {
-                    $this->em->flush();
-                    $output->writeln(PHP_EOL.'Flushed '.$counter);
-                }
+                $this->flushEntities($output, $counter);
                 $counter++;
             }
 
@@ -74,12 +69,14 @@ class GISDataImportManager implements GISDataImportManagerInterface
      *
      * @return GISCoordinate
      */
-    protected function createGISCoordinate($node, $type)
+    protected function createAndPersistGISCoordinate($node, $type)
     {
         $lat = floatval($node['lat']);
         $lon = floatval($node['lon']);
+        $coordinate = new GISCoordinate($lat, $lon, $type);
+        $this->em->persist($coordinate);
 
-        return new GISCoordinate($lat, $lon, $type);
+        return $coordinate;
     }
 
     /**
@@ -105,6 +102,20 @@ class GISDataImportManager implements GISDataImportManagerInterface
                 return GISCoordinate::BUSSTOP_TYPE;
             default:
                 return null;
+        }
+    }
+
+    /**
+     * Flushes entities if counter is reaches batch size
+     *
+     * @param OutputInterface $output
+     * @param $counter
+     */
+    protected function flushEntities(OutputInterface $output, $counter)
+    {
+        if ($counter % $this->batchSize === 0) {
+            $this->em->flush();
+            $output->writeln(PHP_EOL.'Flushed '.$counter);
         }
     }
 }

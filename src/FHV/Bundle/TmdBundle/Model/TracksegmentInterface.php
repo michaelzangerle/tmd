@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Model;
 
 /**
+ * Interface for a tracksegment that provides standard properties like start, end, distance, time and more
  * Interface TracksegmentInterface
  * @package FHV\Bundle\TmdBundle\Model
  */
@@ -10,12 +11,13 @@ interface TracksegmentInterface
 {
     /**
      * Gets the start point
+     *
      * @return TrackpointInterface
      */
     public function getStartPoint();
 
     /**
-     * Sets the start ponit
+     * Sets the start point
      *
      * @param TrackpointInterface $startPoint
      */
@@ -36,6 +38,7 @@ interface TracksegmentInterface
 
     /**
      * Gets the type
+     *
      * @return string
      */
     public function getType();
@@ -49,6 +52,7 @@ interface TracksegmentInterface
 
     /**
      * Gets the distance
+     *
      * @return float
      */
     public function getDistance();
@@ -62,6 +66,7 @@ interface TracksegmentInterface
 
     /**
      * Gets the time
+     *
      * @return float time of segment in seconds
      */
     public function getTime();
@@ -75,6 +80,7 @@ interface TracksegmentInterface
 
     /**
      * Returns all trackpoints
+     *
      * @return TrackpointInterface[]
      */
     public function getTrackPoints();
@@ -120,6 +126,7 @@ interface TracksegmentInterface
 
     /**
      * Gets a result
+     *
      * @return Result
      */
     public function getResult();

@@ -13,10 +13,10 @@ class AnalyseManager implements AnalyseMangerInterface
 {
     /**
      * Transportation modes
-     * todo make modes configurable
+     *
      * @var array
      */
-    protected $modes = ['bus', 'bike', 'walk', 'train', 'drive'];
+    protected $transportationModes;
 
     /**
      * @var EntityManagerInterface
@@ -31,12 +31,13 @@ class AnalyseManager implements AnalyseMangerInterface
     /**
      * @var array
      */
-    protected $config;
+    protected $analyseConfig;
 
-    function __construct($em, $config)
+    function __construct($em, $config, $transportationModes)
     {
         $this->em = $em;
-        $this->config = $config;
+        $this->analyseConfig = $config;
+        $this->transportationModes = $transportationModes;
     }
 
     /**
@@ -45,7 +46,7 @@ class AnalyseManager implements AnalyseMangerInterface
     public function getOverview()
     {
         $response = [];
-        foreach ($this->config as $analyseType => $config) {
+        foreach ($this->analyseConfig as $analyseType => $config) {
             $response[$analyseType] = [];
             $response[$analyseType]['total'] = $this->getResultsCountBy(
                 [
@@ -102,12 +103,11 @@ class AnalyseManager implements AnalyseMangerInterface
             return $this->getDetailPerMode();
         } else {
             $response = [];
-            foreach ($this->config as $analyseType => $config) {
-                $response[$analyseType] = [];
+            foreach ($this->analyseConfig as $analyseType => $config) {
                 $response[$analyseType] = [];
                 $response[$analyseType]['total'] = $this->getResultsCountByMode($analyseType, $mode);
 
-                foreach ($this->modes as $m) {
+                foreach ($this->transportationModes as $m) {
                     if ($m !== $mode) {
                         $response[$analyseType][$m] = $this->getResultsCountByMode($analyseType, $m, $mode);
                     }
@@ -126,11 +126,11 @@ class AnalyseManager implements AnalyseMangerInterface
     protected function getDetailPerMode()
     {
         $response = [];
-        foreach ($this->config as $analyseType => $config) {
+        foreach ($this->analyseConfig as $analyseType => $config) {
             $response[$analyseType] = [];
             $response[$analyseType]['total'] = $this->getResultsCountBy(['analyseType' => $analyseType]);
 
-            foreach ($this->modes as $mode) {
+            foreach ($this->transportationModes as $mode) {
                 $response[$analyseType][$mode] = $this->getResultsCountByMode($analyseType, $mode);
             }
         }

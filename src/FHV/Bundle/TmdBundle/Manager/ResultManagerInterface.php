@@ -17,6 +17,7 @@ interface ResultManagerInterface
      * @param array $data
      *
      * @return mixed
+     *
      * @throws ResultNotFoundException
      */
     public function update($id, array $data);

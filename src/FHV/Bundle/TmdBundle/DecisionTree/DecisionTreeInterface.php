@@ -10,7 +10,8 @@ namespace FHV\Bundle\TmdBundle\DecisionTree;
 interface DecisionTreeInterface
 {
     /**
-     * Process values by tree
+     * Traverses the tree according the given values and the decisions until
+     * it reaches a result which will then be returned
      *
      * @param array $values
      *

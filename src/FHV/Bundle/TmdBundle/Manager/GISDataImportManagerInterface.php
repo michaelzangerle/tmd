@@ -19,6 +19,8 @@ interface GISDataImportManagerInterface
      * @param OutputInterface $output
      *
      * @return mixed
+     *
+     * @throws \InvalidArgumentException
      */
     public function process($fileName, $type, OutputInterface $output);
 }

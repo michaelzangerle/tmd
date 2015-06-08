@@ -2,9 +2,12 @@
 
 namespace FHV\Bundle\TmdBundle\Controller;
 
+use FHV\Bundle\TmdBundle\Exception\RestException;
+use FHV\Bundle\TmdBundle\Exception\ResultNotFoundException;
 use FHV\Bundle\TmdBundle\Manager\ResultManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Routing\ClassResourceInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,11 +18,10 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ResultController extends FOSRestController implements ClassResourceInterface
 {
-
     /**
      * Patch action for results
      *
-     * @param         $id
+     * @param $id
      * @param Request $request
      *
      * @return Response
@@ -27,8 +29,16 @@ class ResultController extends FOSRestController implements ClassResourceInterfa
     public function patchAction($id, Request $request)
     {
         $data = $request->request->all();
-        if ($id !== null && count($data) > 0) {
-            $view = $this->view($this->getManager()->update($id, $data));
+        if (count($data) > 0) {
+            try {
+                $view = $this->view($this->getManager()->update($id, $data));
+            } catch (ResultNotFoundException $ex) {
+                $exc = new RestException($ex->getMessage());
+                $view = $this->view($exc, 404);
+            } catch (InvalidArgumentException $ex) {
+                $exc = new RestException($ex->getMessage());
+                $view = $this->view($exc, 400);
+            }
         } else {
             $view = $this->view('Request is incomplete!', 400);
         }

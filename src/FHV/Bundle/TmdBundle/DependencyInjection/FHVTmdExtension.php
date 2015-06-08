@@ -24,6 +24,7 @@ class FHVTmdExtension extends Extension
 
         $container->setParameter('tmd.planet_circumference', $config['planet_circumference']);
         $container->setParameter('tmd.gpx_namespace', $config['gpx_namespace']);
+        $container->setParameter('tmd.transport_modes', $config['transport_modes']);
 
         $this->setFilterParameters($container, $config);
         $this->setAnalyseParameters($container, $config);

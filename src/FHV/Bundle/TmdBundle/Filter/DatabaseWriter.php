@@ -16,6 +16,7 @@ use FHV\Bundle\TmdBundle\Model\Track as TrackModel;
 use FHV\Bundle\TmdBundle\Model\Tracksegment as TracksegmentModel;
 use FHV\Bundle\TmdBundle\Model\Trackpoint as TrackpointModel;
 use FHV\Bundle\TmdBundle\Model\Result as ResultModel;
+use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 
 /**
  * A sink which persists the given track data to the database
@@ -72,18 +73,18 @@ class DatabaseWriter extends AbstractComponent implements DatabaseWriterInterfac
     {
         $this->track->setAnalyseType($tm->getAnalysisType());
         foreach ($tm->getSegments() as $segModel) {
-            $this->generateTrackSegementEntityFromModel($segModel);
+            $this->generateTrackSegmentEntityFromModel($segModel);
         }
     }
 
     /**
      * Generates a segment entity and all its associated entities and connects itself
      *
-     * @param TracksegmentModel $sm
+     * @param TracksegmentInterface $sm
      *
      * @return TracksegmentEntity
      */
-    protected function generateTrackSegementEntityFromModel(TracksegmentModel $sm)
+    protected function generateTrackSegmentEntityFromModel(TracksegmentInterface $sm)
     {
         $segment = new TracksegmentEntity();
         $segment->setDistance($sm->getDistance());

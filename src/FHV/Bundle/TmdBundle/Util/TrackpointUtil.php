@@ -8,7 +8,8 @@ use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 
 /**
  * Helper class to calculate distances, velocity, ...
- * Class GPSUtil
+ * Class TrackpointUtil
+ * @package FHV\Bundle\TmdBundle\Util
  */
 class TrackpointUtil implements TrackpointUtilInterface
 {
@@ -104,8 +105,10 @@ class TrackpointUtil implements TrackpointUtilInterface
 
     /**
      * Calculates and returns a bounding box for trackpoint
+     *
      * @param TrackpointInterface $tp
      * @param float $distance in meters
+     *
      * @return BoundingBox
      */
     public function getBoundingBox(TrackpointInterface $tp, $distance)
@@ -121,9 +124,11 @@ class TrackpointUtil implements TrackpointUtilInterface
     /**
      * Returns a coordinate with a certain distance and bearing from the given coordinate
      * http://www.movable-type.co.uk/scripts/latlong.html
+     *
      * @param TrackpointInterface $tp
      * @param float $distance in meters
      * @param int $bearing in degrees
+     *
      * @return TrackpointInterface
      */
     public function getDistantCoordinate(TrackpointInterface $tp, $distance, $bearing)

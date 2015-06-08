@@ -5,6 +5,8 @@ namespace FHV\Bundle\TmdBundle\Util;
 use FHV\Bundle\TmdBundle\Model\TrackpointInterface;
 
 /**
+ * Interface for the utility methods like calculating velocity, acceleration, distance etc of
+ * gps trackpoints
  * Interface TrackpointUtilInterface
  * @package FHV\Bundle\TmdBundle\Util
  */
@@ -45,7 +47,7 @@ interface TrackpointUtilInterface
      * Calculates the velocity from a distance and a time
      *
      * @param float $distance in meters
-     * @param int   $time in seconds
+     * @param int $time in seconds
      *
      * @return float velocity in m/s
      */
@@ -55,7 +57,7 @@ interface TrackpointUtilInterface
      * Calculates acceleration (the difference in two velocity values over time)
      *
      * @param float $currentVelocity in m/s
-     * @param int   $time in seconds
+     * @param int $time in seconds
      * @param float $prevVelocity in m/s
      *
      * @return float

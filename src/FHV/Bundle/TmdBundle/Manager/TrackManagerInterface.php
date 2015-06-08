@@ -3,6 +3,7 @@
 namespace FHV\Bundle\TmdBundle\Manager;
 
 use FHV\Bundle\TmdBundle\Entity\Track;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -16,9 +17,11 @@ interface TrackManagerInterface
      * Creates a track from a gxp file and a for a selected process method
      *
      * @param File $file
-     * @param string $method
+     * @param string $analyseType
      *
      * @return Track
+     *
+     * @throws InvalidArgumentException
      */
-    public function create(File $file, $method);
+    public function create(File $file, $analyseType);
 }

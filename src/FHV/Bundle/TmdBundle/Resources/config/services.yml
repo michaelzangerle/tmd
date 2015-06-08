@@ -117,17 +117,20 @@ services:
           - @fhv_tmd.postProcessFilter
           - @fhv_tmd.databaseWriter
           - @fhv_tmd.gisSegmentFilter
+          - %tmd.analyse%
 
     fhv_tmd.resultManager:
         class: FHV\Bundle\TmdBundle\Manager\ResultManager
         arguments:
           - @doctrine.orm.entity_manager
+          - %tmd.transport_modes%
 
     fhv_tmd.analyseManager:
         class: FHV\Bundle\TmdBundle\Manager\AnalyseManager
         arguments:
           - @doctrine.orm.entity_manager
           - %tmd.analyse%
+          - %tmd.transport_modes%
 
     fhv_tmd.gisDataImportManager:
         class: FHV\Bundle\TmdBundle\Manager\GISDataImportManager

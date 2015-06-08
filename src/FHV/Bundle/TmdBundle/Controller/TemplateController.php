@@ -21,7 +21,7 @@ class TemplateController extends Controller
         return $this->render(
             'FHVTmdBundle:Theme:index.html.twig',
             array(
-                'currentNavigation' => 'index'
+                'currentNavigation' => 'index',
             )
         );
     }
@@ -36,7 +36,7 @@ class TemplateController extends Controller
         return $this->render(
             'FHVTmdBundle:Theme:create.html.twig',
             array(
-                'currentNavigation' => 'create'
+                'currentNavigation' => 'create',
             )
         );
     }
@@ -51,7 +51,7 @@ class TemplateController extends Controller
         return $this->render(
             'FHVTmdBundle:Theme:analyse.html.twig',
             array(
-                'currentNavigation' => 'analyse'
+                'currentNavigation' => 'analyse',
             )
         );
     }

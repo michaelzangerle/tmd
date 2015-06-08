@@ -81,6 +81,7 @@ fos_rest:
 fhv_tmd:
   planet_circumference: 6371000
   gpx_namespace: "http://www.topografix.com/GPX/1/1"
+  transport_modes: ['bus', 'bike', 'walk', 'train', 'drive']
 
   filter:
     # 180 km/h should be enough even for trains

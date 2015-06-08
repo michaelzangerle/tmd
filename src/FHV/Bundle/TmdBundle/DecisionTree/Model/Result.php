@@ -51,7 +51,9 @@ class Result
     }
 
     /**
-     * @return mixed
+     * Returns the total number of results in this case
+     *
+     * @return int
      */
     public function getTotal()
     {
@@ -59,7 +61,9 @@ class Result
     }
 
     /**
-     * @return mixed
+     * Returns the name of the maximum type
+     *
+     * @return string
      */
     public function getMaxName()
     {
@@ -67,7 +71,9 @@ class Result
     }
 
     /**
-     * @return mixed
+     * Returns the value of the maximum type
+     * 
+     * @return float
      */
     public function getMaxValue()
     {

@@ -7,6 +7,7 @@ use FHV\Bundle\PipesAndFiltersBundle\Component\ComponentInterface;
 use FHV\Bundle\PipesAndFiltersBundle\Pipes\Pipe;
 use FHV\Bundle\TmdBundle\Entity\Track;
 use FHV\Bundle\TmdBundle\Filter\DatabaseWriterInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -56,6 +57,11 @@ class TrackManager implements TrackManagerInterface
      */
     protected $ppFilter;
 
+    /**
+     * @var array
+     */
+    protected $analyseConfig;
+
     function __construct(
         EntityManager $em,
         ComponentInterface $tpFilter,
@@ -65,7 +71,8 @@ class TrackManager implements TrackManagerInterface
         ComponentInterface $travelModeFilter,
         ComponentInterface $postProcessFilter,
         DatabaseWriterInterface $databaseFilterInterface,
-        ComponentInterface $gisSegmentFilter
+        ComponentInterface $gisSegmentFilter,
+        array $analyseConfig
     ) {
         $this->em = $em;
         $this->tpFilter = $tpFilter;
@@ -76,24 +83,32 @@ class TrackManager implements TrackManagerInterface
         $this->ppFilter = $postProcessFilter;
         $this->dbFilter = $databaseFilterInterface;
         $this->gisSegementFilter = $gisSegmentFilter;
+        $this->analyseConfig = $analyseConfig;
         $this->track = new Track();
     }
 
     /**
      * Creates a track from a gxp file and a for a selected process method
      *
-     * @param File    $file
-     * @param string $method
+     * @param File $file
+     * @param string $analyseType
      *
-     * @return mixed
+     * @return Track
+     *
+     * @throws InvalidArgumentException
      */
-    public function create(File $file, $method)
+    public function create(File $file, $analyseType)
     {
-        // TODO inject analyse config and check if given mode exists
-        $this->track->setAnalyseType($method);
-        $this->initFilters($method);
-        $this->frFilter->run(['fileName' => $file, 'analyseType' => $method]);
+        if (!$this->isAnalyseTypeValid($analyseType)) {
+            throw new InvalidArgumentException('The given analyse type ('.$analyseType.') seems to be unknown!');
+        }
+
+        $this->track->setAnalyseType($analyseType);
+        $this->initFilters($analyseType);
+
+        $this->frFilter->run(['fileName' => $file, 'analyseType' => $analyseType]);
         $this->frFilter->finished();
+
         $this->em->persist($this->track);
         $this->em->flush();
 
@@ -101,12 +116,31 @@ class TrackManager implements TrackManagerInterface
     }
 
     /**
+     * Validates the analyse type against the configuration
+     *
+     * @param string $analyseType
+     *
+     * @return bool
+     */
+    protected function isAnalyseTypeValid($analyseType)
+    {
+        if (!array_key_exists($analyseType, $this->analyseConfig)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Triggers initialisation of filters
+     *
      * @param $method
+     *
      * @throws \Exception
      */
-    protected function initFilters($method){
-        switch($method){
+    protected function initFilters($method)
+    {
+        switch ($method) {
             case 'basic':
                 $this->initBasicFilters();
                 break;
@@ -114,7 +148,7 @@ class TrackManager implements TrackManagerInterface
                 $this->initGisFilters();
                 break;
             default:
-                throw new \Exception('Invalid method');
+                throw new \Exception('Invalid analyse method provided');
         }
     }
 
@@ -129,8 +163,6 @@ class TrackManager implements TrackManagerInterface
         new Pipe($this->segmentFilter, $this->tmFilter);
         new Pipe($this->tmFilter, $this->ppFilter);
         new Pipe($this->ppFilter, $this->dbFilter);
-
-//        new Pipe($this->segmentFilter, $this->dbFilter);
 
         $this->dbFilter->provideTrack($this->track);
     }
