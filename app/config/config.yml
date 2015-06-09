@@ -95,7 +95,7 @@ fhv_tmd:
     max_altitude_change: 25
     min_trackpoints_per_segment: 2
     min_time_difference: 2
-    points_to_skip_from_start: 2
+    points_to_skip_from_start: 5
 
     # should also be quite low because test data showed that tracks with a lot of invalid
     # data exist but they have still enough information to display reasonable routes
@@ -108,13 +108,13 @@ fhv_tmd:
   segmentation:
     # schuessler 2.78
     # zheng 2.5
-    max_walk_velocity: 2.5
+    max_walk_velocity: 2.78
 
     # schuessler 0.1
     # zheng 1.5
     max_walk_acceleration: 1.5
     min_segment_time: 20
-    max_segment_time: 30
+    max_segment_time: 300
     min_segment_distance: 50
     max_time_without_movement: 10
     max_velocity_for_nearly_stoppoints: 0.55
@@ -134,10 +134,11 @@ fhv_tmd:
         - "maxacceleration"
     gis:
       config:
-        boundingBoxDistance: 20
+        boundingBoxDistance: 30
         infrastructureTimeThreshold: 20
         infrastructureDistanceThreshold: 20
-        weightThreshold: 10
+        weightThreshold: 2
+        weightThreshold: 100
       class: "GISDecisionTree"
       cacheDir: "%kernel.root_dir%/../decisionTrees/gis"
       txtFilePath: "%kernel.root_dir%/../decisionTrees/gis"

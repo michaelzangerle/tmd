@@ -105,7 +105,7 @@ define(['underscore', 'async!//maps.googleapis.com/maps/api/js?v=3.exp'], functi
                         geodesic: true,
                         strokeColor: color,
                         strokeOpacity: 1.0,
-                        strokeWeight: 2,
+                        strokeWeight: 3,
                         icons: [{
                             icon: lineSymbol,
                             offset: '100%'

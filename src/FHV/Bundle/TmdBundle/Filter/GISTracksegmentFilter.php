@@ -120,7 +120,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     {
         parent::lastTrackpointHandling($tp);
         $this->checkInfrastructureForTrackpoint($tp);
-        $this->pts = $this->stopCounter > 0 ? $this->publicTransportStationCounter / $this->stopCounter : 0;
+        $this->pts = $this->publicTransportStationCounter;
     }
 
     /**
