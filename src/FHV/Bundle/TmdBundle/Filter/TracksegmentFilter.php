@@ -234,7 +234,7 @@ class TracksegmentFilter extends AbstractComponent
     {
         $this->totalVelocity += $currentVelocity;
         if ($currentVelocity > $this->maxVelocity) {
-            $this->maxVelocity = $currentVelocity;
+            $this->maxVelocity = $currentVelocity*0.95;
         }
     }
 

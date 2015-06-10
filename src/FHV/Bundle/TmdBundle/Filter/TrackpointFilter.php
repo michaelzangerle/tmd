@@ -170,9 +170,11 @@ class TrackpointFilter extends AbstractComponent
             }
 
             // when last pair was valid add also last point
-            if ($i + 1 === $next) {
-                $cleaned[] = $tp2;
-            }
+            // or leave it intentionally because of noise when entering a building
+            // and also one trackpoint wont make a big difference
+//            if ($i + 1 === $next) {
+//                $cleaned[] = $tp2;
+//            }
 
             return $cleaned;
         }
