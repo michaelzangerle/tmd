@@ -83,6 +83,7 @@ fhv_tmd:
   gpx_namespace: "http://www.topografix.com/GPX/1/1"
   transport_modes: ['bus', 'bike', 'walk', 'train', 'drive']
 
+  # TODO refactor configuration params
   # changing something here requires new  building of the training data set
   filter:
     # 180 km/h should be enough even for trains

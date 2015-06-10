@@ -8,6 +8,8 @@ use FHV\Bundle\PipesAndFiltersBundle\Component\Exception\InvalidArgumentExceptio
 use FHV\Bundle\TmdBundle\Model\Result;
 use FHV\Bundle\TmdBundle\Model\Track;
 use FHV\Bundle\TmdBundle\Model\Tracksegment;
+use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
+use FHV\Bundle\TmdBundle\Model\TracksegmentType;
 
 /**
  * Class PostprocessFilter
@@ -26,7 +28,7 @@ class PostprocessFilter extends AbstractComponent
     public function run($data)
     {
         if ($data !== null && $data instanceof Track) {
-//            $this->process($data);
+            $this->process($data);
             $this->write($data);
         } else {
             throw new InvalidArgumentException(
@@ -36,67 +38,55 @@ class PostprocessFilter extends AbstractComponent
     }
 
     /**
-     * Triggers the last analyse step and merging of sequent segments with same type
+     * Triggers the last analyse step in which changes in transportation modes will
+     * be validated
      *
      * @param Track $track
      */
     protected function process(Track $track)
     {
-
-        // TODO biljecki stops at traffic lights could cause errors in connection with bus stops
-        // TODO therefore it will be checked if previous was car - then car is set for this
-        // TODO segment as well
-
-        // nice to have
-        $this->mergeSegments($track);
-    }
-
-    /**
-     * Merges sequent segments with same type
-     *
-     * @param Track $track
-     */
-    protected function mergeSegments(Track $track)
-    {
-        /** @var Tracksegment[] $merged */
-        $merged = [$track->getSegments()[0]];
-        $cur = 0;
+        // biljecki: stops at traffic lights could cause errors in connection with bus stops
+        // therefore it will be checked if previous was car - then car is set for this
+        // zheng: change in transportation mode only with walk segment
         $segments = $track->getSegments();
         $length = count($segments);
-        for ($i = 1; $i < $length; $i++) {
-            $seg = $segments[$i];
-            $curSeg = $merged[$cur];
-            if ($curSeg->getType() === $seg->getType()) {
-                $curSeg->setTime($curSeg->getTime() + $seg->getTime());
-                $curSeg->setDistance($curSeg->getDistance() + $seg->getDistance());
-                $curSeg->setEndPoint($seg->getEndPoint());
-                $curSeg->addTrackPoints($seg->getTrackPoints());
-                $this->mergeFeatures($curSeg->getFeatures(), $seg->getFeatures());
-                $this->mergeResults($curSeg->getResult(), $seg->getResult());
-            } else {
-                $merged[] = $seg;
-                $cur++;
+
+        for ($i = 0; ($i + 1) < $length; $i++) {
+            $curSegment = $segments[$i];
+            $nextSegment = $segments[$i + 1];
+
+            if ($curSegment->getType() === TracksegmentType::BIKE &&
+                $curSegment->getResult()->getProbability() < 0.7 // TODO put in config
+            ) {
+                if ($i > 1 && $segments[$i - 1]->getType() !== TracksegmentType::WALK) {
+                    $this->adjustTransportMode($segments[$i - 1], $curSegment);
+                } else {
+                    $this->adjustTransportMode($nextSegment, $curSegment);
+                }
+            }
+
+            if ($curSegment->getType() !== $nextSegment->getType() &&
+                $curSegment->getType() !== TracksegmentType::WALK &&
+                $nextSegment->getType() !== TracksegmentType::WALK
+            ) {
+                $this->adjustTransportMode($curSegment, $nextSegment);
             }
         }
     }
 
     /**
-     * Merges two features
+     * Adjusts the transport type/mode from the segment to correct according to the correct segment
+     * and will set the result probability to -1 because the type was set in the postprocessing
      *
-     * @param $features1
-     * @param $features2
+     * @param TracksegmentInterface $correctSegment
+     * @param TracksegmentInterface $segmentToCorrect
      */
-    protected function mergeFeatures($features1, $features2)
-    {
-    }
-
-    /**
-     * Merges two features
-     *
-     * @param Result $result1
-     * @param Result $result2
-     */
-    protected function mergeResults(Result $result1, Result $result2)
-    {
+    protected function adjustTransportMode(
+        TracksegmentInterface $correctSegment,
+        TracksegmentInterface $segmentToCorrect
+    ) {
+        $segmentToCorrect->setType($correctSegment->getType());
+        $segmentToCorrect->getResult()->setTransportType($correctSegment->getType());
+        $segmentToCorrect->getResult()->setProbability(-1);
     }
 }
