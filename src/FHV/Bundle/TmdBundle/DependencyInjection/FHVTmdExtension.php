@@ -107,6 +107,7 @@ class FHVTmdExtension extends Extension
      */
     protected function setSegmentationParameters($container, $config)
     {
+        // walk point detection
         $container->setParameter(
             'tmd.segmentation.max_walk_velocity',
             $config['segmentation']['max_walk_velocity']
@@ -115,6 +116,8 @@ class FHVTmdExtension extends Extension
             'tmd.segmentation.max_walk_acceleration',
             $config['segmentation']['max_walk_acceleration']
         );
+
+        // segment creation
         $container->setParameter(
             'tmd.segmentation.min_segment_distance',
             $config['segmentation']['min_segment_distance']
@@ -124,14 +127,11 @@ class FHVTmdExtension extends Extension
             $config['segmentation']['min_segment_time']
         );
         $container->setParameter(
-            'tmd.segmentation.max_segment_time',
-            $config['segmentation']['max_segment_time']
-        );
-
-        $container->setParameter(
             'tmd.segmentation.max_time_difference',
             $config['segmentation']['max_time_difference']
         );
+
+        // stop point detection
         $container->setParameter(
             'tmd.segmentation.max_time_without_movement',
             $config['segmentation']['max_time_without_movement']
@@ -139,6 +139,16 @@ class FHVTmdExtension extends Extension
         $container->setParameter(
             'tmd.segmentation.max_velocity_for_nearly_stoppoints',
             $config['segmentation']['max_velocity_for_nearly_stoppoints']
+        );
+
+        // uncertain / certain segment handling
+        $container->setParameter(
+            'tmd.segmentation.certain_segments_min_time',
+            $config['segmentation']['certain_segments_min_time']
+        );
+        $container->setParameter(
+            'tmd.segmentation.certain_segments_min_distance',
+            $config['segmentation']['certain_segments_min_distance']
         );
     }
 }

@@ -30,24 +30,28 @@ class SegmentationFilter extends AbstractComponent
     protected $util;
 
     /**
+     * Maximum velocity for walk points
      * @var float
      */
-    protected $maxWalkVelocity;
+    protected $walkpointMaxVelocity;
 
     /**
+     * Maximum acceleration for walk points
      * @var float
      */
-    protected $maxWalkAcceleration;
+    protected $walkpointMaxAcceleration;
 
     /**
+     * Minimal distance for a segment to cover
      * @var float
      */
-    protected $minSegmentDistance;
+    protected $segmentMinDistance;
 
     /**
+     * Minimal time for a segment to cover
      * @var int
      */
-    protected $minSegmentTime;
+    protected $segmentMinTime;
 
     /**
      * @var Track
@@ -55,53 +59,69 @@ class SegmentationFilter extends AbstractComponent
     protected $track;
 
     /**
+     * Maximum time difference between two consecutive track points
      * @var integer
      */
-    protected $maxTimeDifference;
+    protected $trackpointMaxTimeDifference;
 
     /**
+     * Minimum time of points to cover to detect as stop point
      * @var integer
      */
-    protected $maxTimeWithoutMovement;
+    protected $stoppointMinTimeWithoutMovement;
 
     /**
+     * Maximum velocity for stop points
      * @var float
      */
-    protected $maxVelocityForNearlyStopPoints;
+    protected $stoppointMaxVelocity;
 
     /**
+     * Analyse type (basic, gis)
      * @var string
      */
     protected $analyseType;
 
     /**
-     * @var int
+     * Minimum time to cover to become a certain segment
+     * @var float
      */
-    protected $maxSegmentTime;
+    protected $certainSegmentMinTime;
+
+    /**
+     * Minimum distance to cover to become a certain segment
+     * @var float
+     */
+    protected $certainSegmentMinDistance;
 
     function __construct(
         TrackpointUtilInterface $util,
-        $maxWalkVelocity,
-        $maxWalkAcceleration,
-        $minSegmentTime,
-        $minSegmentDistance,
-        $maxTimeDifference,
-        $maxTimeWithoutMovement,
-        $maxVelocityForNearlyStopPoints,
-        $maxSegmentTime
+        $walkpointMaxVelocity,
+        $walkpointMaxAcceleration,
+        $segmentMinTime,
+        $segmentMinDistance,
+        $trackpointMaxTimeDifference,
+        $stoppointTimeWithoutMovement,
+        $stoppointMaxVelocity,
+        $certainSegmentMinTime,
+        $certainSegmentMinDistance
     ) {
         parent::__construct();
-
         $this->util = $util;
-        $this->maxWalkVelocity = $maxWalkVelocity;
-        $this->maxWalkAcceleration = $maxWalkAcceleration;
-        $this->minSegmentTime = $minSegmentTime;
-        $this->minSegmentDistance = $minSegmentDistance;
         $this->track = new Track();
-        $this->maxTimeDifference = $maxTimeDifference;
-        $this->maxTimeWithoutMovement = $maxTimeWithoutMovement;
-        $this->maxVelocityForNearlyStopPoints = $maxVelocityForNearlyStopPoints;
-        $this->maxSegmentTime = $maxSegmentTime;
+
+        $this->walkpointMaxVelocity = $walkpointMaxVelocity;
+        $this->walkpointMaxAcceleration = $walkpointMaxAcceleration;
+
+        $this->segmentMinTime = $segmentMinTime;
+        $this->segmentMinDistance = $segmentMinDistance;
+        $this->trackpointMaxTimeDifference = $trackpointMaxTimeDifference;
+
+        $this->stoppointMinTimeWithoutMovement = $stoppointTimeWithoutMovement;
+        $this->stoppointMaxVelocity = $stoppointMaxVelocity;
+
+        $this->certainSegmentMinTime = $certainSegmentMinTime;
+        $this->certainSegmentMinDistance = $certainSegmentMinDistance;
     }
 
     /**
@@ -132,7 +152,8 @@ class SegmentationFilter extends AbstractComponent
     protected function process(array $trackpoints)
     {
         $segments = $this->createSegments($trackpoints);
-        $segments = $this->mergeSegments($segments);
+        $segments = $this->mergeShortSegments($segments);
+        $segments = $this->mergeUncertainSegments($segments);
         $this->track->setSegments($segments);
         $this->track->setAnalysisType($this->analyseType);
     }
@@ -153,6 +174,7 @@ class SegmentationFilter extends AbstractComponent
         $prevVelocity = 0;
         $time = 0;
         $distance = 0;
+        $tmpTime = 0;
         $lowSpeedTimeCounter = 0;
 
         $curSegment = $this->createNewSegment();
@@ -170,7 +192,7 @@ class SegmentationFilter extends AbstractComponent
 
             // bilijecki counts the points with speed below a certain value
             // and starts a new segment when the threshold is reached
-            if ($this->util->calcVelocity($tmpDistance, $tmpTime) < $this->maxVelocityForNearlyStopPoints) {
+            if ($this->util->calcVelocity($tmpDistance, $tmpTime) < $this->stoppointMaxVelocity) {
                 $lowSpeedTimeCounter += $tmpTime;
             } else {
                 // reset when below threshold
@@ -182,12 +204,13 @@ class SegmentationFilter extends AbstractComponent
             // segment with one element und undefined type
             if (count($curSegment->getTrackpoints()) === 1) {
                 $this->createNewResultEntity($this->analyseType, $isWalkPoint, $curSegment);
-            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime, $time, $lowSpeedTimeCounter)) {
+            } elseif ($this->newSegmentNeeded($isWalkPoint, $curSegment, $tmpTime, $lowSpeedTimeCounter)) {
                 // more than 1 element in segment and different type
                 $segments[] = $this->setValuesForSegment(
                     $curSegment,
                     $time,
-                    $distance
+                    $distance,
+                    $tmpTime
                 );
 
                 $curSegment = $this->createNewSegment();
@@ -204,7 +227,8 @@ class SegmentationFilter extends AbstractComponent
         $segments[] = $this->setValuesForSegment(
             $curSegment,
             $time,
-            $distance
+            $distance,
+            $tmpTime
         );
 
         return $segments;
@@ -216,16 +240,21 @@ class SegmentationFilter extends AbstractComponent
      * @param TracksegmentInterface $segment
      * @param integer $time
      * @param float $distance
+     * @param integer $tmpTime
      *
      * @return TracksegmentInterface
      */
-    protected function setValuesForSegment($segment, $time, $distance)
+    protected function setValuesForSegment($segment, $time, $distance, $tmpTime)
     {
         $segment->setTime($time);
         $segment->setDistance($distance);
         $length = count($segment->getTrackPoints());
         $segment->setEndPoint($segment->getTrackpoints()[$length - 1]);
         $segment->setStartPoint($segment->getTrackpoints()[0]);
+
+        if ($tmpTime > $this->trackpointMaxTimeDifference) {
+            $segment->setCertainSegment(true);
+        }
 
         return $segment;
     }
@@ -259,6 +288,7 @@ class SegmentationFilter extends AbstractComponent
 
         if ($isWalkPoint) {
             $result->setTransportType(TracksegmentType::WALK);
+            $curSegment->setCertainSegment(true);
         } else {
             $result->setTransportType(TracksegmentType::UNDEFINED);
         }
@@ -284,7 +314,7 @@ class SegmentationFilter extends AbstractComponent
         $acc = $this->util->calcAcceleration($velocity, $time, $prevVelocity);
         $prevVelocity = $velocity;
 
-        if ($acc < $this->maxWalkAcceleration && $velocity < $this->maxWalkVelocity) {
+        if ($acc < $this->walkpointMaxAcceleration && $velocity < $this->walkpointMaxVelocity) {
             return true;
         }
 
@@ -300,7 +330,6 @@ class SegmentationFilter extends AbstractComponent
      * @param boolean $isWalkPoint
      * @param TracksegmentInterface $curSegment
      * @param integer $trackPointTime
-     * @param integer $segmentTime
      * @param integer $lowSpeedCounter
      *
      * @return bool
@@ -309,16 +338,13 @@ class SegmentationFilter extends AbstractComponent
         $isWalkPoint,
         TracksegmentInterface $curSegment,
         $trackPointTime,
-        $segmentTime,
         $lowSpeedCounter
     ) {
-        $segmentTime += $trackPointTime;
         if (count($curSegment->getTrackpoints()) >= 2 && (
                 ($isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::UNDEFINED) ||
                 (!$isWalkPoint && $curSegment->getResult()->getTransportType() === TracksegmentType::WALK) ||
-                ($segmentTime > $this->maxSegmentTime) ||
-                ($trackPointTime > $this->maxTimeDifference) ||
-                ($lowSpeedCounter >= $this->maxTimeWithoutMovement))
+                ($trackPointTime > $this->trackpointMaxTimeDifference) || // no trackpoint for 30 seconds
+                ($lowSpeedCounter >= $this->stoppointMinTimeWithoutMovement)) // stop detected
         ) {
             return true;
         }
@@ -333,7 +359,7 @@ class SegmentationFilter extends AbstractComponent
      *
      * @return TracksegmentInterface[]
      */
-    protected function mergeSegments(array $segments)
+    protected function mergeShortSegments(array $segments)
     {
         $i = 1;
         $j = 0;
@@ -342,7 +368,7 @@ class SegmentationFilter extends AbstractComponent
 
         // merge first segment with second when too small
         // to prevent starting signal issue
-        if (count($segments) > 1 && $this->shouldSegmentBeMerged($segments[0])) {
+        if (count($segments) > 1 && $this->shouldShortSegmentBeMerged($segments[0])) {
             $this->merge($segments[0], $segments[1]);
             $i = 2;
         }
@@ -350,7 +376,7 @@ class SegmentationFilter extends AbstractComponent
         $result[] = $curSegment;
 
         while ($i < $amount) {
-            if ($this->shouldSegmentBeMerged($segments[$i])) {
+            if ($this->shouldShortSegmentBeMerged($segments[$i])) {
                 $this->merge($curSegment, $segments[$i]);
             } else {
                 // add segment only when it should not be merged
@@ -371,10 +397,10 @@ class SegmentationFilter extends AbstractComponent
      *
      * @return bool
      */
-    protected function shouldSegmentBeMerged(TracksegmentInterface $segment)
+    protected function shouldShortSegmentBeMerged(TracksegmentInterface $segment)
     {
-        return ($segment->getDistance() < $this->minSegmentDistance ||
-            $segment->getTime() < $this->minSegmentTime);
+        return ($segment->getDistance() < $this->segmentMinDistance ||
+            $segment->getTime() < $this->segmentMinTime);
     }
 
     /**
@@ -396,6 +422,9 @@ class SegmentationFilter extends AbstractComponent
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function parentHasFinished()
     {
         $this->write(
@@ -405,5 +434,54 @@ class SegmentationFilter extends AbstractComponent
             ]
         );
         parent::parentHasFinished();
+    }
+
+    /**
+     * Merges uncertain segments which means segments that are non walk segments and
+     * are below a certain length and time threshold
+     *
+     * @param TracksegmentInterface[] $segments
+     *
+     * @return TracksegmentInterface[]
+     */
+    protected function mergeUncertainSegments(array $segments)
+    {
+        $length = count($segments);
+        if ($length <= 1) {
+            return $segments;
+        }
+
+        $result[] = $segments[0];
+        $last = 0;
+        for ($i = 1; $i < $length; $i++) {
+            if ($this->shouldUncertainSegmentBeMerged($result[$last], $segments[$i])) {
+                $this->merge($result[$last], $segments[$i]);
+            } else {
+                $last++;
+                $result[] = $segments[$i];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Determines if two uncertain segments should be merged
+     *
+     * @param TracksegmentInterface $segment1
+     * @param TracksegmentInterface $segment2
+     *
+     * @return bool
+     */
+    protected function shouldUncertainSegmentBeMerged(TracksegmentInterface $segment1, TracksegmentInterface $segment2)
+    {
+        if (!$segment1->isCertainSegment() && !$segment2->isCertainSegment() &&
+            ($segment1->getDistance() < $this->certainSegmentMinDistance ||
+                $segment1->getTime() < $this->certainSegmentMinTime)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

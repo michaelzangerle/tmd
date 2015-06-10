@@ -102,25 +102,27 @@ fhv_tmd:
     # data exist but they have still enough information to display reasonable routes
     min_valid_points_ratio: 0
 
-    # ~ 2 km/h
+    # TODO needed at all?
     max_velocity_for_nearly_stoppoints: 0.55
     max_time_without_movement: 5
 
-  # changing something here requires new  building of the training data set
   segmentation:
-    # schuessler 2.78
-    # zheng 2.5
-    max_walk_velocity: 2.5
+    # determine walk points
+    max_walk_velocity: 2.78 # schuessler 2.78 | zheng 2.5
+    max_walk_acceleration: 1.5   # schuessler 0.1 | zheng 1.5
 
-    # schuessler 0.1
-    # zheng 1.5
-    max_walk_acceleration: 1.5
+    # determine segments
     min_segment_time: 20
-    max_segment_time: 300
     min_segment_distance: 50
-    max_time_without_movement: 10
-    max_velocity_for_nearly_stoppoints: 0.55
     max_time_difference: 30
+
+    # determine stop points
+    max_time_without_movement: 10
+    max_velocity_for_nearly_stoppoints: 0.55 # ~ 2 km/h
+
+    # merging uncertain segments and getting certain segments
+    certain_segments_min_time: 60
+    certain_segments_min_distance: 100
 
   analyse:
     basic:
@@ -139,7 +141,7 @@ fhv_tmd:
         boundingBoxDistance: 30
         infrastructureTimeThreshold: 20
         infrastructureDistanceThreshold: 20
-        weightThreshold: 1
+        weightThreshold: 10
       class: "GISDecisionTree"
       cacheDir: "%kernel.root_dir%/../decisionTrees/gis"
       txtFilePath: "%kernel.root_dir%/../decisionTrees/gis"

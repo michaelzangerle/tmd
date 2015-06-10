@@ -76,7 +76,8 @@ services:
             - %tmd.segmentation.max_time_difference%
             - %tmd.segmentation.max_time_without_movement%
             - %tmd.segmentation.max_velocity_for_nearly_stoppoints%
-            - %tmd.segmentation.max_segment_time%
+            - %tmd.segmentation.certain_segments_min_time%
+            - %tmd.segmentation.certain_segments_min_distance%
 
     fhv_tmd.travelModeFilter:
           class: FHV\Bundle\TmdBundle\Filter\TravelModeFilter
