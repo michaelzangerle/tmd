@@ -12,12 +12,12 @@ use FHV\Bundle\TmdBundle\Model\TracksegmentInterface;
 use FHV\Bundle\TmdBundle\Model\TracksegmentType;
 
 /**
+ * Determines if the transport modes make sense and changes them if not
  * Class PostprocessFilter
  * @package FHV\Bundle\TmdBundle\Filter
  */
 class PostprocessFilter extends AbstractComponent
 {
-
     /**
      * Starts a filter and processes the given data
      *
@@ -54,24 +54,25 @@ class PostprocessFilter extends AbstractComponent
         for ($i = 0; ($i + 1) < $length; $i++) {
             $curSegment = $segments[$i];
             $nextSegment = $segments[$i + 1];
+            $previousSegment = $i > 0 ? $segments[$i - 1] : null;
 
-            if ($curSegment->getType() === TracksegmentType::BIKE &&
-                $curSegment->getResult()->getProbability() < 0.7 // TODO put in config
-            ) {
-                if ($i > 1 && $segments[$i - 1]->getType() !== TracksegmentType::WALK) {
-                    $this->adjustTransportMode($segments[$i - 1], $curSegment);
-                } else {
-                    $this->adjustTransportMode($nextSegment, $curSegment);
-                }
-            }
-
-            if ($curSegment->getType() !== $nextSegment->getType() &&
-                $curSegment->getType() !== TracksegmentType::WALK &&
-                $nextSegment->getType() !== TracksegmentType::WALK
-            ) {
-                $this->adjustTransportMode($curSegment, $nextSegment);
-            }
+            $this->mergeUncertainBikeMode($curSegment, $nextSegment, $previousSegment);
+            $this->mergeFastTransportMode($curSegment, $nextSegment);
         }
+    }
+
+    /**
+     * Checks if the given segment is associated with a fast transport type
+     *
+     * @param TracksegmentInterface $segment
+     *
+     * @return bool
+     */
+    protected function isFastTransportType(TracksegmentInterface $segment)
+    {
+        return ($segment->getType() === TracksegmentType::BUS ||
+            $segment->getType() === TracksegmentType::DRIVE ||
+            $segment->getType() === TracksegmentType::TRAIN);
     }
 
     /**
@@ -88,5 +89,49 @@ class PostprocessFilter extends AbstractComponent
         $segmentToCorrect->setType($correctSegment->getType());
         $segmentToCorrect->getResult()->setTransportType($correctSegment->getType());
         $segmentToCorrect->getResult()->setProbability(-1);
+    }
+
+    /**
+     * Decides if given segments should be merged or not
+     *
+     * @param TracksegmentInterface $curSegment
+     * @param TracksegmentInterface $nextSegment
+     */
+    protected function mergeFastTransportMode(TracksegmentInterface $curSegment, TracksegmentInterface $nextSegment)
+    {
+        if ($curSegment->getType() !== $nextSegment->getType() &&
+            $curSegment->getType() !== TracksegmentType::WALK &&
+            $nextSegment->getType() !== TracksegmentType::WALK
+            // TODO needed? will break all where 1 bike segment is present
+//            $this->isFastTransportType($curSegment) &&
+//            $this->isFastTransportType($nextSegment)
+        ) {
+            $this->adjustTransportMode($curSegment, $nextSegment);
+        }
+    }
+
+    /**
+     * Merges an uncertain bike mode with the previous or next segment
+     *
+     * @param TracksegmentInterface $curSegment
+     * @param TracksegmentInterface $nextSegment
+     * @param TracksegmentInterface $previousSegment
+     *
+     */
+    protected function mergeUncertainBikeMode(
+        TracksegmentInterface $curSegment,
+        TracksegmentInterface $nextSegment,
+        TracksegmentInterface $previousSegment = null
+    ) {
+        if ($curSegment->getType() === TracksegmentType::BIKE && (
+                (!$previousSegment || $previousSegment->getType() !== TracksegmentType::BIKE) &&
+                $nextSegment->getType() !== TracksegmentType::BIKE)
+        ) {
+            if ($previousSegment && $previousSegment->getType() !== TracksegmentType::WALK) {
+                $this->adjustTransportMode($previousSegment, $curSegment);
+            } else {
+                $this->adjustTransportMode($nextSegment, $curSegment);
+            }
+        }
     }
 }

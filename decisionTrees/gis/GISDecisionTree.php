@@ -23,19 +23,19 @@ class GISDecisionTree implements DecisionTreeInterface
                                     $node1 = new Node();
                     $node1->setDecision(new Decision('meanvelocity', '>', 7.887));
                                     $node2 = new Node();
-                    $node2->setDecision(new Decision('railcloseness', '>', 0.011));
+                    $node2->setDecision(new Decision('railcloseness', '>', 0.012));
                                     $node3 = new Node();
                             $node3->setResult(new Result([
                             'bike' => 0,
                             'drive' => 0,
                             'walk' => 0,
                             'bus' => 0,
-                            'train' => 6,
+                            'train' => 8,
                         ]));
                             $node4 = new Node();
                     $node4->setDecision(new Decision('ptscloseness', '>', 1.5));
                                     $node5 = new Node();
-                    $node5->setDecision(new Decision('ptscloseness', '>', 4.5));
+                    $node5->setDecision(new Decision('ptscloseness', '>', 20.5));
                                     $node6 = new Node();
                     $node6->setDecision(new Decision('railcloseness', '>', 0));
                                     $node7 = new Node();
@@ -94,82 +94,152 @@ class GISDecisionTree implements DecisionTreeInterface
                         ]));
                             $node16 = new Node();
                             $node16->setResult(new Result([
-                            'bike' => 9,
+                            'bike' => 11,
                             'drive' => 0,
                             'walk' => 0,
                             'bus' => 0,
                             'train' => 0,
                         ]));
                             $node17 = new Node();
-                            $node17->setResult(new Result([
-                            'bike' => 17,
-                            'drive' => 11,
+                    $node17->setDecision(new Decision('railcloseness', '>', 0));
+                                    $node18 = new Node();
+                            $node18->setResult(new Result([
+                            'bike' => 8,
+                            'drive' => 0,
                             'walk' => 0,
-                            'bus' => 1,
+                            'bus' => 0,
                             'train' => 0,
                         ]));
-                            $node18 = new Node();
-                    $node18->setDecision(new Decision('maxacceleration', '>', 1.993));
-                                    $node19 = new Node();
-                    $node19->setDecision(new Decision('stoprate', '>', 0.126));
+                            $node19 = new Node();
+                    $node19->setDecision(new Decision('meanacceleration', '>', 0.866));
                                     $node20 = new Node();
-                            $node20->setResult(new Result([
-                            'bike' => 2,
+                    $node20->setDecision(new Decision('highwaycloseness', '>', 0.001));
+                                    $node21 = new Node();
+                            $node21->setResult(new Result([
+                            'bike' => 4,
                             'drive' => 0,
                             'walk' => 0,
                             'bus' => 0,
                             'train' => 0,
                         ]));
-                            $node21 = new Node();
-                    $node21->setDecision(new Decision('maxvelocity', '>', 44.538));
-                                    $node22 = new Node();
-                            $node22->setResult(new Result([
-                            'bike' => 2,
-                            'drive' => 0,
+                            $node22 = new Node();
+                    $node22->setDecision(new Decision('meanvelocity', '>', 6.07));
+                                    $node23 = new Node();
+                            $node23->setResult(new Result([
+                            'bus' => 1,
+                            'drive' => 3,
                             'walk' => 0,
-                            'bus' => 0,
+                            'bike' => 0,
                             'train' => 0,
                         ]));
-                            $node23 = new Node();
-                    $node23->setDecision(new Decision('meanacceleration', '>', 0.476));
-                                    $node24 = new Node();
-                    $node24->setDecision(new Decision('maxacceleration', '>', 3.211));
+                            $node24 = new Node();
+                    $node24->setDecision(new Decision('stoprate', '>', 0.005));
                                     $node25 = new Node();
                             $node25->setResult(new Result([
+                            'bike' => 0,
+                            'drive' => 3,
+                            'walk' => 0,
+                            'bus' => 0,
+                            'train' => 0,
+                        ]));
+                            $node26 = new Node();
+                    $node26->setDecision(new Decision('meanacceleration', '>', 1.119));
+                                    $node27 = new Node();
+                    $node27->setDecision(new Decision('maxvelocity', '>', 30.207));
+                                    $node28 = new Node();
+                            $node28->setResult(new Result([
+                            'bike' => 0,
+                            'drive' => 2,
+                            'walk' => 0,
+                            'bus' => 0,
+                            'train' => 0,
+                        ]));
+                            $node29 = new Node();
+                            $node29->setResult(new Result([
+                            'bus' => 0,
+                            'drive' => 1,
+                            'walk' => 0,
+                            'bike' => 5,
+                            'train' => 0,
+                        ]));
+                            $node30 = new Node();
+                            $node30->setResult(new Result([
+                            'bike' => 0,
+                            'drive' => 2,
+                            'walk' => 0,
+                            'bus' => 0,
+                            'train' => 0,
+                        ]));
+                            $node31 = new Node();
+                            $node31->setResult(new Result([
+                            'bike' => 5,
+                            'drive' => 0,
+                            'walk' => 0,
+                            'bus' => 0,
+                            'train' => 0,
+                        ]));
+                            $node32 = new Node();
+                    $node32->setDecision(new Decision('maxacceleration', '>', 1.993));
+                                    $node33 = new Node();
+                    $node33->setDecision(new Decision('stoprate', '>', 0.126));
+                                    $node34 = new Node();
+                            $node34->setResult(new Result([
+                            'bike' => 2,
+                            'drive' => 0,
+                            'walk' => 0,
+                            'bus' => 0,
+                            'train' => 0,
+                        ]));
+                            $node35 = new Node();
+                    $node35->setDecision(new Decision('maxvelocity', '>', 44.538));
+                                    $node36 = new Node();
+                            $node36->setResult(new Result([
+                            'bike' => 2,
+                            'drive' => 0,
+                            'walk' => 0,
+                            'bus' => 0,
+                            'train' => 0,
+                        ]));
+                            $node37 = new Node();
+                    $node37->setDecision(new Decision('meanacceleration', '>', 0.476));
+                                    $node38 = new Node();
+                    $node38->setDecision(new Decision('maxacceleration', '>', 3.211));
+                                    $node39 = new Node();
+                            $node39->setResult(new Result([
                             'bike' => 0,
                             'drive' => 0,
                             'walk' => 6,
                             'bus' => 0,
                             'train' => 0,
                         ]));
-                            $node26 = new Node();
-                    $node26->setDecision(new Decision('maxvelocity', '>', 5.613));
-                                    $node27 = new Node();
-                            $node27->setResult(new Result([
+                            $node40 = new Node();
+                    $node40->setDecision(new Decision('maxvelocity', '>', 5.613));
+                                    $node41 = new Node();
+                            $node41->setResult(new Result([
                             'bike' => 2,
                             'drive' => 0,
                             'walk' => 0,
                             'bus' => 0,
                             'train' => 0,
                         ]));
-                            $node28 = new Node();
-                            $node28->setResult(new Result([
+                            $node42 = new Node();
+                            $node42->setResult(new Result([
                             'bike' => 0,
                             'drive' => 0,
                             'walk' => 2,
                             'bus' => 0,
                             'train' => 0,
                         ]));
-                            $node29 = new Node();
-                            $node29->setResult(new Result([
+                            $node43 = new Node();
+                            $node43->setResult(new Result([
                             'bike' => 0,
                             'drive' => 0,
                             'walk' => 14,
                             'bus' => 0,
                             'train' => 0,
                         ]));
-                            $node30 = new Node();
-                            $node30->setResult(new Result([
+                            $node44 = new Node();
+                            $node44->setResult(new Result([
                             'bus' => 0,
                             'drive' => 1,
                             'walk' => 31,
@@ -178,7 +248,7 @@ class GISDecisionTree implements DecisionTreeInterface
                         ]));
                 
                                     $node0->setLeft($node1);
-                            $node0->setRight($node18);
+                            $node0->setRight($node32);
                                     $node1->setParent($node0);
                             $node1->setLeft($node2);
                             $node1->setRight($node11);
@@ -211,32 +281,60 @@ class GISDecisionTree implements DecisionTreeInterface
                                     $node14->setParent($node14);
                                                     $node15->setParent($node15);
                                                     $node16->setParent($node16);
-                                                    $node17->setParent($node17);
-                                                    $node18->setParent($node0);
-                            $node18->setLeft($node19);
-                            $node18->setRight($node30);
-                                    $node19->setParent($node18);
+                                                    $node17->setParent($node11);
+                            $node17->setLeft($node18);
+                            $node17->setRight($node19);
+                                    $node18->setParent($node18);
+                                                    $node19->setParent($node17);
                             $node19->setLeft($node20);
-                            $node19->setRight($node21);
-                                    $node20->setParent($node20);
-                                                    $node21->setParent($node19);
-                            $node21->setLeft($node22);
-                            $node21->setRight($node23);
-                                    $node22->setParent($node22);
-                                                    $node23->setParent($node21);
-                            $node23->setLeft($node24);
-                            $node23->setRight($node29);
-                                    $node24->setParent($node23);
+                            $node19->setRight($node31);
+                                    $node20->setParent($node19);
+                            $node20->setLeft($node21);
+                            $node20->setRight($node22);
+                                    $node21->setParent($node21);
+                                                    $node22->setParent($node20);
+                            $node22->setLeft($node23);
+                            $node22->setRight($node24);
+                                    $node23->setParent($node23);
+                                                    $node24->setParent($node22);
                             $node24->setLeft($node25);
                             $node24->setRight($node26);
                                     $node25->setParent($node25);
                                                     $node26->setParent($node24);
                             $node26->setLeft($node27);
-                            $node26->setRight($node28);
-                                    $node27->setParent($node27);
-                                                    $node28->setParent($node28);
+                            $node26->setRight($node30);
+                                    $node27->setParent($node26);
+                            $node27->setLeft($node28);
+                            $node27->setRight($node29);
+                                    $node28->setParent($node28);
                                                     $node29->setParent($node29);
                                                     $node30->setParent($node30);
+                                                    $node31->setParent($node31);
+                                                    $node32->setParent($node0);
+                            $node32->setLeft($node33);
+                            $node32->setRight($node44);
+                                    $node33->setParent($node32);
+                            $node33->setLeft($node34);
+                            $node33->setRight($node35);
+                                    $node34->setParent($node34);
+                                                    $node35->setParent($node33);
+                            $node35->setLeft($node36);
+                            $node35->setRight($node37);
+                                    $node36->setParent($node36);
+                                                    $node37->setParent($node35);
+                            $node37->setLeft($node38);
+                            $node37->setRight($node43);
+                                    $node38->setParent($node37);
+                            $node38->setLeft($node39);
+                            $node38->setRight($node40);
+                                    $node39->setParent($node39);
+                                                    $node40->setParent($node38);
+                            $node40->setLeft($node41);
+                            $node40->setRight($node42);
+                                    $node41->setParent($node41);
+                                                    $node42->setParent($node42);
+                                                    $node43->setParent($node43);
+                                                    $node44->setParent($node44);
                                 
         $this->tree = new Tree($node0);
     }
