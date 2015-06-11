@@ -102,9 +102,6 @@ class PostprocessFilter extends AbstractComponent
         if ($curSegment->getType() !== $nextSegment->getType() &&
             $curSegment->getType() !== TracksegmentType::WALK &&
             $nextSegment->getType() !== TracksegmentType::WALK
-            // TODO needed? will break all where 1 bike segment is present
-//            $this->isFastTransportType($curSegment) &&
-//            $this->isFastTransportType($nextSegment)
         ) {
             $this->adjustTransportMode($curSegment, $nextSegment);
         }

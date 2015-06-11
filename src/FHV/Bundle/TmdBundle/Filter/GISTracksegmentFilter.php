@@ -253,7 +253,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     {
         $boundingBox = $this->util->getBoundingBox($tp, $this->gisAnalyseConfig['infrastructureDistanceThreshold']);
         $result = $this->gisCoordinateRepository->getCoordinatesForBoundingBox($boundingBox, $type);
-        if ($result) {
+            if ($result) {
 
             return true;
         }
