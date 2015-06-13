@@ -5,24 +5,6 @@
     <trk>
         <name>xaiox#20110817</name>
         <trkseg type="bus">
-            <trkpt lon="9.74325" lat="47.406583333">
-                <ele>388.0</ele>
-                <time>2011-08-17T15:13:45.000Z</time>
-                <course>0.0</course>
-                <speed>0.0</speed>
-                <name>Position 1</name>
-                <fix>3d</fix>
-                <sat>8</sat>
-            </trkpt>
-            <trkpt lon="9.743243333" lat="47.406668333">
-                <ele>392.0</ele>
-                <time>2011-08-17T15:13:49.000Z</time>
-                <course>356.961487</course>
-                <speed>2.36887</speed>
-                <name>Position 2</name>
-                <fix>3d</fix>
-                <sat>8</sat>
-            </trkpt>
             <trkpt lon="9.743036667" lat="47.406803333">
                 <ele>421.0</ele>
                 <time>2011-08-17T15:14:12.000Z</time>

@@ -54,12 +54,18 @@ class Tracksegment implements TracksegmentInterface
     protected $distance;
 
     /**
+     * @var bool
+     */
+    protected $certainSegment;
+
+    /**
      * @param int $time
      * @param float $distance in meters
      * @param TrackpointInterface $startPoint
      * @param TrackpointInterface $endPoint
      * @param TrackpointInterface[] $trackPoints
      * @param string $type of segment
+     * @param bool $isCertain
      */
     function __construct(
         $time = 0,
@@ -67,7 +73,8 @@ class Tracksegment implements TracksegmentInterface
         $startPoint = null,
         $endPoint = null,
         $trackPoints = [],
-        $type = 'undefined'
+        $type = 'undefined',
+        $isCertain = false
     ) {
         $this->time = $time;
         $this->distance = round($distance, 2);
@@ -75,6 +82,7 @@ class Tracksegment implements TracksegmentInterface
         $this->endPoint = $endPoint;
         $this->startPoint = $startPoint;
         $this->trackpoints = $trackPoints;
+        $this->certainSegment = $isCertain;
     }
 
     /**
@@ -269,5 +277,21 @@ class Tracksegment implements TracksegmentInterface
                     break;
             }
         }
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCertainSegment()
+    {
+        return $this->certainSegment;
+    }
+
+    /**
+     * @param boolean $certainSegment
+     */
+    public function setCertainSegment($certainSegment)
+    {
+        $this->certainSegment = $certainSegment;
     }
 }

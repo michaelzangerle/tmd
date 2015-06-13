@@ -75,6 +75,8 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('segmentation')
                     ->children()
+
+                        // walk point configuration
                         ->scalarNode('max_walk_velocity')
                             ->defaultValue(3)
                             ->info('Max velocity for walk points in (m/s).')
@@ -83,6 +85,8 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(10)
                             ->info('Max acceleration for walk points in (m/s2)')
                         ->end()
+
+                        // segment creation
                         ->scalarNode('min_segment_distance')
                             ->defaultValue(100)
                             ->info('Minimal distance of a segment in meters.')
@@ -95,10 +99,8 @@ class Configuration implements ConfigurationInterface
                             ->defaultValue(30)
                             ->info('Maximum time difference in seconds between two track points.')
                         ->end()
-                        ->scalarNode('max_segment_time')
-                            ->defaultValue(30)
-                            ->info('Maximum time of a segment.')
-                        ->end()
+
+                        // stop point detection
                         ->scalarNode('max_time_without_movement')
                             ->defaultValue(12)
                             ->info('Timespan threshold which will trigger a new segment when exeeded (in seconds).')
@@ -106,6 +108,16 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('max_velocity_for_nearly_stoppoints')
                             ->defaultValue(0.55)
                             ->info('Maximum velocity for points with nearly or no movement.')
+                        ->end()
+
+                        // uncertain / certain segment handling
+                        ->scalarNode('certain_segments_min_time')
+                            ->defaultValue(300)
+                            ->info('Minimum time of a for a uncertain segment to become a certain segment.')
+                        ->end()
+                        ->scalarNode('certain_segments_min_distance')
+                            ->defaultValue(300)
+                            ->info('Minimum distance for a uncertain segment become get a certain segment.')
                         ->end()
                     ->end()
                 ->end()

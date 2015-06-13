@@ -152,4 +152,16 @@ interface TracksegmentInterface
      * @return mixed
      */
     public function addTrackPoints(array $trackPoints);
+
+    /**
+     * Returns if the segment is certain or uncertain
+     * @return boolean
+     */
+    public function isCertainSegment();
+
+    /**
+     * Sets segment certain or uncertain
+     * @param boolean $certainSegment
+     */
+    public function setCertainSegment($certainSegment);
 }

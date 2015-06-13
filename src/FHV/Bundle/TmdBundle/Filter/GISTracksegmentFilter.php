@@ -120,7 +120,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     {
         parent::lastTrackpointHandling($tp);
         $this->checkInfrastructureForTrackpoint($tp);
-        $this->pts = $this->stopCounter > 0 ? $this->publicTransportStationCounter / $this->stopCounter : 0;
+        $this->pts = $this->publicTransportStationCounter;
     }
 
     /**
@@ -253,7 +253,7 @@ class GISTracksegmentFilter extends TracksegmentFilter
     {
         $boundingBox = $this->util->getBoundingBox($tp, $this->gisAnalyseConfig['infrastructureDistanceThreshold']);
         $result = $this->gisCoordinateRepository->getCoordinatesForBoundingBox($boundingBox, $type);
-        if ($result) {
+            if ($result) {
 
             return true;
         }

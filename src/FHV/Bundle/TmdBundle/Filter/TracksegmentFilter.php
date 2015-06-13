@@ -234,7 +234,7 @@ class TracksegmentFilter extends AbstractComponent
     {
         $this->totalVelocity += $currentVelocity;
         if ($currentVelocity > $this->maxVelocity) {
-            $this->maxVelocity = $currentVelocity;
+            $this->maxVelocity = $currentVelocity*0.95;
         }
     }
 
@@ -266,7 +266,6 @@ class TracksegmentFilter extends AbstractComponent
      */
     protected function handlePossibleStop($currentVelocity, $currentTime)
     {
-
         if ($currentVelocity < $this->maxVelocityForNearlyStopPoints) {
             $this->lowSpeedTimeCounter += $currentTime;
 
