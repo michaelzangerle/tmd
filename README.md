@@ -5,12 +5,14 @@ More information about how this this works and how it was implemented can be fou
 
 ## Prerequisites
 
-To run this project you need a webserver that supports PHP e.g. Apache and a 
-mySQL database. Furthermore you need Composer https://getcomposer.org/ to 
-install the php dependencies.
+To run this project you need a webserver that supports PHP e.g. Apache and a database that is supported by doctrine e.g. mySQL. Furthermore you need Composer https://getcomposer.org/ to install the php dependencies.
+
+###Requirements
+
+- PHP 5.4 or higher
+- Database (e.g. mySQL 14.14)
 
 ### Optional
-
 
 Add a vhost: 
 
