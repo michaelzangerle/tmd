@@ -1,5 +1,5 @@
 #Transport Mode Detection
-This is prototype for an application that can determine the used transport mode (bike, bus, car, walk, train) from a given gpx-file. Basically it offers two different analyse methods. The first one uses values derived form the gpx-file only (velocity, acceleration, stopprate, ...). The second method uses gis data like bus stops,train stations, rails and highway. 
+This is prototype for an application that can determine the used transport mode (bike, bus, car, walk, train) from a given gpx-file. Basically it offers two different analyse methods. The first one uses values derived form the gpx-file only (velocity, acceleration, stopprate, ...). The second method uses in addition also gis data like bus stops,train stations, rails and highway. 
 
 More information about how this this works and how it was implemented can be found in here https://github.com/michaelzangerle/thesis (german only).
 
