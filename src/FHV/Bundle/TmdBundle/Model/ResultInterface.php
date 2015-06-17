@@ -27,17 +27,27 @@ interface ResultInterface
     /**
      * Set analizationType
      *
-     * @param integer $analizationType
+     * @param integer $analisationType
      *
      * @return Result
      */
-    public function setAnalizationType($analizationType);
+    public function setAnalisationType($analisationType);
 
     /**
      * Get analizationType
      *
      * @return integer
      */
-    public function getAnalizationType();
+    public function getAnalisationType();
+
+    /**
+     * @return int
+     */
+    public function getCorrectTransportType();
+
+    /**
+     * @param int $correctAnalysationType
+     */
+    public function setCorrectTransportType($correctAnalysationType);
 }
 

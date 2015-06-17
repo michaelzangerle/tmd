@@ -62,8 +62,16 @@ class TravelModeFilter extends AbstractComponent
         foreach ($track->getSegments() as $segment) {
             /** @var TreeResult $treeResult */
             $treeResult = $this->tree->process($segment->getFeatures());
-
             $result = $segment->getResult();
+
+            // if the segment has already a type (because it was in the gpx data)
+            // assume that the given type was the correct one
+            // therefore if the new type is different than the given one set the given
+            // one in the corrected result
+            if($segment->getType() && $segment->getType() !== $treeResult->getMaxName()) {
+                $result->setCorrectTransportType($segment->getType());
+            }
+
             $result->setProbability(round($treeResult->getMaxValue() / $treeResult->getTotal(), 2));
             $result->setTransportType($treeResult->getMaxName());
             $segment->setType($treeResult->getMaxName());

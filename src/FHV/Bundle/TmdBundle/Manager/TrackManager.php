@@ -53,7 +53,7 @@ class TrackManager implements TrackManagerInterface
     protected $tmFilter;
 
     /**
-     * @var ComponentInterface // TODO remove?
+     * @var ComponentInterface
      */
     protected $ppFilter;
 
@@ -61,6 +61,11 @@ class TrackManager implements TrackManagerInterface
      * @var array
      */
     protected $analyseConfig;
+
+    /**
+     * @var boolean
+     */
+    protected $filtersInitialized;
 
     function __construct(
         EntityManager $em,
@@ -84,7 +89,6 @@ class TrackManager implements TrackManagerInterface
         $this->dbFilter = $databaseFilterInterface;
         $this->gisSegementFilter = $gisSegmentFilter;
         $this->analyseConfig = $analyseConfig;
-        $this->track = new Track();
     }
 
     /**
@@ -103,8 +107,12 @@ class TrackManager implements TrackManagerInterface
             throw new InvalidArgumentException('The given analyse type ('.$analyseType.') seems to be unknown!');
         }
 
+        $this->track = new Track();
         $this->track->setAnalyseType($analyseType);
-        $this->initFilters($analyseType);
+
+        if (!$this->filtersInitialized) {
+            $this->initFilters($analyseType);
+        }
 
         $this->frFilter->run(['fileName' => $file, 'analyseType' => $analyseType]);
         $this->frFilter->finished();
@@ -165,6 +173,7 @@ class TrackManager implements TrackManagerInterface
         new Pipe($this->ppFilter, $this->dbFilter);
 
         $this->dbFilter->provideTrack($this->track);
+        $this->filtersInitialized = true;
     }
 
     /**
@@ -180,5 +189,6 @@ class TrackManager implements TrackManagerInterface
         new Pipe($this->ppFilter, $this->dbFilter);
 
         $this->dbFilter->provideTrack($this->track);
+        $this->filtersInitialized = true;
     }
 }

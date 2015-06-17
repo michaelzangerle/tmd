@@ -14,9 +14,9 @@ class Result implements ResultInterface
     private $transportType = TracksegmentType::UNDEFINED;
 
     /**
-     * @var integer
+     * @var string
      */
-    private $analizationType;
+    private $analisationType;
 
     /**
      * @var float
@@ -24,9 +24,14 @@ class Result implements ResultInterface
     private $probability;
 
     /**
+     * @var string
+     */
+    private $correctTransportType;
+
+    /**
      * Set transportType
      *
-     * @param integer $transportType
+     * @param string $transportType
      *
      * @return Result
      */
@@ -40,7 +45,7 @@ class Result implements ResultInterface
     /**
      * Get transportType
      *
-     * @return integer
+     * @return string
      */
     public function getTransportType()
     {
@@ -50,13 +55,13 @@ class Result implements ResultInterface
     /**
      * Set analizationType
      *
-     * @param integer $analizationType
+     * @param string $analisationType
      *
      * @return Result
      */
-    public function setAnalizationType($analizationType)
+    public function setAnalisationType($analisationType)
     {
-        $this->analizationType = $analizationType;
+        $this->analisationType = $analisationType;
 
         return $this;
     }
@@ -64,11 +69,11 @@ class Result implements ResultInterface
     /**
      * Get analizationType
      *
-     * @return integer
+     * @return string
      */
-    public function getAnalizationType()
+    public function getAnalisationType()
     {
-        return $this->analizationType;
+        return $this->analisationType;
     }
 
     /**
@@ -85,5 +90,21 @@ class Result implements ResultInterface
     public function setProbability($probability)
     {
         $this->probability = $probability;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCorrectTransportType()
+    {
+        return $this->correctTransportType;
+    }
+
+    /**
+     * @param string $correctTransportType
+     */
+    public function setCorrectTransportType($correctTransportType)
+    {
+        $this->correctTransportType = $correctTransportType;
     }
 }

@@ -94,6 +94,12 @@ class SegmentationFilter extends AbstractComponent
      */
     protected $certainSegmentMinDistance;
 
+    /**
+     * Type of transport read from the file
+     * @var string
+     */
+    protected $segmentType;
+
     function __construct(
         TrackpointUtilInterface $util,
         $walkpointMaxVelocity,
@@ -138,6 +144,7 @@ class SegmentationFilter extends AbstractComponent
             array_key_exists('analyseType', $data) && $data['analyseType'] !== null
         ) {
             $this->analyseType = $data['analyseType'];
+            $this->segmentType = $data['type'];
             $this->process($data['trackPoints']);
         } else {
             throw new ComponentException('Invalid data. Data must contain trackpoints and analyse type!');
@@ -252,6 +259,10 @@ class SegmentationFilter extends AbstractComponent
         $segment->setEndPoint($segment->getTrackpoints()[$length - 1]);
         $segment->setStartPoint($segment->getTrackpoints()[0]);
 
+        if($this->segmentType) {
+            $segment->setType($this->segmentType); // when type is defined assume this is the correct one and set it
+        }
+
         if ($tmpTime > $this->trackpointMaxTimeDifference) {
             $segment->setCertainSegment(true);
         }
@@ -283,7 +294,7 @@ class SegmentationFilter extends AbstractComponent
     protected function createNewResultEntity($getAnalyseType, $isWalkPoint, $curSegment)
     {
         $result = new Result();
-        $result->setAnalizationType($getAnalyseType);
+        $result->setAnalisationType($getAnalyseType);
         $curSegment->setResult($result);
 
         if ($isWalkPoint) {
@@ -434,6 +445,7 @@ class SegmentationFilter extends AbstractComponent
             ]
         );
         parent::parentHasFinished();
+        $this->track = new Track(); // for processing multiple files
     }
 
     /**

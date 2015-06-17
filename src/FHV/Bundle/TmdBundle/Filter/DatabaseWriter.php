@@ -153,10 +153,14 @@ class DatabaseWriter extends AbstractComponent implements DatabaseWriterInterfac
     {
         $result = new ResultEntity();
         $result->setSegment($segment);
-        $result->setAnalyseType($rm->getAnalizationType());
+        $result->setAnalyseType($rm->getAnalisationType());
         $result->setTransportType($rm->getTransportType());
         $result->setProbability($rm->getProbability());
         $segment->setResult($result);
+
+        if($rm->getCorrectTransportType()){
+            $result->setCorrectedTransportType($rm->getCorrectTransportType());
+        }
 
         return $result;
     }

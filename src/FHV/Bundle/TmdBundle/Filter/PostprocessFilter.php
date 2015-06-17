@@ -88,7 +88,13 @@ class PostprocessFilter extends AbstractComponent
     ) {
         $segmentToCorrect->setType($correctSegment->getType());
         $segmentToCorrect->getResult()->setTransportType($correctSegment->getType());
-        $segmentToCorrect->getResult()->setProbability(-1);
+        $segmentToCorrect->getResult()->setProbability(0);
+
+        // remove corrected transport type which was set in travel mode filter
+        // but has been correctly changed by the postprocess filter
+        if($segmentToCorrect->getResult()->getCorrectTransportType() === $correctSegment->getType()) {
+            $segmentToCorrect->getResult()->setCorrectTransportType(null);
+        }
     }
 
     /**
