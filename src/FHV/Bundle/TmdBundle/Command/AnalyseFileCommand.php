@@ -46,9 +46,8 @@ class AnalyseFileCommand extends ContainerAwareCommand
     {
         $dir = $input->getArgument('dir');
         $analyseMethod = $input->getArgument('analyseMethod');
-        $fileNames = $this->getFiles($dir);
-//        $dir = $this->appendSlashToDir($dir);
-        $this->processFiles($dir, $fileNames, $analyseMethod, $output);
+        $fileNames = $this->getFileNames($dir);
+        $this->processFiles($fileNames, $analyseMethod, $output);
         $output->write('Finished.', true);
     }
 
@@ -59,7 +58,7 @@ class AnalyseFileCommand extends ContainerAwareCommand
      *
      * @return array of file names
      */
-    protected function getFiles($dir)
+    protected function getFileNames($dir)
     {
         $this->validateDirectory($dir);
 
@@ -81,12 +80,11 @@ class AnalyseFileCommand extends ContainerAwareCommand
     /**
      * Processes all given files and triggers the analyse process in the track manager
      *
-     * @param string $dir
      * @param array $fileNames
      * @param string $analyseMethod
      * @param OutputInterface $output
      */
-    protected function processFiles($dir, array $fileNames, $analyseMethod, OutputInterface $output)
+    protected function processFiles(array $fileNames, $analyseMethod, OutputInterface $output)
     {
         if (count($fileNames) > 0) {
             /** @var TrackManagerInterface $trackManager */
@@ -98,21 +96,5 @@ class AnalyseFileCommand extends ContainerAwareCommand
         } else {
             $output->write('No gpx files found.', true);
         }
-    }
-
-    /**
-     * Appends a slash to the given directory string if none is present
-     *
-     * @param $dir
-     *
-     * @return string
-     */
-    protected function appendSlashToDir($dir)
-    {
-        if (substr($dir, -1) !== '/') {
-            return $dir.'/';
-        }
-
-        return $dir;
     }
 }

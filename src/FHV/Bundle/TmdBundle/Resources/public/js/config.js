@@ -24,4 +24,6 @@ requirejs.config({
             exports: '_'
         }
     }
+
+    // TODO minimize all js files
 });

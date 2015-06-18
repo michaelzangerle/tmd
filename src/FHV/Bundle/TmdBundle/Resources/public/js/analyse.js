@@ -5,8 +5,12 @@ require(['jquery', 'chart', 'material'], function ($, Chart) {
             correctAnalysedUrl: '/api/analyse?type=detail',
             falseAnalysedModeUrl: '/api/analyse?type=detail&mode=',
             modes: ['bus', 'drive', 'walk', 'bike', 'train'],
-            blue: '96,125,139',
-            green: '0,150,136'
+            colors: [
+                '96,125,139', // blue
+                '0,150,136', // green/blue
+                '244,67,54', //red
+                '89,183,92' // green
+            ]
         },
         analyse = {
 
@@ -132,11 +136,7 @@ require(['jquery', 'chart', 'material'], function ($, Chart) {
                         labels.push(type);
                     }
 
-                    if (i % 2) {
-                        ds = $.extend({}, this.getDataSetDummy(constants.blue));
-                    } else {
-                        ds = $.extend({}, this.getDataSetDummy(constants.green));
-                    }
+                    ds = $.extend({}, this.getDataSetDummy(constants.colors[i % constants.colors.length]));
                     ds.data = values;
                     ds.label = key;
                     result.datasets.push(ds);
@@ -160,7 +160,7 @@ require(['jquery', 'chart', 'material'], function ($, Chart) {
                     fillColor: tmp + ',0.5)',
                     strokeColor: tmp + ',0.8)',
                     highlightFill: tmp + ',0.75)',
-                    highlightStroke: 'rgba(96,125,139,1)',
+                    highlightStroke: tmp + ',1)',
                     data: []
                 };
             }
