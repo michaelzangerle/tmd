@@ -9,7 +9,8 @@ require(['jquery', 'chart', 'material'], function ($, Chart) {
                 '96,125,139', // blue
                 '0,150,136', // green/blue
                 '244,67,54', //red
-                '89,183,92' // green
+                '89,183,92', // green
+                '242,181,0' //yellow
             ]
         },
         analyse = {

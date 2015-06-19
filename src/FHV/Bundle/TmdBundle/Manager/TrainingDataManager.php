@@ -105,7 +105,10 @@ class TrainingDataManager
      */
     protected function connectFilters($analyseType)
     {
-        if ($analyseType === 'gis') {
+        // TODO make analyse methods more configurable
+        // TODO connect filters by config and remove this
+        $gis = 'gis';
+        if ($analyseType === $gis || substr($analyseType, 0, strlen($gis)) === $gis) {
             new Pipe($this->frFilter, $this->tpFilter);
             new Pipe($this->tpFilter, $this->gisSegmentFilter);
             new Pipe($this->gisSegmentFilter, $this->fileWriter);

@@ -83,7 +83,7 @@ fhv_tmd:
   gpx_namespace: "http://www.topografix.com/GPX/1/1"
   transport_modes: ['bus', 'bike', 'walk', 'train', 'drive']
 
-  # TODO refactor configuration params
+  # TODO refactor configuration param naming
   # changing something here requires new  building of the training data set
   filter:
     # 180 km/h should be enough even for trains
@@ -103,7 +103,7 @@ fhv_tmd:
     # data exist but they have still enough information to display reasonable routes
     min_valid_points_ratio: 0
 
-    # TODO needed at all?
+    # TODO needed at all? remove!
     max_velocity_for_nearly_stoppoints: 0.55
     max_time_without_movement: 5
 
@@ -156,3 +156,61 @@ fhv_tmd:
         - "meanacceleration"
         - "maxvelocity"
         - "maxacceleration"
+
+    # just for a little experiment - gis without max
+    gis_without_max:
+      config:
+        boundingBoxDistance: 30
+        infrastructureTimeThreshold: 20
+        infrastructureDistanceThreshold: 20
+        weightThreshold: 10
+      class: "GISDecisionTreeWithoutMax"
+      cacheDir: "%kernel.root_dir%/../decisionTrees/gis-without-max"
+      txtFilePath: "%kernel.root_dir%/../decisionTrees/gis-without-max"
+      txtFileName: "gisDecisionTreeWithoutMax.txt"
+      csv_columns:
+        - "ptscloseness"
+        - "railcloseness"
+        - "highwaycloseness"
+        - "stoprate"
+        - "meanvelocity"
+        - "meanacceleration"
+
+    # just for a little experiment - gis without mean
+    gis_without_mean:
+      config:
+        boundingBoxDistance: 30
+        infrastructureTimeThreshold: 20
+        infrastructureDistanceThreshold: 20
+        weightThreshold: 10
+      class: "GISDecisionTreeWithoutMean"
+      cacheDir: "%kernel.root_dir%/../decisionTrees/gis-without-mean"
+      txtFilePath: "%kernel.root_dir%/../decisionTrees/gis-without-mean"
+      txtFileName: "gisDecisionTreeWithoutMean.txt"
+      csv_columns:
+        - "ptscloseness"
+        - "railcloseness"
+        - "highwaycloseness"
+        - "stoprate"
+        - "maxacceleration"
+        - "maxvelocity"
+
+    # just for a little experiment - gis without rail
+    gis_without_rail:
+      config:
+        boundingBoxDistance: 30
+        infrastructureTimeThreshold: 20
+        infrastructureDistanceThreshold: 20
+        weightThreshold: 10
+      class: "GISDecisionTreeWithoutRail"
+      cacheDir: "%kernel.root_dir%/../decisionTrees/gis-without-rail"
+      txtFilePath: "%kernel.root_dir%/../decisionTrees/gis-without-rail"
+      txtFileName: "gisDecisionTreeWithoutRail.txt"
+      csv_columns:
+        - "ptscloseness"
+        - "highwaycloseness"
+        - "stoprate"
+        - "maxacceleration"
+        - "maxvelocity"
+        - "meanvelocity"
+        - "meanacceleration"

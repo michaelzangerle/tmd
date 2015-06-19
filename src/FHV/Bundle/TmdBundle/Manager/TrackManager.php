@@ -148,11 +148,16 @@ class TrackManager implements TrackManagerInterface
      */
     protected function initFilters($method)
     {
+        // TODO make analyse methods more configurable
+        // TODO connect filters by config and remove this
         switch ($method) {
             case 'basic':
                 $this->initBasicFilters();
                 break;
             case 'gis':
+            case 'gis_without_max':
+            case 'gis_without_mean':
+            case 'gis_without_rail':
                 $this->initGisFilters();
                 break;
             default:

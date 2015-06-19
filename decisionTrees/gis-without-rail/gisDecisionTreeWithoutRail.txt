@@ -1,0 +1,42 @@
+meanvelocity > 2.044
+|   meanvelocity > 7.887
+|   |   meanvelocity > 20.939: train {bike=0, drive=0, walk=0, bus=0, train=5}
+|   |   meanvelocity ≤ 20.939
+|   |   |   ptscloseness > 20.500
+|   |   |   |   stoprate > 0.001: bus {bike=0, drive=0, walk=0, bus=2, train=0}
+|   |   |   |   stoprate ≤ 0.001: drive {bike=0, drive=1, walk=0, bus=1, train=0}
+|   |   |   ptscloseness ≤ 20.500
+|   |   |   |   ptscloseness > 1.500
+|   |   |   |   |   meanacceleration > 4.800: train {bike=0, drive=1, walk=0, bus=0, train=2}
+|   |   |   |   |   meanacceleration ≤ 4.800: drive {bus=2, drive=11, walk=0, bike=0, train=0}
+|   |   |   |   ptscloseness ≤ 1.500: drive {bike=0, drive=48, walk=0, bus=0, train=1}
+|   meanvelocity ≤ 7.887
+|   |   meanvelocity > 7.594: bus {bike=0, drive=0, walk=0, bus=4, train=0}
+|   |   meanvelocity ≤ 7.594
+|   |   |   stoprate > 0.002
+|   |   |   |   maxvelocity > 10.906
+|   |   |   |   |   ptscloseness > 2: bus {bike=0, drive=0, walk=0, bus=5, train=0}
+|   |   |   |   |   ptscloseness ≤ 2
+|   |   |   |   |   |   meanacceleration > 1.571
+|   |   |   |   |   |   |   meanacceleration > 1.816: drive {bike=0, drive=2, walk=0, bus=0, train=0}
+|   |   |   |   |   |   |   meanacceleration ≤ 1.816: bike {bike=2, drive=0, walk=0, bus=0, train=0}
+|   |   |   |   |   |   meanacceleration ≤ 1.571: drive {bike=0, drive=5, walk=0, bus=0, train=0}
+|   |   |   |   maxvelocity ≤ 10.906: bike {bike=6, drive=0, walk=0, bus=0, train=0}
+|   |   |   stoprate ≤ 0.002
+|   |   |   |   maxacceleration > 2.403
+|   |   |   |   |   meanacceleration > 2.436
+|   |   |   |   |   |   highwaycloseness > 0.000: bike {bike=2, drive=0, walk=0, bus=0, train=0}
+|   |   |   |   |   |   highwaycloseness ≤ 0.000: drive {bike=0, drive=2, walk=0, bus=0, train=0}
+|   |   |   |   |   meanacceleration ≤ 2.436: bike {bike=23, drive=0, walk=0, bus=0, train=0}
+|   |   |   |   maxacceleration ≤ 2.403
+|   |   |   |   |   stoprate > 0.000: bike {bike=2, drive=0, walk=0, bus=1, train=0}
+|   |   |   |   |   stoprate ≤ 0.000: drive {bike=0, drive=2, walk=0, bus=0, train=0}
+meanvelocity ≤ 2.044
+|   maxvelocity > 44.538: bike {bike=2, drive=0, walk=0, bus=0, train=0}
+|   maxvelocity ≤ 44.538
+|   |   stoprate > 0.129
+|   |   |   stoprate > 0.166: walk {bike=0, drive=0, walk=2, bus=0, train=0}
+|   |   |   stoprate ≤ 0.166: bike {bike=2, drive=0, walk=0, bus=0, train=0}
+|   |   stoprate ≤ 0.129
+|   |   |   meanvelocity > 1.947: bike {bike=1, drive=0, walk=1, bus=0, train=0}
+|   |   |   meanvelocity ≤ 1.947: walk {bike=1, drive=1, walk=50, bus=0, train=
