@@ -109,7 +109,7 @@ class AnalyseManager implements AnalyseMangerInterface
 
                 foreach ($this->transportationModes as $m) {
                     if ($m !== $mode) {
-                        $response[$analyseType][$m] = $this->getResultsCountByMode($analyseType, $m, $mode);
+                        $response[$analyseType][$m] = $this->getResultsCountByMode($analyseType, $mode, $m);
                     }
                 }
             }
