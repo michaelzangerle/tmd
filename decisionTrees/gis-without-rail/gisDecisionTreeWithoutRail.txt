@@ -39,4 +39,4 @@ meanvelocity ≤ 2.044
 |   |   |   stoprate ≤ 0.166: bike {bike=2, drive=0, walk=0, bus=0, train=0}
 |   |   stoprate ≤ 0.129
 |   |   |   meanvelocity > 1.947: bike {bike=1, drive=0, walk=1, bus=0, train=0}
-|   |   |   meanvelocity ≤ 1.947: walk {bike=1, drive=1, walk=50, bus=0, train=
+|   |   |   meanvelocity ≤ 1.947: walk {bike=1, drive=1, walk=50, bus=0, train=0}
