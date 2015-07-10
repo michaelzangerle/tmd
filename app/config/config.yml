@@ -214,3 +214,23 @@ fhv_tmd:
         - "maxvelocity"
         - "meanvelocity"
         - "meanacceleration"
+
+    # just for a little experiment - gis without stoprate
+    gis_without_stoprate:
+      config:
+        boundingBoxDistance: 30
+        infrastructureTimeThreshold: 20
+        infrastructureDistanceThreshold: 20
+        weightThreshold: 10
+      class: "GISDecisionTreeWithoutStoprate"
+      cacheDir: "%kernel.root_dir%/../decisionTrees/gis-without-stoprate"
+      txtFilePath: "%kernel.root_dir%/../decisionTrees/gis-without-stoprate"
+      txtFileName: "gisDecisionTreeWithoutStoprate.txt"
+      csv_columns:
+        - "ptscloseness"
+        - "railcloseness"
+        - "highwaycloseness"
+        - "meanvelocity"
+        - "meanacceleration"
+        - "maxvelocity"
+        - "maxacceleration"

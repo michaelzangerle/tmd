@@ -10,7 +10,8 @@ require(['jquery', 'chart', 'material'], function ($, Chart) {
                 '0,150,136', // green/blue
                 '244,67,54', //red
                 '89,183,92', // green
-                '242,181,0' //yellow
+                '242,181,0', //yellow
+                '73,91,192' // indigo
             ]
         },
         analyse = {

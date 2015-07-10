@@ -1,0 +1,32 @@
+meanvelocity > 2.044
+|   meanvelocity > 7.887
+|   |   railcloseness > 0.012: train {bike=0, drive=0, walk=0, bus=0, train=8}
+|   |   railcloseness ≤ 0.012
+|   |   |   ptscloseness > 20.500
+|   |   |   |   railcloseness > 0.000: drive {bike=0, drive=1, walk=0, bus=1, train=0}
+|   |   |   |   railcloseness ≤ 0.000: bus {bike=0, drive=0, walk=0, bus=2, train=0}
+|   |   |   ptscloseness ≤ 20.500: drive {bus=2, drive=60, walk=0, bike=0, train=0}
+|   meanvelocity ≤ 7.887
+|   |   meanvelocity > 7.594: bus {bike=0, drive=0, walk=0, bus=4, train=0}
+|   |   meanvelocity ≤ 7.594
+|   |   |   railcloseness > 0.000: bike {bike=16, drive=0, walk=0, bus=0, train=0}
+|   |   |   railcloseness ≤ 0.000
+|   |   |   |   maxvelocity > 10.906
+|   |   |   |   |   ptscloseness > 2
+|   |   |   |   |   |   maxvelocity > 15.801: bus {bike=0, drive=0, walk=0, bus=4, train=0}
+|   |   |   |   |   |   maxvelocity ≤ 15.801: bike {bike=2, drive=0, walk=0, bus=1, train=0}
+|   |   |   |   |   ptscloseness ≤ 2
+|   |   |   |   |   |   highwaycloseness > 0.001: bike {bike=3, drive=0, walk=0, bus=0, train=0}
+|   |   |   |   |   |   highwaycloseness ≤ 0.001
+|   |   |   |   |   |   |   maxvelocity > 15.561
+|   |   |   |   |   |   |   |   maxvelocity > 30.207: drive {bike=0, drive=2, walk=0, bus=0, train=0}
+|   |   |   |   |   |   |   |   maxvelocity ≤ 30.207: bike {bike=3, drive=0, walk=0, bus=0, train=0}
+|   |   |   |   |   |   |   maxvelocity ≤ 15.561: drive {bus=1, drive=7, walk=0, bike=0, train=0}
+|   |   |   |   maxvelocity ≤ 10.906
+|   |   |   |   |   maxacceleration > 2.310: bike {bike=8, drive=0, walk=0, bus=0, train=0}
+|   |   |   |   |   maxacceleration ≤ 2.310
+|   |   |   |   |   |   meanacceleration > 0.866: drive {bike=0, drive=2, walk=0, bus=0, train=0}
+|   |   |   |   |   |   meanacceleration ≤ 0.866: bike {bike=3, drive=0, walk=0, bus=0, train=0}
+meanvelocity ≤ 2.044
+|   maxvelocity > 44.538: bike {bike=2, drive=0, walk=0, bus=0, train=0}
+|   maxvelocity ≤ 44.538: walk {bike=4, drive=1, walk=53, bus=0, train=0}
