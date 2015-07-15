@@ -35,6 +35,12 @@ Add a vhost:
 </VirtualHost>
 ```
 
+Add an entry in the hosts file (restart afterwards)
+
+```
+127.0.0.1 	tmd.lo
+```
+
 ## Installation
 
 Clone the repository
